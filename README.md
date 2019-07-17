@@ -21,3 +21,6 @@ I'm looking for people to help me with the project, please contact me!
  - Scripts Engine (for make rules): *LUA*
  - Events Database: *LiteDB*
  - Classic Database (can change in future): *Sqlite*
+
+# !!! NOTE !!!
+Modify config `neon.settings-default.json` to `neon.settings.json` before lunch application
