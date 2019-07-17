@@ -1,0 +1,23 @@
+﻿# Neon.HomeControl
+Similar to HomeAssistant but made with .net core and ❤️
+
+# Help request!
+I'm looking for people to help me with the project, please contact me!
+
+
+# Actual implemented plugins
+- Weather (Dark sky API)
+- Spotify API
+- Sonoff-Tasmoda
+- Philip Hue
+- Panasonic Air Conditioner API
+- Own tracks (via MQTT)
+- MQTT Client
+- Nest Thermo (disabled, becouse the api are changing)
+
+
+# Features
+ - .NET Core 2.2 
+ - Scripts Engine (for make rules): *LUA*
+ - Events Database: *LiteDB*
+ - Classic Database (can change in future): *Sqlite*

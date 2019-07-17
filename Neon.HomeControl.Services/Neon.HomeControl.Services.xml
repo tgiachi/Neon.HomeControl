@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neon.HomeControl.Services</name>
+    </assembly>
+    <members>
+        <member name="T:Neon.HomeControl.Services.Services.IoTService">
+            <summary>
+                Implementation of IoT Server
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Services.Services.IoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemService,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService)">
+            <summary>
+                Ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="fileSystemService"></param>
+            <param name="config"></param>
+        </member>
+    </members>
+</doc>

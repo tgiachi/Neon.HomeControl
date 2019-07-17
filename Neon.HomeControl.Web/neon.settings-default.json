@@ -1,0 +1,38 @@
+{
+	"Home": {
+		"Name": "My Home",
+		"Latitude": 40.7496256,
+		"Longitude": 10.3255320,
+		"Elevation": 33
+	},
+	"Mqtt": {
+		"RunEmbedded": false,
+		"Host": "test.mosquitto.org",
+		"ClientId": "Server-Neon"
+	},
+	"Database": {
+		"ConnectionString": "Neon.HomeControl.sqlite"
+	},
+	"Plugins": {
+		"Directory": "Plugins"
+	},
+	"Scripts": {
+		"Directory": "Scripts"
+	},
+	"Tasks": {
+		"MaxNumThreads": 10
+	},
+	"FileSystem": {
+		"RootDirectory": "C:\\NeonHome\\"
+	},
+	"Components": {
+		"ConfigDirectory": "Components"
+	},
+	"EventsDatabase": {
+		"DatabaseDirectory": "Database"
+	},
+	"IoT": {
+		"DatabaseDirectory": "Database"
+	},
+	"JwtToken": "Jqdik6YoOiZUIx35zO8p4ZnpBCjUtorN8kl58FywYgqbCeOjSOdASwWGDq21WNLw4tADnTqPPWvsJe66"
+}

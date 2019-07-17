@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neon.HomeControl.Components</name>
+    </assembly>
+    <members>
+        <member name="T:Neon.HomeControl.Components.Interfaces.ISpotifyWebComponent">
+            <summary>
+                Interface for create Spotify Component
+            </summary>
+        </member>
+    </members>
+</doc>

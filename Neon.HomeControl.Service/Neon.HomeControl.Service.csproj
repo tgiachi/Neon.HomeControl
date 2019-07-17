@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <StartupObject>Neon.HomeControl.Service.Program</StartupObject>
+    <RuntimeIdentifiers>win10-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
+    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>Neon.HomeControl.Service.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neon.HomeControl.Api\Neon.HomeControl.Api.csproj" />
+    <ProjectReference Include="..\Neon.HomeControl.Entities\Neon.HomeControl.Entities.csproj" />
+    <ProjectReference Include="..\Neon.HomeControl.Services\Neon.HomeControl.Services.csproj" />
+    <ProjectReference Include="..\Neon.HomeControl.Web\Neon.HomeControl.Web.csproj" />
+  </ItemGroup>
+
+</Project>
