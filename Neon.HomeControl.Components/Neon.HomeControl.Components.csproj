@@ -11,9 +11,11 @@
   <ItemGroup>
     <PackageReference Include="DarkSkyCore" Version="5.1.16" />
     <PackageReference Include="Elton.Nest" Version="1.0.0" />
+    <PackageReference Include="GoogleCast" Version="1.6.7" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Q42.HueApi" Version="3.10.1" />
-    <PackageReference Include="SpotifyAPI.Web" Version="4.1.2" />
+    <PackageReference Include="SSDP.Portable" Version="1.0.30" />
+    <PackageReference Include="SpotifyAPI.Web" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>

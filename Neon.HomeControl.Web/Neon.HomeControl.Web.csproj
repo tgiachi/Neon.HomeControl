@@ -4,8 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>fa070407-4a6c-4d5c-aabd-f1b229666dc5</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>
+    <OutputType>Exe</OutputType>
+    <!--<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,6 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="neon.settings-default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="Neon.settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

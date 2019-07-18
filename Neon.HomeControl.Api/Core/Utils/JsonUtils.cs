@@ -52,7 +52,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 			catch (Exception)
 			{
 				Console.WriteLine($"Can't convert {obj} to object {typeof(T).Name}");
-				return default;
+				return default(T);
 			}
 		}
 	}

@@ -4,6 +4,16 @@
         <name>Neon.HomeControl.Components</name>
     </assembly>
     <members>
+        <member name="T:Neon.HomeControl.Components.Components.ChromecastComponent">
+            <summary>
+            Component for connect to chromecast and play media
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Components.Interfaces.IChromecastComponent">
+            <summary>
+            Interface for create chrome cast connector
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Components.Interfaces.ISpotifyWebComponent">
             <summary>
                 Interface for create Spotify Component
