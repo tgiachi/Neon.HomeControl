@@ -13,8 +13,8 @@ I'm looking for people to help me with the project, please contact me!
 - Panasonic Air Conditioner API
 - Own tracks (via MQTT)
 - MQTT Client
-- Nest Thermo (disabled, becouse the api are changing)
-
+- Nest Thermo (disabled, because the api are changing)
+- Chromecast and SSDP media player (thanks @kakone)
 
 # Features
  - .NET Core 2.2 
