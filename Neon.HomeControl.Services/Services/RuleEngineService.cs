@@ -83,6 +83,7 @@ namespace Neon.HomeControl.Services.Services
 
 			if (bResult)
 			{
+				_logger.LogInformation($"Executing rule {rule.RuleName}");
 				rule.Action.Invoke(entity);
 			}
 		}
