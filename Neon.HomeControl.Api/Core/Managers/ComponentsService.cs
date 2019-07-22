@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Threading.Tasks;
 using Neon.HomeControl.Api.Core.Attributes.Components;
@@ -23,23 +24,24 @@ namespace Neon.HomeControl.Api.Core.Managers
 		private readonly IFileSystemService _fileSystemService;
 		private readonly ILogger _logger;
 		private readonly IServicesManager _servicesManager;
-
+		private readonly ITaskExecutorService _taskExecutorService;
 
 		public ComponentsService(ILogger<ComponentsService> logger, IServicesManager servicesManager, NeonConfig config,
-			IFileSystemService fileSystemService)
+			IFileSystemService fileSystemService, ITaskExecutorService taskExecutorService)
 		{
 			_logger = logger;
 			_config = config;
+			_taskExecutorService = taskExecutorService;
 			_servicesManager = servicesManager;
 			_fileSystemService = fileSystemService;
 			AvailableComponents = new List<ComponentInfo>();
-			RunningComponents = new List<RunningComponentInfo>();
+			RunningComponents = new ObservableCollection<RunningComponentInfo>();
 			_componentsTypes = new Dictionary<ComponentInfo, Type>();
 		}
 
 		public List<ComponentInfo> AvailableComponents { get; set; }
 
-		public List<RunningComponentInfo> RunningComponents { get; set; }
+		public ObservableCollection<RunningComponentInfo> RunningComponents { get; set; }
 
 		public void SaveComponentConfig<T>(T config) where T : IComponentConfig
 		{
@@ -92,42 +94,49 @@ namespace Neon.HomeControl.Api.Core.Managers
 		{
 			foreach (var keyValuePair in _componentsTypes)
 			{
-				var runningComponent = new RunningComponentInfo
+				await StartComponent(keyValuePair.Key, keyValuePair.Value);
+			}
+		}
+
+		private async Task StartComponent(ComponentInfo componentInfo, Type type)
+		{
+
+			var runningComponent = new RunningComponentInfo
+			{
+				Name = componentInfo.Name,
+				Version = componentInfo.Version,
+				Description = componentInfo.Description,
+				Status = ComponentStatusEnum.STOPPED
+			};
+			try
+			{
+				_logger.LogInformation($"Initialize component {componentInfo.Name} v{componentInfo.Version}");
+				var obj = _servicesManager.Resolve(type) as IComponent;
+				var attr = type.GetCustomAttribute<ComponentAttribute>();
+
+
+				RunningComponents.Add(runningComponent);
+				runningComponent.Component = obj;
+				var componentConfig = (IComponentConfig)LoadComponentConfig(attr.ComponentConfigType);
+
+				if (componentConfig != null)
+					await obj.InitConfiguration(componentConfig);
+				else
+					SaveComponentConfig(obj.GetDefaultConfig(), attr.ComponentConfigType);
+
+				if (componentConfig != null && componentConfig.Enabled)
 				{
-					Name = keyValuePair.Key.Name,
-					Version = keyValuePair.Key.Version,
-					Description = keyValuePair.Key.Description,
-					Status = ComponentStatusEnum.STOPPED
-				};
-				try
-				{
-					_logger.LogInformation($"Initialize component {keyValuePair.Key.Name} v{keyValuePair.Key.Version}");
-					var obj = _servicesManager.Resolve(keyValuePair.Value) as IComponent;
-					var attr = keyValuePair.Value.GetCustomAttribute<ComponentAttribute>();
-
-
-					RunningComponents.Add(runningComponent);
-					runningComponent.Component = obj;
-					var componentConfig = (IComponentConfig) LoadComponentConfig(attr.ComponentConfigType);
-
-					if (componentConfig != null)
-						await obj.InitConfiguration(componentConfig);
-					else
-						SaveComponentConfig(obj.GetDefaultConfig(), attr.ComponentConfigType);
-
-					if (componentConfig != null && componentConfig.Enabled)
-					{
-						await obj.Start();
-						runningComponent.Status = ComponentStatusEnum.STARTED;
-					}
-				}
-				catch (Exception ex)
-				{
-					_logger.LogError($"Error during start component {keyValuePair.Value.Name} => {ex.Message}");
-					runningComponent.Error = ex;
-					runningComponent.Status = ComponentStatusEnum.ERROR;
+					await obj.Start();
+					runningComponent.Status = ComponentStatusEnum.STARTED;
 				}
 			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Error during start component {componentInfo.Name} => {ex.Message}");
+				runningComponent.Error = ex;
+				runningComponent.Status = ComponentStatusEnum.ERROR;
+			}
+
 		}
 
 		private void SaveComponentConfig(object obj, Type configType)

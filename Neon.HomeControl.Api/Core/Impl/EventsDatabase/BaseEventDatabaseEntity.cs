@@ -10,12 +10,14 @@ namespace Neon.HomeControl.Api.Core.Impl.EventsDatabase
 			EventDateTime = DateTime.Now;
 		}
 
-		[IgnorePropertyCompare] public Guid Id { get; set; }
+		[IgnorePropertyCompare] 
+		public Guid Id { get; set; }
 
 		public string EntityName { get; set; }
 
 		public string EntityType { get; set; }
 
-		[IgnorePropertyCompare] public DateTime EventDateTime { get; set; }
+		[IgnorePropertyCompare] 
+		public DateTime EventDateTime { get; set; }
 	}
 }

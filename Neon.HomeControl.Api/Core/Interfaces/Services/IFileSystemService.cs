@@ -10,6 +10,8 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 
 		bool SaveFile(string file, object obj);
 
+		bool SaveFileText(string file, string text);
+
 		object LoadFile(string file, Type type);
 
 		T LoadFile<T>(string file);

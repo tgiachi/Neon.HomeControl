@@ -44,7 +44,6 @@ namespace Neon.HomeControl.Web
 				.UseIISIntegration()
 				.ConfigureLogging(builder => builder.AddDebug())
 				.UseSerilog()
-				.UseMetrics()
 				.UseStartup<Startup>();
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -9,7 +10,10 @@ using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using LiteDB;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Data.Commands;
+using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
 
 
 namespace Neon.HomeControl.Services.Services
@@ -17,7 +21,7 @@ namespace Neon.HomeControl.Services.Services
 	/// <summary>
 	///     Implementation of IoT Server
 	/// </summary>
-	[Service(typeof(IoTService), Name = "IoT Service", LoadAtStartup = true, Order = 3)]
+	[Service(typeof(IoTService), Name = "IoT Service", LoadAtStartup = true, Order = 2)]
 	public class IoTService : IIoTService
 	{
 		private static readonly string _dbFilename = "Neon.HomeControl.IoT.db";
@@ -26,8 +30,10 @@ namespace Neon.HomeControl.Services.Services
 		private readonly NeonConfig _config;
 		private readonly IFileSystemService _fileSystemService;
 		private readonly IEventDatabaseService _eventDatabaseService;
-
+		private readonly INotificationService _notificationService;
+		private readonly IMqttService _mqttService;
 		private readonly Subject<IIotEntity> _iotEntitiesBus = new Subject<IIotEntity>();
+		private readonly ICommandDispatcherService _commandDispatcherService;
 		private readonly ILogger _logger;
 		private readonly object _liteDbObjectLock = new object();
 
@@ -38,9 +44,20 @@ namespace Neon.HomeControl.Services.Services
 		/// <param name="logger"></param>
 		/// <param name="fileSystemService"></param>
 		/// <param name="config"></param>
-		public IoTService(ILogger<IoTService> logger, IFileSystemService fileSystemService, NeonConfig config, IEventDatabaseService eventDatabaseService)
+		public IoTService(ILogger<IIoTService> logger, IFileSystemService fileSystemService, 
+			NeonConfig config, 
+			IEventDatabaseService eventDatabaseService, 
+			INotificationService notificationService,
+			IMqttService mqttService,
+			ICommandDispatcherService commandDispatcherService
+		)
 		{
 			_logger = logger;
+			_logger.LogError($"CREATED");
+
+			_commandDispatcherService = commandDispatcherService;
+			_mqttService = mqttService;
+			_notificationService = notificationService;
 			_eventDatabaseService = eventDatabaseService;
 			_fileSystemService = fileSystemService;
 			_config = config;
@@ -62,6 +79,7 @@ namespace Neon.HomeControl.Services.Services
 			return Task.FromResult(true);
 		}
 
+	
 		public T InsertEntity<T>(T value) where T : IIotEntity
 		{
 			lock (_liteDbObjectLock)
@@ -71,6 +89,31 @@ namespace Neon.HomeControl.Services.Services
 				_liteDatabase.GetCollection<T>(_collectionName).Insert(value);
 				return value;
 			}
+		}
+
+		public string GetEntityTypeByName(string name)
+		{
+			var entity = Query<BaseEventDatabaseEntity>().FirstOrDefault(d => d.EntityName == name);
+				
+			return entity?.EntityType;
+		}
+
+		public T GetEntityByType<T>(string name, string type) where T : IIotEntity
+		{
+			lock (_liteDbObjectLock)
+			{
+				return _liteDatabase.GetCollection<T>(_collectionName).FindOne(document =>
+					document.EntityName == name && document.EntityType == type);
+			}
+		}
+
+		/// <summary>
+		/// Get all entities
+		/// </summary>
+		/// <returns></returns>
+		public List<IIotEntity> GetEntities()
+		{
+			return Query<IIotEntity>().ToList();
 		}
 
 		public T Update<T>(T value) where T : IIotEntity
@@ -133,6 +176,8 @@ namespace Neon.HomeControl.Services.Services
 		{
 			_eventDatabaseService.Insert(value);
 			InsertOrUpdate(value);
+
+			_mqttService.SendMessage($"events/{value.EntityType}", value);
 
 			return value;
 		}

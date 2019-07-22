@@ -4,6 +4,63 @@
         <name>Neon.HomeControl.StandardLuaLibrary</name>
     </assembly>
     <members>
+        <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject">
+            <summary>
+            Events manager for LUA
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.AddAlarm(System.String,System.Int32,System.Int32,NLua.LuaFunction)">
+            <summary>
+            Add new alarm
+            </summary>
+            <param name="name"></param>
+            <param name="hours"></param>
+            <param name="minutes"></param>
+            <param name="function"></param>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.GetEntities">
+            <summary>
+            Get all entities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.GetEntityByName(System.String)">
+            <summary>
+            Get Entity by Name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.GetEntityType``1(System.Object)">
+            <summary>
+            Transform entity to Generic Entity
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.OnEventName(System.String,NLua.LuaFunction)">
+            <summary>
+            Subscribe to event with name
+            </summary>
+            <param name="entityName"></param>
+            <param name="function"></param>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.SendCommand(Neon.HomeControl.Api.Core.Interfaces.IoTEntities.IIotEntity,System.String,System.Object[])">
+            <summary>
+            Send command to event system
+            </summary>
+            <param name="entity"></param>
+            <param name="commandName"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.OnEventType(System.String,NLua.LuaFunction)">
+            <summary>
+            Subscribe to event with Type (without full class name)
+            </summary>
+            <param name="eventType"></param>
+            <param name="function"></param>
+        </member>
         <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ServiceManagerLuaObject">
             <summary>
             Class for control Services Manager

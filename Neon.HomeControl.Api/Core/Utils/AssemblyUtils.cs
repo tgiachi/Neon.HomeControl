@@ -95,7 +95,12 @@ namespace Neon.HomeControl.Api.Core.Utils
 		/// <returns></returns>
 		public static List<Assembly> GetAppAssemblies()
 		{
-			return AppDomain.CurrentDomain.GetAssemblies().ToList();
+			return _assembliesCache;
+		}
+
+		public static Assembly[] GetAppAssembliesArray()
+		{
+			return _assembliesCache.ToArray();
 		}
 
 		/// <summary>

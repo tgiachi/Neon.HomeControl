@@ -10,6 +10,6 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 		IObservable<MqttMessage> OnMqttMessage { get; set; }
 		Task<bool> SubscribeTopic(string topic);
 
-		Task<bool> SendMessage(string topic, IBaseMessage message);
+		Task<bool> SendMessage(string topic, object message);
 	}
 }

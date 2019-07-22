@@ -28,6 +28,10 @@ namespace Neon.HomeControl.Services.Services
 		private readonly Lua _luaEngine;
 		private readonly IServicesManager _servicesManager;
 
+		public List<LuaScriptFunctionData> GlobalFunctions { get; set; }
+
+		private string _bootstrapFile = "";
+
 		public ScriptService(ILogger<ScriptService> logger, NeonConfig neonConfig, IServicesManager servicesManager,
 			IFileSystemService fileSystemService)
 		{
@@ -41,20 +45,24 @@ namespace Neon.HomeControl.Services.Services
 
 			_luaEngine.HookException += (sender, args) =>
 			{
-				_logger.LogError($"Error during execute LUA => {args.Exception}");
+				_logger.LogError($"Error during execute LUA =>\n {args.Exception.FlattenException()}");
 			};
 		}
 
-		public List<LuaScriptFunctionData> GlobalFunctions { get; set; }
 
 		public Task<bool> Start()
 		{
+			_bootstrapFile = _fileSystemService.BuildFilePath(_neonConfig.Scripts.Directory + Path.DirectorySeparatorChar + "bootstrap.lua");
 			_fileSystemService.CreateDirectory(_neonConfig.Scripts.Directory);
+			CheckBootstrapFile();
 			StartMonitorDirectory();
 
 			_logger.LogInformation("Initializing LUA script manager");
 			_luaEngine.LoadCLRPackage();
 			ScanForScriptClasses();
+
+			_logger.LogInformation($"Loading bootstrap file");
+			LoadLuaFile(_bootstrapFile, true);
 
 			_logger.LogInformation($"Scanning files in directory {_neonConfig.Scripts.Directory}");
 			LoadLuaFiles();
@@ -63,6 +71,15 @@ namespace Neon.HomeControl.Services.Services
 
 			_logger.LogInformation("LUA Script manager initialized");
 			return Task.FromResult(true);
+		}
+
+		private void CheckBootstrapFile()
+		{
+			if (!File.Exists(_bootstrapFile))
+			{
+				File.WriteAllText(_bootstrapFile, "");
+			}
+
 		}
 
 		public Task<bool> Stop()
@@ -80,24 +97,33 @@ namespace Neon.HomeControl.Services.Services
 				var obj = _servicesManager.Resolve(t);
 				obj.GetType().GetMethods().ToList().ForEach(m =>
 				{
-					var scriptFuncAttr =
-						(LuaScriptFunctionAttribute) m.GetCustomAttribute(typeof(LuaScriptFunctionAttribute));
+					try
 
-					if (scriptFuncAttr == null) return;
-
-					_logger.LogInformation(
-						$"{obj.GetType().Name} - {scriptFuncAttr.FunctionName} [{scriptFuncAttr.Help}]");
-
-					_luaEngine.RegisterFunction(scriptFuncAttr.FunctionName, obj,
-						obj.GetType().GetMethod(m.Name));
-
-					GlobalFunctions.Add(new LuaScriptFunctionData
 					{
-						Category = scriptFuncAttr.FunctionCategory,
-						Help = scriptFuncAttr.Help,
-						Name = scriptFuncAttr.FunctionName,
-						Args = m.GetParameters().GetMethodParamStrings()
-					});
+						var scriptFuncAttr = m.GetCustomAttribute<LuaScriptFunctionAttribute>();
+							
+
+						if (scriptFuncAttr == null) return;
+
+						_logger.LogInformation(
+							$"{obj.GetType().Name} - {scriptFuncAttr.FunctionName} [{scriptFuncAttr.Help}]");
+
+						_luaEngine.RegisterFunction(scriptFuncAttr.FunctionName, obj,
+							obj.GetType().GetMethod(m.Name));
+
+						GlobalFunctions.Add(new LuaScriptFunctionData
+						{
+							Category = scriptFuncAttr.FunctionCategory,
+							Help = scriptFuncAttr.Help,
+							Name = scriptFuncAttr.FunctionName,
+							Args = m.GetParameters().GetMethodParamStrings()
+						});
+					}
+					catch (Exception ex)
+					{
+						
+					}
+
 				});
 			});
 		}
@@ -108,9 +134,9 @@ namespace Neon.HomeControl.Services.Services
 			_fileSystemWatcher.IncludeSubdirectories = true;
 			_fileSystemWatcher.Path = _fileSystemService.BuildFilePath(_neonConfig.Scripts.Directory);
 			_fileSystemWatcher.NotifyFilter = NotifyFilters.LastAccess
-			                                  | NotifyFilters.LastWrite
-			                                  | NotifyFilters.FileName
-			                                  | NotifyFilters.DirectoryName;
+											  | NotifyFilters.LastWrite
+											  | NotifyFilters.FileName
+											  | NotifyFilters.DirectoryName;
 
 			_fileSystemWatcher.Created += (sender, args) => ProcessMonitorFile(args.FullPath);
 			_fileSystemWatcher.Changed += (sender, args) => ProcessMonitorFile(args.FullPath);
@@ -149,7 +175,7 @@ namespace Neon.HomeControl.Services.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError($"Error during load file {filename} => {ex}");
+				_logger.LogError($"Error during load file {filename} => {ex.FlattenException()}");
 			}
 		}
 	}

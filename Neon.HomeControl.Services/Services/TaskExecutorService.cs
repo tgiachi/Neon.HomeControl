@@ -24,6 +24,7 @@ namespace Neon.HomeControl.Services.Services
 
 		public Task Enqueue(Func<Task> task)
 		{
+			_logger.LogDebug($"Executing task {task.Method}");
 			return _taskPool.Enqueue(task);
 		}
 

@@ -117,7 +117,7 @@ namespace Neon.HomeControl.Components.Components
 			}
 			catch (Exception e)
 			{
-				_logger.LogError($"Error during air conditioner => {e}");
+				_logger.LogError($"Error during air conditioner");
 				//throw;
 			}
 		}

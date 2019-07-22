@@ -27,6 +27,7 @@ namespace Neon.HomeControl.Web
 	{
 		private readonly IServicesManager _servicesManager;
 		private IContainer _container;
+		private NeonConfig _neonConfig;
 
 		public Startup(IHostingEnvironment env, ILogger<ServicesManager> _serviceManagerLogger)
 		{
@@ -39,9 +40,9 @@ namespace Neon.HomeControl.Web
 
 
 			Configuration = builder.Build();
+			_neonConfig = Configuration.Get<NeonConfig>();
 
-
-			_servicesManager = new ServicesManager(_serviceManagerLogger, Configuration.Get<NeonConfig>());
+			_servicesManager = new ServicesManager(_serviceManagerLogger, _neonConfig);
 		}
 
 
@@ -61,8 +62,10 @@ namespace Neon.HomeControl.Web
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 			services.AddAutoMapper(AssemblyUtils.GetAppAssemblies());
 			services.AddMvc()
-				.AddMetrics()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+			if (_neonConfig.EnableMetrics)
+				services.AddMetrics();
 
 
 			services.AddLogging();
@@ -88,12 +91,11 @@ namespace Neon.HomeControl.Web
 					};
 				});
 
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new Info {Title = "Leon Home control", Version = "v1.0"});
-			});
-
-			//_servicesManager.AddConfiguration(Configuration.Get<NeonConfig>());
+			if (_neonConfig.EnableSwagger)
+				services.AddSwaggerGen(c =>
+				{
+					c.SwaggerDoc("v1", new Info {Title = "Leon Home control", Version = "v1.0"});
+				});
 
 			services.AddDbContextPool<NeonDbContext>(options =>
 			{
@@ -105,9 +107,6 @@ namespace Neon.HomeControl.Web
 			});
 
 			services.AddTransient<DbContext, NeonDbContext>();
-			//		builder.RegisterType<DbContext>().AsSelf().InstancePerDependency();
-			//		builder.RegisterType<NeonDbContext>().As<DbContext>().InstancePerDependency();
-
 
 			builder.Populate(services);
 			_container = _servicesManager.Build();
@@ -119,6 +118,8 @@ namespace Neon.HomeControl.Web
 		public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
 			IApplicationLifetime applicationLifetime)
 		{
+			applicationLifetime.ApplicationStopping.Register(async () => await _servicesManager.Stop());
+
 			if (env.IsDevelopment())
 				app.UseDeveloperExceptionPage();
 			else
@@ -134,7 +135,10 @@ namespace Neon.HomeControl.Web
 				.AllowAnyMethod()
 				.AllowAnyHeader());
 			app.UseAuthentication();
-			app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leon Home control"); });
+
+			if (_neonConfig.EnableSwagger)
+				app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leon Home control"); });
+
 			app.UseMvc();
 			await _servicesManager.Start();
 		}

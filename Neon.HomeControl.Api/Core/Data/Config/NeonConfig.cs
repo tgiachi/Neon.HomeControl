@@ -22,6 +22,16 @@
 		/// MQTT Server information
 		/// </summary>
 		public MqttConfig Mqtt { get; set; }
+		/// <summary>
+		/// Expose application metrics
+		/// </summary>
+		public bool EnableMetrics { get; set; }
+
+		/// <summary>
+		/// Expose API information with swagger
+		/// </summary>
+		public bool EnableSwagger { get; set; }
+
 		public DatabaseConfig Database { get; set; }
 		public ScriptConfig Scripts { get; set; }
 		public TaskConfig Tasks { get; set; }

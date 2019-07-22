@@ -59,6 +59,12 @@ namespace Neon.HomeControl.Services.Services
 			}
 		}
 
+		public bool SaveFileText(string file, string text)
+		{
+			File.WriteAllText(BuildFilePath(file), text);
+			return true;
+		}
+
 		public object LoadFile(string file, Type type)
 		{
 			return File.ReadAllText(BuildFilePath(file)).FromJson(type);

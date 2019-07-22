@@ -58,7 +58,7 @@ namespace Neon.HomeControl.Services.Services
 		}
 
 
-		public async Task<bool> SendMessage(string topic, IBaseMessage message)
+		public async Task<bool> SendMessage(string topic, object message)
 		{
 			if (_mqttClient.IsConnected)
 			{

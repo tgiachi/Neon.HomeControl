@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <StartupObject>Neon.HomeControl.Service.Program</StartupObject>
     <RuntimeIdentifiers>win10-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
-    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.2.6</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

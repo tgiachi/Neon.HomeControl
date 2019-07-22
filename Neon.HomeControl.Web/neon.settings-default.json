@@ -34,5 +34,7 @@
 	"IoT": {
 		"DatabaseDirectory": "Database"
 	},
-	"JwtToken": "Jqdik6YoOiZUIx35zO8p4ZnpBCjUtorN8kl58FywYgqbCeOjSOdASwWGDq21WNLw4tADnTqPPWvsJe66"
+	"JwtToken": "Jqdik6YoOiZUIx35zO8p4ZnpBCjUtorN8kl58FywYgqbCeOjSOdASwWGDq21WNLw4tADnTqPPWvsJe66",
+	"EnableMetrics": false,
+	"EnableSwagger": true
 }

@@ -169,8 +169,6 @@ namespace Neon.HomeControl.Components.Components
 			var groups = await _hueClient.GetGroupsAsync();
 			groups.ToList().ForEach(g =>
 			{
-				//	_logger.LogDebug($"Updating Light group {g.Name}");
-
 				var entity = new PhilipsHueEd
 				{
 					EntityName = g.Name,

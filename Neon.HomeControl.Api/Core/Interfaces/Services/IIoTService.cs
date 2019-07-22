@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using MediatR;
+using Neon.HomeControl.Api.Core.Data.Commands;
 using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
@@ -16,6 +19,16 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 		/// <param name="value"></param>
 		/// <returns></returns>
 		T InsertEntity<T>(T value) where T : IIotEntity;
+
+		string GetEntityTypeByName(string name);
+
+		T GetEntityByType<T>(string name, string type) where T : IIotEntity;
+
+		/// <summary>
+		/// Get all Entities
+		/// </summary>
+		/// <returns></returns>
+		List<IIotEntity> GetEntities();
 
 		/// <summary>
 		///     Update Entity

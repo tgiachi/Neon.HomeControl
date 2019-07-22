@@ -6,7 +6,10 @@
     <UserSecretsId>fa070407-4a6c-4d5c-aabd-f1b229666dc5</UserSecretsId>
     <OutputType>Exe</OutputType>
     <!--<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>-->
+    <RuntimeFrameworkVersion>2.2.5</RuntimeFrameworkVersion>
+    -->
+    <RuntimeFrameworkVersion>2.2.6</RuntimeFrameworkVersion>
+
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

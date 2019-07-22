@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using CoordinateSharp;
+using MediatR;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Enums;
@@ -10,11 +12,12 @@ using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
 using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Data.Commands;
 
 namespace Neon.HomeControl.Components.Components
 {
 	[Component("Sun Set Component", "1.0", "WEATHER", "Get sun set information", typeof(SunSetConfig))]
-	public class SunSetComponent : ISunSetComponent
+	public class SunSetComponent : ISunSetComponent, INotificationHandler<IotCommand<SunSetEd>>
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;
 		private readonly HttpClient _httpClient;
@@ -60,7 +63,7 @@ namespace Neon.HomeControl.Components.Components
 
 		public object GetDefaultConfig()
 		{
-			return new SunSetConfig {Enabled = true};
+			return new SunSetConfig { Enabled = true };
 		}
 
 		private async void GetSunSetJob()
@@ -77,6 +80,13 @@ namespace Neon.HomeControl.Components.Components
 
 
 			_ioTService.InsertEvent(ed);
+		}
+
+		public Task Handle(IotCommand<SunSetEd> notification, CancellationToken cancellationToken)
+		{
+			//throw new NotImplementedException();
+
+			return Task.CompletedTask;
 		}
 	}
 }

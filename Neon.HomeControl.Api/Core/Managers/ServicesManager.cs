@@ -150,6 +150,9 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			_availableServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 
+			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
+				.AsClosedTypesOf(typeof(INotificationHandler<>)).AsImplementedInterfaces().SingleInstance();
+
 			return ContainerBuilder;
 		}
 
@@ -227,7 +230,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			catch (Exception ex)
 			{
 				var _service = ServicesInfo.FirstOrDefault(s => s.ServiceId == generatedId);
-				logger.LogInformation($"Error during start service {service.GetType().Name} => {ex.Message}");
+				logger.LogInformation($"Error during start service {service.GetType().Name} => {ex}");
 				_service.Exception = ex;
 				_service.Status = ServiceStatusEnum.ERROR;
 			}

@@ -4,18 +4,64 @@
         <name>Neon.HomeControl.Services</name>
     </assembly>
     <members>
+        <member name="M:Neon.HomeControl.Services.Services.CommandDispatcherService.DispatchCommand``1(``0,System.String,System.Object[])">
+            <summary>
+            Dispatch command to commands
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="entity"></param>
+            <param name="commandName"></param>
+            <param name="args"></param>
+        </member>
         <member name="T:Neon.HomeControl.Services.Services.IoTService">
             <summary>
                 Implementation of IoT Server
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Services.Services.IoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemService,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService)">
+        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemService,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService,Neon.HomeControl.Api.Core.Interfaces.Services.INotificationService,Neon.HomeControl.Api.Core.Interfaces.Services.IMqttService,Neon.HomeControl.Api.Core.Interfaces.Services.ICommandDispatcherService)">
             <summary>
                 Ctor
             </summary>
             <param name="logger"></param>
             <param name="fileSystemService"></param>
             <param name="config"></param>
+        </member>
+        <member name="M:Neon.HomeControl.Services.Services.IoTService.GetEntities">
+            <summary>
+            Get all entities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Neon.HomeControl.Services.Services.NotificationService">
+            <summary>
+            Service bridge for notify 
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Services.Services.NotificationService.#ctor(MediatR.IMediator,Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Services.Services.NotificationService})">
+            <summary>
+            Ctor
+            </summary>
+            <param name="mediator"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:Neon.HomeControl.Services.Services.NotificationService.Start">
+            <summary>
+            Start notification service
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Services.Services.NotificationService.Stop">
+            <summary>
+            Stop notification service
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Services.Services.NotificationService.BroadcastMessage``1(``0)">
+            <summary>
+            Broadcast to listener
+            </summary>
+            <typeparam name="TMessage"></typeparam>
+            <param name="message"></param>
         </member>
     </members>
 </doc>

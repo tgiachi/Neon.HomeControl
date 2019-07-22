@@ -753,6 +753,21 @@
                 marked with the <see cref="T:Neon.HomeControl.Api.Annotations.XamlItemsControlAttribute" /> attribute.
             </remarks>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandAttribute">
+            <summary>
+            Command attribute for dispatch to components commands
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandAttribute.CommandName">
+            <summary>
+            Command name
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandAttribute.EntityType">
+            <summary>
+            Entity Type
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Attributes.Components.ComponentAttribute">
             <summary>
                 Attribute for the implementation of the components
@@ -929,6 +944,35 @@
                 Number of secondse
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1">
+            <summary>
+            Command to send to devices
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1.Entity">
+            <summary>
+            Entity
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1.CommandName">
+            <summary>
+            Command name
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1.Parameters">
+            <summary>
+            Command Parameters
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1.BuildCommand``1(``0,System.String,System.Object[])">
+            <summary>
+            Helper for build command
+            </summary>
+            <param name="entity"></param>
+            <param name="commandName"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
         <member name="P:Neon.HomeControl.Api.Core.Data.Config.MqttConfig.RunEmbedded">
             <summary>
             If true start local Mqtt Server
@@ -957,6 +1001,16 @@
         <member name="P:Neon.HomeControl.Api.Core.Data.Config.NeonConfig.Mqtt">
             <summary>
             MQTT Server information
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Config.NeonConfig.EnableMetrics">
+            <summary>
+            Expose application metrics
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Config.NeonConfig.EnableSwagger">
+            <summary>
+            Expose API information with swagger
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Data.Config.ScriptConfig">
@@ -1034,6 +1088,31 @@
                 Enum for choose polling timer
             </summary>
         </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Components.IComponent.Start">
+            <summary>
+            Start component
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Components.IComponent.Stop">
+            <summary>
+            Stop component
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Components.IComponent.InitConfiguration(System.Object)">
+            <summary>
+            Send to component the configuration
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Components.IComponent.GetDefaultConfig">
+            <summary>
+            If configuration is empty send default config
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.IDtoMapper`2">
             <summary>
             Interface for create DTO Mapper
@@ -1074,6 +1153,20 @@
                 Interface for create Property Change Entity
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.ICommandDispatcherService">
+            <summary>
+            Dispatcher Service
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.ICommandDispatcherService.DispatchCommand``1(``0,System.String,System.Object[])">
+            <summary>
+            Dispatch to component service
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="entity"></param>
+            <param name="commandName"></param>
+            <param name="args"></param>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService">
             <summary>
                 Service for save Entities status
@@ -1085,6 +1178,12 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService.GetEntities">
+            <summary>
+            Get all Entities
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService.Update``1(``0)">
@@ -1143,6 +1242,40 @@
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IPluginsService">
             <summary>
             Interface for create plugins manager service
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IRuleEngineService">
+            <summary>
+            Rules engine service
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IRuleEngineService.AddRule(System.String,System.Type,System.String,System.Action{Neon.HomeControl.Api.Core.Interfaces.IoTEntities.IIotEntity})">
+            <summary>
+            Add rule with string condition with Lambda parser
+            </summary>
+            <param name="ruleName"></param>
+            <param name="condition"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IRuleEngineService.AddRule(System.String,System.Type,System.Func{Neon.HomeControl.Api.Core.Interfaces.IoTEntities.IIotEntity,System.Boolean},System.Action{Neon.HomeControl.Api.Core.Interfaces.IoTEntities.IIotEntity})">
+            <summary>
+            Add rule with function boolean 
+            </summary>
+            <param name="ruleName"></param>
+            <param name="condition"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IRuleEngineService.AddRule(System.String,System.Type,System.String,NLua.LuaFunction)">
+            <summary>
+            Add rule with string condition for ScriptManager
+            </summary>
+            <param name="ruleName"></param>
+            <param name="condition"></param>
+            <param name="action"></param>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Interfaces.Services.IRuleEngineService.Rules">
+            <summary>
+            Get all rules
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.ISchedulerService">
@@ -1308,6 +1441,13 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Utils.MethodsUtils.FlattenException(System.Exception)">
+            <summary>
+            Return flatten Exception
+            </summary>
+            <param name="exception"></param>
             <returns></returns>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Utils.NotificationExtensions">
@@ -1490,13 +1630,13 @@
             <summary>Branch: master</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commit">
-            <summary>Commit: 548a01e</summary>
+            <summary>Commit: b180158</summary>
         </member>
         <member name="F:ThisAssembly.Git.Sha">
-            <summary>Sha: 548a01e64888232fbf1e3c08a39b2e60cbee1891</summary>
+            <summary>Sha: b180158b42079e0d343b955678b98672df48d56f</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commits">
-            <summary>Commits on top of base version: 2</summary>
+            <summary>Commits on top of base version: 4</summary>
         </member>
         <member name="F:ThisAssembly.Git.Tag">
             <summary>Tag: </summary>
@@ -1526,7 +1666,7 @@
             <summary>Minor: 0</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Patch">
-            <summary>Patch: 2</summary>
+            <summary>Patch: 4</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Label">
             <summary>Label: </summary>
