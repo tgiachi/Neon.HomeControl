@@ -773,7 +773,7 @@
                 Attribute for the implementation of the components
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.Api.Core.Attributes.Components.ComponentAttribute.#ctor(System.String,System.String,System.String,System.String,System.Type)">
+        <member name="M:Neon.HomeControl.Api.Core.Attributes.Components.ComponentAttribute.#ctor(System.String,System.String,System.String,System.String,System.String,System.Type)">
             <summary>
                 Ctor
             </summary>
@@ -782,6 +782,11 @@
             <param name="category">Category (LIGHTS, MUSIC, HOME_AUTOMATION)</param>
             <param name="description">Describes what the component does</param>
             <param name="componentConfigType">Type of Config</param>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Components.ComponentAttribute.Id">
+            <summary>
+            Id of component (philip_hue, ecc..)
+            </summary>
         </member>
         <member name="P:Neon.HomeControl.Api.Core.Attributes.Components.ComponentAttribute.Name">
             <summary>
@@ -1011,6 +1016,11 @@
         <member name="P:Neon.HomeControl.Api.Core.Data.Config.NeonConfig.EnableSwagger">
             <summary>
             Expose API information with swagger
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Config.NeonConfig.AutoLoadComponents">
+            <summary>
+            If true, load all components
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Data.Config.ScriptConfig">
@@ -1316,6 +1326,13 @@
             <summary>
                 Stop service from <see cref="T:Neon.HomeControl.Api.Core.Interfaces.Managers.IServicesManager" />
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Managers.ComponentsService.StartComponent(System.String)">
+            <summary>
+            Start component
+            </summary>
+            <param name="componentId"></param>
             <returns></returns>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Mapper.DefaultMapperProfile">
@@ -1635,13 +1652,13 @@
             <summary>Branch: master</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commit">
-            <summary>Commit: 30ecd3b</summary>
+            <summary>Commit: 83d4358</summary>
         </member>
         <member name="F:ThisAssembly.Git.Sha">
-            <summary>Sha: 30ecd3bea8f279b93c27612913629d6c1890b503</summary>
+            <summary>Sha: 83d4358bd933495cb74c2fa9fb1f3611ad6a33a6</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commits">
-            <summary>Commits on top of base version: 6</summary>
+            <summary>Commits on top of base version: 7</summary>
         </member>
         <member name="F:ThisAssembly.Git.Tag">
             <summary>Tag: </summary>
@@ -1671,7 +1688,7 @@
             <summary>Minor: 0</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Patch">
-            <summary>Patch: 6</summary>
+            <summary>Patch: 7</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Label">
             <summary>Label: </summary>

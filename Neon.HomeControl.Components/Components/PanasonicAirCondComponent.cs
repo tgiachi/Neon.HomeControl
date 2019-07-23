@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Panasonic AirConditioner", "1.0", "AIR", "Connect and control Panasonic Airconditioner",
+	[Component("panasonic_air", "Panasonic AirConditioner", "1.0", "AIR", "Connect and control Panasonic Airconditioner",
 		typeof(PanasonicAirCondConfig))]
 	public class PanasonicAirCondComponent : IPanasonicAirCondComponent
 	{

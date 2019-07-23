@@ -5,7 +5,7 @@ using Neon.HomeControl.Components.Interfaces;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Nest Thermostat", "1.0", "COMFORT", "Control Nest Thermostat", typeof(NestThermoConfig))]
+	[Component("nest","Nest Thermostat", "1.0", "COMFORT", "Control Nest Thermostat", typeof(NestThermoConfig))]
 	public class NestThermoComponent : INestThermoComponent
 	{
 		private NestThermoConfig _config;

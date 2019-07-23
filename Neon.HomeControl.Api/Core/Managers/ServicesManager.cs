@@ -60,7 +60,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			InitPolly();
 			ServicesInfo = new ObservableCollection<ServiceInfo>();
 			ContainerBuilder = new ContainerBuilder();
-			
+
 			ContainerBuilder.RegisterModule(new LogRequestModule());
 			ContainerBuilder.RegisterInstance(_neonConfig);
 			ContainerBuilder.RegisterInstance<IServicesManager>(this);
@@ -71,12 +71,12 @@ namespace Neon.HomeControl.Api.Core.Managers
 				ContainerBuilder
 					.RegisterAssemblyTypes(a)
 					.AsClosedTypesOf(typeof(IRequestHandler<,>))
-					.AsImplementedInterfaces();
+					.AsImplementedInterfaces().SingleInstance(); ;
 
 				ContainerBuilder
 					.RegisterAssemblyTypes(a)
 					.AsClosedTypesOf(typeof(INotificationHandler<>))
-					.AsImplementedInterfaces();
+					.AsImplementedInterfaces().SingleInstance();
 			});
 
 			// It appears Autofac returns the last registered types first
@@ -108,7 +108,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			_logger.LogInformation($"DataAccesses  {dataAccess.Count}");
 
 
-			luaObjects.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
+			luaObjects.ForEach(l => { ContainerBuilder.RegisterType(l).AsSelf().InstancePerLifetimeScope(); });
 			singletonServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 			componentsObject.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 
@@ -149,13 +149,11 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			jobObjects.ForEach(t => RegisterService(LifeScopeTypeEnum.SCOPED, t));
 
-			//_availableServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssembliesArray())
 				.Where(t => t.Name.ToLower().EndsWith("service"))
 				.AsImplementedInterfaces().InstancePerLifetimeScope();
 
-			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
-				.AsClosedTypesOf(typeof(INotificationHandler<>)).AsImplementedInterfaces().SingleInstance();
+
 
 			return ContainerBuilder;
 		}
@@ -183,11 +181,24 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			var list = orderList.OrderBy(pair => pair.Key).ToList();
 
+
+#if DEBUG
+			foreach (var keyValuePair in list)
+				keyValuePair.Value.ForEach(t =>
+				{
+					_logger.LogDebug($"ORDER {keyValuePair.Key} => {t.Name}");
+
+
+				});
+
+#endif
+
 			foreach (var keyValuePair in list)
 				foreach (var service in keyValuePair.Value)
 				{
 					var attribute = service.GetCustomAttribute<ServiceAttribute>();
 					await StartService(service);
+
 				}
 
 			var notificationService = Resolve<INotificationService>();

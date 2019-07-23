@@ -4,6 +4,18 @@
         <name>Neon.HomeControl.StandardLuaLibrary</name>
     </assembly>
     <members>
+        <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ComponentsServiceLuaObject">
+            <summary>
+            Bridge for control components
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ComponentsServiceLuaObject.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ComponentsServiceLuaObject},Neon.HomeControl.Api.Core.Interfaces.Managers.IComponentsService)">
+            <summary>
+            ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="componentsService"></param>
+        </member>
         <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject">
             <summary>
             Events manager for LUA

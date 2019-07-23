@@ -33,7 +33,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 			return _servicesManager.Resolve(type);
 
 		}
-
+		
 		/// <summary>
 		/// Get all services info
 		/// </summary>

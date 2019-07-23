@@ -10,7 +10,7 @@ namespace Neon.HomeControl.Services.Services
 	/// <summary>
 	/// Service bridge for notify 
 	/// </summary>
-	[Service(typeof(INotificationService), Name = "Notification Service", LoadAtStartup = true, Order = 2)]
+	[Service(typeof(INotificationService), Name = "Notification Service", LoadAtStartup = true, Order = 3)]
 	public class NotificationService : INotificationService
 	{
 		private readonly ILogger _logger;
@@ -55,6 +55,7 @@ namespace Neon.HomeControl.Services.Services
 		{
 			try
 			{
+				_logger.LogInformation($"NOTIFICATION TYPE {message.GetType().Name}");
 				await _mediator.Publish(message);
 			}
 			catch(Exception ex)

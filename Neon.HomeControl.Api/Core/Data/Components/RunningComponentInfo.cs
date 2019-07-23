@@ -9,7 +9,6 @@ namespace Neon.HomeControl.Api.Core.Data.Components
 	{
 		[JsonIgnore] public IComponent Component { get; set; }
 
-
 		public ComponentStatusEnum Status { get; set; }
 		public Exception Error { get; set; }
 	}

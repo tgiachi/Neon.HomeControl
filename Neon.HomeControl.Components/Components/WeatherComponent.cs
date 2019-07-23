@@ -16,7 +16,7 @@ using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Weather", "1.0", "WEATHER", "Broadcast weather", typeof(WeatherComponentConfig))]
+	[Component("weather", "Weather", "1.0", "WEATHER", "Broadcast weather", typeof(WeatherComponentConfig))]
 	public class WeatherComponent : IWeatherComponent, INotificationHandler<IotCommand<WeatherEd>>
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;

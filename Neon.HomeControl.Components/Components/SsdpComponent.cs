@@ -10,7 +10,7 @@ using UPnP;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Ssdp connector", "1.0", "STREAMING", "Control ssdp", typeof(SsdpConfig))]
+	[Component("ssdp","Ssdp connector", "1.0", "STREAMING", "Control ssdp", typeof(SsdpConfig))]
 	public class SsdpComponent : ISsdpComponent
 	{
 

@@ -18,7 +18,7 @@ namespace Neon.HomeControl.Components.Components
 	/// <summary>
 	/// Component for connect to chromecast and play media
 	/// </summary>
-	[Component("Chromecast connector", "1.0", "STREAMING", "Control chromecast", typeof(ChromecastConfig))]
+	[Component("chromecast","Chromecast connector", "1.0", "STREAMING", "Control chromecast", typeof(ChromecastConfig))]
 	public class ChromecastComponent : IChromecastComponent
 	{
 

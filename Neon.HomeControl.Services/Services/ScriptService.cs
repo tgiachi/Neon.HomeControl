@@ -160,7 +160,11 @@ namespace Neon.HomeControl.Services.Services
 					SearchOption.AllDirectories)
 				.ToList();
 
-			files.ForEach(f => LoadLuaFile(f, false));
+			files.ForEach(f =>
+			{
+				if (!f.ToLower().Contains("bootstrap.lua"))	
+					LoadLuaFile(f, false);
+			});
 		}
 
 		public void LoadLuaFile(string filename, bool execute)

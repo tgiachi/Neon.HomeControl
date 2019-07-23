@@ -16,15 +16,21 @@ namespace Neon.HomeControl.Api.Core.Attributes.Components
 		/// <param name="category">Category (LIGHTS, MUSIC, HOME_AUTOMATION)</param>
 		/// <param name="description">Describes what the component does</param>
 		/// <param name="componentConfigType">Type of Config</param>
-		public ComponentAttribute(string name, string version, string category, string description,
+		public ComponentAttribute(string id, string name, string version, string category, string description,
 			Type componentConfigType)
 		{
+			Id = id;
 			Name = name;
 			Version = version;
 			Category = category;
 			Description = description;
 			ComponentConfigType = componentConfigType;
 		}
+
+		/// <summary>
+		/// Id of component (philip_hue, ecc..)
+		/// </summary>
+		public string Id { get; set; }
 
 		/// <summary>
 		///     Name of components

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Sonoff-Tasmoda", "1.0", "IOT", "Connect and control Sonoff Tasmoda IoT", typeof(SonoffTasmodaConfig))]
+	[Component("sonoff_tasmoda","Sonoff-Tasmoda", "1.0", "IOT", "Connect and control Sonoff Tasmoda IoT", typeof(SonoffTasmodaConfig))]
 	public class SonoffTasmodaComponent : ISonoffTasmodaComponent
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;

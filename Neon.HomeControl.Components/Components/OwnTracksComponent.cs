@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("OwnTrack component", "1.0", "Presence", "Presence", typeof(OwnTracksConfig))]
+	[Component("owntracks","OwnTrack component", "1.0", "Presence", "Presence", typeof(OwnTracksConfig))]
 	public class OwnTracksComponent : IOwnTracksComponent
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;

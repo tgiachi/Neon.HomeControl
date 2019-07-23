@@ -32,6 +32,11 @@
 		/// </summary>
 		public bool EnableSwagger { get; set; }
 
+		/// <summary>
+		/// If true, load all components
+		/// </summary>
+		public bool AutoLoadComponents { get; set; }
+
 		public DatabaseConfig Database { get; set; }
 		public ScriptConfig Scripts { get; set; }
 		public TaskConfig Tasks { get; set; }

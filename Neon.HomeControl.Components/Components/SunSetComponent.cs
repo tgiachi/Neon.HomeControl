@@ -16,7 +16,7 @@ using Neon.HomeControl.Api.Core.Data.Commands;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Sun Set Component", "1.0", "WEATHER", "Get sun set information", typeof(SunSetConfig))]
+	[Component("sunset", "Sun Set Component", "1.0", "WEATHER", "Get sun set information", typeof(SunSetConfig))]
 	public class SunSetComponent : ISunSetComponent, INotificationHandler<IotCommand<SunSetEd>>
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;

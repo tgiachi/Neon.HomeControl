@@ -20,7 +20,7 @@ using SpotifyAPI.Web;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Spotify Web", "1.0", "MUSIC", "Connect to spotify Web Api", typeof(SpotifyWebConfig))]
+	[Component("spotify_web", "Spotify Web", "1.0", "MUSIC", "Connect to spotify Web Api", typeof(SpotifyWebConfig))]
 	[OAuthProvider("spotify")]
 	public class SpotifyWebComponent : ISpotifyWebComponent, IOAuthCallback
 	{

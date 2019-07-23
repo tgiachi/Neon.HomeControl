@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Neon.HomeControl.Api.Core.Data.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
@@ -13,5 +14,8 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Managers
 		ObservableCollection<RunningComponentInfo> RunningComponents { get; set; }
 
 		void SaveComponentConfig<T>(T config) where T : IComponentConfig;
+
+		Task<bool> StartComponent(string componentId);
+
 	}
 }

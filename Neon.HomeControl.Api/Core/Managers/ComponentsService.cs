@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ using Neon.HomeControl.Api.Core.Events.System;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
-	[Service(typeof(IComponentsService), LoadAtStartup = true, Name = "Components Service manager")]
+	[Service(typeof(IComponentsService), LoadAtStartup = true, Name = "Components Service manager", Order = 3)]
 	public class ComponentsService : IComponentsService, INotificationHandler<ServiceLoadedEvent>
 	{
 		private readonly Dictionary<ComponentInfo, Type> _componentsTypes;
@@ -27,18 +28,15 @@ namespace Neon.HomeControl.Api.Core.Managers
 		private readonly IFileSystemService _fileSystemService;
 		private readonly ILogger _logger;
 		private readonly IServicesManager _servicesManager;
-		private readonly ITaskExecutorService _taskExecutorService;
-
 
 		public List<ComponentInfo> AvailableComponents { get; set; }
 		public ObservableCollection<RunningComponentInfo> RunningComponents { get; set; }
 
 		public ComponentsService(ILogger<ComponentsService> logger, IServicesManager servicesManager, NeonConfig config,
-			IFileSystemService fileSystemService, ITaskExecutorService taskExecutorService)
+			IFileSystemService fileSystemService)
 		{
 			_logger = logger;
 			_config = config;
-			_taskExecutorService = taskExecutorService;
 			_servicesManager = servicesManager;
 			_fileSystemService = fileSystemService;
 			AvailableComponents = new List<ComponentInfo>();
@@ -50,6 +48,26 @@ namespace Neon.HomeControl.Api.Core.Managers
 		public void SaveComponentConfig<T>(T config) where T : IComponentConfig
 		{
 			SaveComponentConfig(config, typeof(T));
+		}
+
+		/// <summary>
+		/// Start component
+		/// </summary>
+		/// <param name="componentId"></param>
+		/// <returns></returns>
+		public async Task<bool> StartComponent(string componentId)
+		{
+			var component = AvailableComponents.FirstOrDefault(c =>
+				string.Equals(c.Id, componentId, StringComparison.CurrentCultureIgnoreCase));
+
+			if (component == null)
+				return false;
+
+			if (RunningComponents.FirstOrDefault(c => c.Id == componentId) == null)
+				await StartComponent(component, _componentsTypes[component]);
+
+			return true;
+
 		}
 
 		public async Task<bool> Start()
@@ -80,6 +98,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 					var attr = t.GetCustomAttribute<ComponentAttribute>();
 					var componentInfo = new ComponentInfo
 					{
+						Id = attr.Id,
 						Name = attr.Name,
 						Version = attr.Version,
 						Description = attr.Description
@@ -107,6 +126,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			var runningComponent = new RunningComponentInfo
 			{
+				Id = componentInfo.Id,
 				Name = componentInfo.Name,
 				Version = componentInfo.Version,
 				Description = componentInfo.Description,
@@ -169,10 +189,15 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		public async Task Handle(ServiceLoadedEvent notification, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Load components");
-			await StartComponents();
-			_logger.LogInformation($"Loaded {_componentsTypes.Count} components");
+			if (AvailableComponents.Count > 0)
+				if (_config.AutoLoadComponents)
+				{
+					_logger.LogInformation($"Load components");
+					await StartComponents();
+					_logger.LogInformation($"Loaded {_componentsTypes.Count} components");
+				}
 
 		}
+
 	}
 }

@@ -51,8 +51,6 @@ namespace Neon.HomeControl.Services.Services
 		)
 		{
 			_logger = logger;
-			_logger.LogError($"CREATED");
-
 			_mqttService = mqttService;
 			_notificationService = notificationService;
 			_eventDatabaseService = eventDatabaseService;
@@ -71,7 +69,6 @@ namespace Neon.HomeControl.Services.Services
 							new LiteDatabase(_fileSystemService.BuildFilePath(_config.IoT.DatabaseDirectory) + "\\" + _dbFilename);
 				_liteDatabase.Shrink();
 			}
-
 
 			return Task.FromResult(true);
 		}

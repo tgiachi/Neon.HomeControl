@@ -16,7 +16,7 @@ using Q42.HueApi.Interfaces;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("Philip Hue", "1.0", "LIGHTS", "Control Philip Hue lights", typeof(PhilipHueConfig))]
+	[Component("philip_hue", "Philip Hue", "1.0", "LIGHTS", "Control Philip Hue lights", typeof(PhilipHueConfig))]
 	public class PhilipHueComponent : IPhilipHueComponent
 	{
 		private readonly IBridgeLocator _bridgeLocator = new HttpBridgeLocator();

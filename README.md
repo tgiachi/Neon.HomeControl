@@ -1,5 +1,5 @@
 ﻿# Neon.HomeControl
-Similar to HomeAssistant but made with .net core and ❤️
+Similar to HomeAssistant, but made with .net core and ❤️
 
 # Help request!
 I'm looking for people to help me with the project, please contact me!
