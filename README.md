@@ -57,7 +57,7 @@ end
 on_event_name("weather", function(entity)
 
   if entity.Temperature >= 30 then
-      log_info("test", "Temperature is {0} ed e' un caldo bestia", entity.Temperature);
+      log_info("test", "Temperature is {0}", entity.Temperature);
       local airco_entity = cast_entity(get_entity_by_name("airco"))
       send_command(airco, "POWER", "ON")
   else      
