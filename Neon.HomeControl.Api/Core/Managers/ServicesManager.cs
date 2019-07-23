@@ -54,8 +54,23 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		public ObservableCollection<ServiceInfo> ServicesInfo { get; set; }
 
+		private void PrintHeader()
+		{
+			_logger.LogInformation(@"
+ ____     ___   ___   ____  
+|    \   /  _] /   \ |    \ 
+|  _  | /  [_ |     ||  _  |
+|  |  ||    _]|  O  ||  |  |
+|  |  ||   [_ |     ||  |  |
+|  |  ||     ||     ||  |  |
+|__|__||_____| \___/ |__|__|
+                            ");
+		}
+
+
 		public ContainerBuilder InitContainer()
 		{
+			PrintHeader();
 			EnhancedStackTrace.Current();
 			InitPolly();
 			ServicesInfo = new ObservableCollection<ServiceInfo>();
@@ -101,11 +116,11 @@ namespace Neon.HomeControl.Api.Core.Managers
 			_availableServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ServiceAttribute));
 
 
-			_logger.LogInformation($"Services  {_availableServices.Count}");
-			_logger.LogInformation($"Singleton services {singletonServices.Count}");
-			_logger.LogInformation($"Transient services {transientServices.Count}");
-			_logger.LogInformation($"Scoped services {scopedServices.Count}");
-			_logger.LogInformation($"DataAccesses  {dataAccess.Count}");
+			_logger.LogDebug($"Services  {_availableServices.Count}");
+			_logger.LogDebug($"Singleton services {singletonServices.Count}");
+			_logger.LogDebug($"Transient services {transientServices.Count}");
+			_logger.LogDebug($"Scoped services {scopedServices.Count}");
+			_logger.LogDebug($"DataAccesses  {dataAccess.Count}");
 
 
 			luaObjects.ForEach(l => { ContainerBuilder.RegisterType(l).AsSelf().InstancePerLifetimeScope(); });

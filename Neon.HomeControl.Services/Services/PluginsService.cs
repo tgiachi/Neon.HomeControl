@@ -33,7 +33,7 @@ namespace Neon.HomeControl.Services.Services
 
 		public Task<bool> Stop()
 		{
-			throw new NotImplementedException();
+			return Task.FromResult(true);
 		}
 	}
 }

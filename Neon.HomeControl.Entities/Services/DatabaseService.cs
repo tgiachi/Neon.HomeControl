@@ -31,6 +31,7 @@ namespace Neon.HomeControl.Entities.Services
 		{
 			//_neonDbContext = _servicesManager.Resolve<NeonDbContext>();
 			_logger.LogInformation("Applying migrations");
+			await _neonDbContext.Database.EnsureCreatedAsync();
 			await _neonDbContext.Database.MigrateAsync();
 			_logger.LogInformation("Migrations completed");
 

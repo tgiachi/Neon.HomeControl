@@ -122,7 +122,8 @@ namespace Neon.HomeControl.Web
 		public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
 			IApplicationLifetime applicationLifetime)
 		{
-			applicationLifetime.ApplicationStopping.Register(async () => await _servicesManager.Stop());
+			applicationLifetime.ApplicationStopping.Register(async () =>
+				await _servicesManager.Stop());
 
 			if (env.IsDevelopment())
 				app.UseDeveloperExceptionPage();

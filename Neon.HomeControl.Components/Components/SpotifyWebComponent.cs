@@ -29,7 +29,6 @@ namespace Neon.HomeControl.Components.Components
 		private const string AuthorizeUrl = "https://accounts.spotify.com/it/authorize";
 
 		private readonly IComponentsService _componentsService;
-		private readonly IEventDatabaseService _eventDatabaseService;
 		private readonly HttpClient _httpClient;
 		private readonly IIoTService _ioTService;
 		private readonly ILogger _logger;
@@ -63,7 +62,6 @@ namespace Neon.HomeControl.Components.Components
 			_componentsService = componentsService;
 			_userInteractionService = userInteractionService;
 			_ioTService = ioTService;
-			_eventDatabaseService = eventDatabaseService;
 			_httpClient = httpClientFactory.CreateClient();
 		}
 
@@ -105,10 +103,16 @@ namespace Neon.HomeControl.Components.Components
 								new KeyValuePair<string, string>("client_id", _config.ClientId),
 								new KeyValuePair<string, string>("client_secret", _config.ClientSecret)));
 						var st = await res.Content.ReadAsStringAsync();
-						_logger.LogInformation($"new token {st}");
+
+						var newToken = st.FromJson<OAuthTokenResult>();
+						_config.AccessToken = newToken.AccessToken;
+						_config.ExpireOn = DateTime.Now.AddSeconds(newToken.ExpiresIn);
+						_componentsService.SaveComponentConfig(_config);
+
+						_logger.LogInformation($"Token refresh expire on: {_config.ExpireOn}");
 
 						InitSpotifyClient();
-					}, "SpotifyRefreshToken", (int) TimeSpan.FromMinutes(10).TotalSeconds, false);
+					}, "SpotifyRefreshToken", (int)TimeSpan.FromMinutes(10).TotalSeconds, false);
 
 					await Start();
 				}
@@ -143,7 +147,7 @@ namespace Neon.HomeControl.Components.Components
 
 		public Task InitConfiguration(object config)
 		{
-			_config = (SpotifyWebConfig) config;
+			_config = (SpotifyWebConfig)config;
 
 			return Task.CompletedTask;
 		}
@@ -161,7 +165,7 @@ namespace Neon.HomeControl.Components.Components
 					_spotifyWebApi?.Dispose();
 				}
 
-			_spotifyWebApi = new SpotifyWebAPI {TokenType = _config.TokenType, AccessToken = _config.AccessToken};
+			_spotifyWebApi = new SpotifyWebAPI { TokenType = _config.TokenType, AccessToken = _config.AccessToken };
 		}
 
 		private void BuildUserTokenRequest()

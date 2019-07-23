@@ -57,7 +57,7 @@ namespace Neon.HomeControl.Components.Components
 
 
 					_ioTService.InsertEvent(ev);
-					_logger.LogInformation("OwnTracks!");
+					_logger.LogInformation($"Received position from id {ev.EntityName}");
 				}
 			});
 
@@ -66,7 +66,7 @@ namespace Neon.HomeControl.Components.Components
 
 		public Task<bool> Stop()
 		{
-			throw new NotImplementedException();
+			return Task.FromResult(true);
 		}
 
 		public Task InitConfiguration(object config)
