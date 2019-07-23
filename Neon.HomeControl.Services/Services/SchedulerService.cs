@@ -55,6 +55,7 @@ namespace Neon.HomeControl.Services.Services
 			};
 
 			AddPolling(GC.Collect, "GC", SchedulerServicePollingEnum.NORMAL_POLLING);
+	
 
 			return Task.FromResult(true);
 		}

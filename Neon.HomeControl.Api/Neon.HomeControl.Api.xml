@@ -1088,6 +1088,11 @@
                 Enum for choose polling timer
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Events.System.ServiceLoadedEvent">
+            <summary>
+            System event triggered when services manager loaded all service
+            </summary>
+        </member>
         <member name="M:Neon.HomeControl.Api.Core.Interfaces.Components.IComponent.Start">
             <summary>
             Start component
@@ -1621,22 +1626,22 @@
             <summary>Provides access to the git information for the current assembly.</summary>
         </member>
         <member name="F:ThisAssembly.Git.IsDirty">
-            <summary>IsDirty: false</summary>
+            <summary>IsDirty: true</summary>
         </member>
         <member name="F:ThisAssembly.Git.IsDirtyString">
-            <summary>IsDirtyString: false</summary>
+            <summary>IsDirtyString: true</summary>
         </member>
         <member name="F:ThisAssembly.Git.Branch">
             <summary>Branch: master</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commit">
-            <summary>Commit: 23db6d2</summary>
+            <summary>Commit: 30ecd3b</summary>
         </member>
         <member name="F:ThisAssembly.Git.Sha">
-            <summary>Sha: 23db6d2e20e7c1f14ba8b54f9f7dbddf62ea7587</summary>
+            <summary>Sha: 30ecd3bea8f279b93c27612913629d6c1890b503</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commits">
-            <summary>Commits on top of base version: 5</summary>
+            <summary>Commits on top of base version: 6</summary>
         </member>
         <member name="F:ThisAssembly.Git.Tag">
             <summary>Tag: </summary>
@@ -1666,7 +1671,7 @@
             <summary>Minor: 0</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Patch">
-            <summary>Patch: 5</summary>
+            <summary>Patch: 6</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Label">
             <summary>Label: </summary>

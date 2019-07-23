@@ -21,19 +21,18 @@ namespace Neon.HomeControl.Services.Services
 	/// <summary>
 	///     Implementation of IoT Server
 	/// </summary>
-	[Service(typeof(IoTService), Name = "IoT Service", LoadAtStartup = true, Order = 2)]
+	[Service(typeof(IIoTService), Name = "IoT Service", LoadAtStartup = true, Order = 2)]
 	public class IoTService : IIoTService
 	{
 		private static readonly string _dbFilename = "Neon.HomeControl.IoT.db";
 		private static readonly string _collectionName = "entities";
-		private static LiteDatabase _liteDatabase;
+		private LiteDatabase _liteDatabase;
 		private readonly NeonConfig _config;
 		private readonly IFileSystemService _fileSystemService;
 		private readonly IEventDatabaseService _eventDatabaseService;
 		private readonly INotificationService _notificationService;
 		private readonly IMqttService _mqttService;
 		private readonly Subject<IIotEntity> _iotEntitiesBus = new Subject<IIotEntity>();
-		private readonly ICommandDispatcherService _commandDispatcherService;
 		private readonly ILogger _logger;
 		private readonly object _liteDbObjectLock = new object();
 
@@ -44,18 +43,16 @@ namespace Neon.HomeControl.Services.Services
 		/// <param name="logger"></param>
 		/// <param name="fileSystemService"></param>
 		/// <param name="config"></param>
-		public IoTService(ILogger<IIoTService> logger, IFileSystemService fileSystemService, 
-			NeonConfig config, 
-			IEventDatabaseService eventDatabaseService, 
+		public IoTService(ILogger<IIoTService> logger, IFileSystemService fileSystemService,
+			NeonConfig config,
+			IEventDatabaseService eventDatabaseService,
 			INotificationService notificationService,
-			IMqttService mqttService,
-			ICommandDispatcherService commandDispatcherService
+			IMqttService mqttService
 		)
 		{
 			_logger = logger;
 			_logger.LogError($"CREATED");
 
-			_commandDispatcherService = commandDispatcherService;
 			_mqttService = mqttService;
 			_notificationService = notificationService;
 			_eventDatabaseService = eventDatabaseService;
@@ -79,7 +76,7 @@ namespace Neon.HomeControl.Services.Services
 			return Task.FromResult(true);
 		}
 
-	
+
 		public T InsertEntity<T>(T value) where T : IIotEntity
 		{
 			lock (_liteDbObjectLock)
@@ -94,7 +91,7 @@ namespace Neon.HomeControl.Services.Services
 		public string GetEntityTypeByName(string name)
 		{
 			var entity = Query<BaseEventDatabaseEntity>().FirstOrDefault(d => d.EntityName == name);
-				
+
 			return entity?.EntityType;
 		}
 

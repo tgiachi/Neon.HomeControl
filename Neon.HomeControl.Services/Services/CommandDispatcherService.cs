@@ -26,7 +26,9 @@ namespace Neon.HomeControl.Services.Services
 
 		private List<IotCommandInfo> _commands = new List<IotCommandInfo>();
 
-		public CommandDispatcherService(ILogger<ICommandDispatcherService> logger, IComponentsService componentsService, INotificationService notificationService)
+		public CommandDispatcherService(ILogger<ICommandDispatcherService> logger,
+			IComponentsService componentsService, 
+			INotificationService notificationService)
 		{
 			_logger = logger;
 			_notificationService = notificationService;

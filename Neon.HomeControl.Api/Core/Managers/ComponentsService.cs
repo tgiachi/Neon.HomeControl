@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Components;
@@ -13,11 +15,12 @@ using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
 using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Events.System;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
 	[Service(typeof(IComponentsService), LoadAtStartup = true, Name = "Components Service manager")]
-	public class ComponentsService : IComponentsService
+	public class ComponentsService : IComponentsService, INotificationHandler<ServiceLoadedEvent>
 	{
 		private readonly Dictionary<ComponentInfo, Type> _componentsTypes;
 		private readonly NeonConfig _config;
@@ -25,6 +28,10 @@ namespace Neon.HomeControl.Api.Core.Managers
 		private readonly ILogger _logger;
 		private readonly IServicesManager _servicesManager;
 		private readonly ITaskExecutorService _taskExecutorService;
+
+
+		public List<ComponentInfo> AvailableComponents { get; set; }
+		public ObservableCollection<RunningComponentInfo> RunningComponents { get; set; }
 
 		public ComponentsService(ILogger<ComponentsService> logger, IServicesManager servicesManager, NeonConfig config,
 			IFileSystemService fileSystemService, ITaskExecutorService taskExecutorService)
@@ -39,9 +46,6 @@ namespace Neon.HomeControl.Api.Core.Managers
 			_componentsTypes = new Dictionary<ComponentInfo, Type>();
 		}
 
-		public List<ComponentInfo> AvailableComponents { get; set; }
-
-		public ObservableCollection<RunningComponentInfo> RunningComponents { get; set; }
 
 		public void SaveComponentConfig<T>(T config) where T : IComponentConfig
 		{
@@ -52,7 +56,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 		{
 			_fileSystemService.CreateDirectory(_config.Components.ConfigDirectory);
 			ScanComponents();
-			await StartComponents();
+			//await StartComponents();
 			return true;
 		}
 
@@ -161,6 +165,14 @@ namespace Neon.HomeControl.Api.Core.Managers
 				_logger.LogError($"Error during load config {configType.Name} => {ex}");
 				return null;
 			}
+		}
+
+		public async Task Handle(ServiceLoadedEvent notification, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation($"Load components");
+			await StartComponents();
+			_logger.LogInformation($"Loaded {_componentsTypes.Count} components");
+
 		}
 	}
 }

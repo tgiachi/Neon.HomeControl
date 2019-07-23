@@ -19,7 +19,7 @@ namespace Neon.HomeControl.Web
 				.Filter
 				.ByExcluding(Matching.FromSource("System"))
 				.Enrich.FromLogContext()
-				.MinimumLevel.Debug()
+				.MinimumLevel.Information()
 				.WriteTo.File(new CompactJsonFormatter(), "Logs/Neon.homecontrol.log",
 					rollingInterval: RollingInterval.Day)
 				.WriteTo.Console(

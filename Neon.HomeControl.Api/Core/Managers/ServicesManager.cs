@@ -29,6 +29,7 @@ using Neon.HomeControl.Api.Core.Utils;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Events.System;
 using Polly;
 
 namespace Neon.HomeControl.Api.Core.Managers
@@ -148,7 +149,10 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			jobObjects.ForEach(t => RegisterService(LifeScopeTypeEnum.SCOPED, t));
 
-			_availableServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
+			//_availableServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
+			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssembliesArray())
+				.Where(t => t.Name.ToLower().EndsWith("service"))
+				.AsImplementedInterfaces().InstancePerLifetimeScope();
 
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.AsClosedTypesOf(typeof(INotificationHandler<>)).AsImplementedInterfaces().SingleInstance();
@@ -186,6 +190,9 @@ namespace Neon.HomeControl.Api.Core.Managers
 					await StartService(service);
 				}
 
+			var notificationService = Resolve<INotificationService>();
+
+			notificationService.BroadcastMessage(new ServiceLoadedEvent());
 
 			return true;
 		}
@@ -210,6 +217,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 		{
 			var logger = Container.Resolve<ILogger<IServicesManager>>();
 			var attribute = serviceType.GetCustomAttribute<ServiceAttribute>();
+			logger.LogDebug($"Resolving service {attribute.ServiceInterface}");
 			var service = Container.Resolve(attribute.ServiceInterface) as IService;
 			var generatedId = Guid.NewGuid();
 			ServicesInfo.Add(new ServiceInfo
