@@ -38,10 +38,14 @@ namespace Neon.HomeControl.Web
 				.AddJsonFile("neon.settings.json", true, true)
 				.AddEnvironmentVariables();
 
-
 			Configuration = builder.Build();
 			_neonConfig = Configuration.Get<NeonConfig>();
 
+			if (_neonConfig == null)
+			{
+				_neonConfig = new NeonConfig();
+				File.WriteAllText(env.ContentRootPath + "neon.settings.json", _neonConfig.ToJson());
+			}
 			_servicesManager = new ServicesManager(_serviceManagerLogger, _neonConfig);
 		}
 
@@ -64,8 +68,8 @@ namespace Neon.HomeControl.Web
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			if (_neonConfig.EnableMetrics)
-				services.AddMetrics();
+		//	if (_neonConfig.EnableMetrics)
+		//		services.AddMetrics();
 
 
 			services.AddLogging();

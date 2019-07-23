@@ -146,38 +146,54 @@ namespace Neon.HomeControl.Components.Components
 
 		private async void UpdateLightsStatus()
 		{
-			var lights = await _hueClient.GetLightsAsync();
-
-			lights.ToList().ForEach(s =>
+			try
 			{
-				var entity = new PhilipsHueEd
-				{
-					EntityName = s.Name,
-					Brightness = s.State.Brightness,
-					Hue = s.State.Hue ?? -1,
-					IsOn = s.State.On,
-					IsReachable = s.State.IsReachable ?? false,
-					Type = PhilipsHueTypeEnum.LIGHT
-				};
+				var lights = await _hueClient.GetLightsAsync();
 
-				_ioTService.InsertEvent(entity);
-			});
+				lights.ToList().ForEach(s =>
+				{
+					var entity = new PhilipsHueEd
+					{
+						EntityName = s.Name,
+						Brightness = s.State.Brightness,
+						Hue = s.State.Hue ?? -1,
+						IsOn = s.State.On,
+						IsReachable = s.State.IsReachable ?? false,
+						Type = PhilipsHueTypeEnum.LIGHT
+					};
+
+					_ioTService.InsertEvent(entity);
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Error during update light status: {ex}");
+			}
+
 		}
 
 		private async void UpdateLightGroupsStatus()
 		{
-			var groups = await _hueClient.GetGroupsAsync();
-			groups.ToList().ForEach(g =>
+			try
 			{
-				var entity = new PhilipsHueEd
+				var groups = await _hueClient.GetGroupsAsync();
+				groups.ToList().ForEach(g =>
 				{
-					EntityName = g.Name,
-					IsOn = g.State?.AllOn == null ? g.State.AllOn.Value : false,
-					Type = PhilipsHueTypeEnum.GROUP
-				};
-			
-				_ioTService.InsertEvent(entity);
-			});
+					var entity = new PhilipsHueEd
+					{
+						EntityName = g.Name,
+						IsOn = g.State?.AllOn == null ? g.State.AllOn.Value : false,
+						Type = PhilipsHueTypeEnum.GROUP
+					};
+
+					_ioTService.InsertEvent(entity);
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Error during update light group status: {ex}");
+			}
+
 		}
 	}
 }

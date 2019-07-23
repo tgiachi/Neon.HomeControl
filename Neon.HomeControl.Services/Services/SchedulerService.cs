@@ -99,7 +99,7 @@ namespace Neon.HomeControl.Services.Services
 
 		public void AddPolling(Action job, string name, SchedulerServicePollingEnum pollingType)
 		{
-			_logger.LogDebug($"Adding polling {name} [{pollingType}]");
+			_logger.LogInformation($"Adding polling {name} [{pollingType}]");
 			AddJob(job, $"{name.ToUpper()}_POLLING", (int) pollingType, false);
 		}
 

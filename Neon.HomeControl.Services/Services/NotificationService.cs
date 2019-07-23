@@ -55,7 +55,7 @@ namespace Neon.HomeControl.Services.Services
 		{
 			try
 			{
-				_logger.LogInformation($"NOTIFICATION TYPE {message.GetType().Name}");
+				_logger.LogDebug($"Sending notification type {message.GetType().Name}");
 				await _mediator.Publish(message);
 			}
 			catch(Exception ex)

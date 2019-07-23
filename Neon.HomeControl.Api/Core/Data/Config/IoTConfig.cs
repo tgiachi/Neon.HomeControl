@@ -3,5 +3,11 @@
 	public class IoTConfig
 	{
 		public string DatabaseDirectory { get; set; }
+
+
+		public IoTConfig()
+		{
+			DatabaseDirectory = "Database";
+		}
 	}
 }

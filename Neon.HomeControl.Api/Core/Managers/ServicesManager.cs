@@ -115,12 +115,12 @@ namespace Neon.HomeControl.Api.Core.Managers
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.Where(t => t == typeof(IDatabaseSeed))
 				.AsImplementedInterfaces()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 
 			ContainerBuilder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
 				.Where(t => t == typeof(IDataAccess<>))
 				.AsImplementedInterfaces()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.AsClosedTypesOf(typeof(IDataAccess<>)).AsImplementedInterfaces();
@@ -151,7 +151,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssembliesArray())
 				.Where(t => t.Name.ToLower().EndsWith("service"))
-				.AsImplementedInterfaces().InstancePerLifetimeScope();
+				.AsImplementedInterfaces().SingleInstance();
 
 
 
@@ -187,8 +187,6 @@ namespace Neon.HomeControl.Api.Core.Managers
 				keyValuePair.Value.ForEach(t =>
 				{
 					_logger.LogDebug($"ORDER {keyValuePair.Key} => {t.Name}");
-
-
 				});
 
 #endif

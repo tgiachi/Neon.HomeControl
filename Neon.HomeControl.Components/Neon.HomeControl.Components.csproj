@@ -13,6 +13,7 @@
     <PackageReference Include="Elton.Nest" Version="1.0.0" />
     <PackageReference Include="GoogleCast" Version="1.6.7" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     <PackageReference Include="Q42.HueApi" Version="3.10.1" />
     <PackageReference Include="SSDP.Portable" Version="1.0.31" />
     <PackageReference Include="SpotifyAPI.Web" Version="4.2.0" />

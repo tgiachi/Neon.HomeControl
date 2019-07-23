@@ -146,7 +146,11 @@ namespace Neon.HomeControl.Api.Core.Managers
 				if (componentConfig != null)
 					await obj.InitConfiguration(componentConfig);
 				else
-					SaveComponentConfig(obj.GetDefaultConfig(), attr.ComponentConfigType);
+				{
+					componentConfig = (IComponentConfig)obj.GetDefaultConfig();
+					SaveComponentConfig(componentConfig, attr.ComponentConfigType);
+					await obj.InitConfiguration(componentConfig);
+				}
 
 				if (componentConfig != null && componentConfig.Enabled)
 				{

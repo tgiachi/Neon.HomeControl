@@ -67,7 +67,14 @@ namespace Neon.HomeControl.Services.Services
 
 		public object LoadFile(string file, Type type)
 		{
-			return File.ReadAllText(BuildFilePath(file)).FromJson(type);
+			try
+			{
+				return File.ReadAllText(BuildFilePath(file)).FromJson(type);
+			}
+			catch
+			{
+				return null;
+			}
 		}
 
 		public T LoadFile<T>(string file)

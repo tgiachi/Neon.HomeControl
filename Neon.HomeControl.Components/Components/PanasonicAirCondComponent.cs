@@ -72,7 +72,7 @@ namespace Neon.HomeControl.Components.Components
 
 		public Task InitConfiguration(object config)
 		{
-			_config = (PanasonicAirCondConfig) config;
+			_config = (PanasonicAirCondConfig)config;
 
 			return Task.CompletedTask;
 		}
@@ -105,7 +105,7 @@ namespace Neon.HomeControl.Components.Components
 								OperationMode = device.Parameters.OperationMode.ToString()
 							};
 
-							
+
 							_ioTService.InsertEvent(deviceEd);
 						}
 						catch (Exception e)
@@ -117,7 +117,14 @@ namespace Neon.HomeControl.Components.Components
 			}
 			catch (Exception e)
 			{
-				_logger.LogError($"Error during air conditioner");
+				if (e.Message.Contains("Token expires"))
+				{
+					_config.AuthCode = "";
+					await Start();
+
+				}
+				else
+					_logger.LogError($"Error during air conditioner");
 				//throw;
 			}
 		}

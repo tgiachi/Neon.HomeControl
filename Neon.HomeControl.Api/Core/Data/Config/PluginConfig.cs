@@ -3,5 +3,10 @@
 	public class PluginConfig
 	{
 		public string Directory { get; set; }
+
+		public PluginConfig()
+		{
+			Directory = "Plugins";
+		}
 	}
 }

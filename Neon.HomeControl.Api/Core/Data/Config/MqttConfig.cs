@@ -10,5 +10,11 @@
 		public string Host { get; set; }
 
 		public string ClientId { get; set; }
+
+		public MqttConfig()
+		{
+			RunEmbedded = true;
+			ClientId = "Neon-server";
+		}
 	}
 }

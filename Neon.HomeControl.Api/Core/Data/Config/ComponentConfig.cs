@@ -3,5 +3,10 @@
 	public class ComponentConfig
 	{
 		public string ConfigDirectory { get; set; }
+
+		public ComponentConfig()
+		{
+			ConfigDirectory = "Components";
+		}
 	}
 }

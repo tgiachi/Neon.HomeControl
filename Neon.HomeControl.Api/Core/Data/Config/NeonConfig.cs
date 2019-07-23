@@ -44,5 +44,22 @@
 		public ComponentConfig Components { get; set; }
 		public EventDatabaseConfig EventsDatabase { get; set; }
 		public IoTConfig IoT { get; set; }
+
+
+		public NeonConfig()
+		{
+			Database = new DatabaseConfig();
+			Scripts = new ScriptConfig();
+			Mqtt = new MqttConfig();
+			Plugins = new PluginConfig();
+			Tasks = new TaskConfig();
+			FileSystem = new FileSystemConfig();
+			Components = new ComponentConfig();
+			EventsDatabase = new EventDatabaseConfig();
+			IoT = new IoTConfig();
+			JwtToken = "password";
+			AutoLoadComponents = true;
+			Home = new HomeConfig();
+		}
 	}
 }

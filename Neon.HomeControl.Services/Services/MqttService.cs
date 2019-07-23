@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace Neon.HomeControl.Services.Services
 			{
 				var result = await _mqttClient.SubscribeAsync(topic, MqttQualityOfServiceLevel.ExactlyOnce);
 
-				_logger.LogInformation($"Topic {topic} subcribed {result.Items[0].ResultCode}");
+				_logger.LogDebug($"Topic {topic} subcribed {result.Items[0].ResultCode}");
 
 				return true;
 			}
@@ -73,12 +74,13 @@ namespace Neon.HomeControl.Services.Services
 		{
 			if (_neonConfig.Mqtt.RunEmbedded)
 			{
-				var optionsBuilder = new MqttServerOptionsBuilder()
+				var mqttOptionBuilder = new MqttServerOptionsBuilder()
 					.WithConnectionBacklog(100)
-					.WithDefaultEndpointPort(1883);
+					.WithDefaultEndpointBoundIPAddress(IPAddress.Parse("0.0.0.0"))
+					.WithDefaultEndpointPort(35001);
 				_mqttServer = new MqttFactory().CreateMqttServer();
 				_logger.LogInformation($"Starting embedded MQTT Server");
-				await _mqttServer.StartAsync(optionsBuilder.Build());
+				await _mqttServer.StartAsync(mqttOptionBuilder.Build());
 				_logger.LogInformation($"Embedded MQTT Server started");
 				_neonConfig.Mqtt.Host = "127.0.0.1";
 			}

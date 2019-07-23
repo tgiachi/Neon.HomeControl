@@ -3,5 +3,10 @@
 	public class FileSystemConfig
 	{
 		public string RootDirectory { get; set; }
+
+		public FileSystemConfig()
+		{
+			RootDirectory = "Neon\\";
+		}
 	}
 }

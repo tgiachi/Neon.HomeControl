@@ -12,5 +12,10 @@ namespace Neon.HomeControl.Api.Core.Data.Config
 		/// Directory where script is located
 		/// </summary>
 		public string Directory { get; set; }
+
+		public ScriptConfig()
+		{
+			Directory = "Scripts";
+		}
 	}
 }
