@@ -168,8 +168,10 @@ namespace Neon.HomeControl.Services.Services
 
 		public T InsertEvent<T>(T value) where T : IIotEntity
 		{
-			_eventDatabaseService.Insert(value);
+
 			InsertOrUpdate(value);
+			_eventDatabaseService.Insert(value);
+
 
 			_mqttService.SendMessage($"events/{value.EntityType}", value);
 

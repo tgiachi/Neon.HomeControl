@@ -123,7 +123,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			_logger.LogDebug($"DataAccesses  {dataAccess.Count}");
 
 
-			luaObjects.ForEach(l => { ContainerBuilder.RegisterType(l).AsSelf().InstancePerLifetimeScope(); });
+			luaObjects.ForEach(l => { ContainerBuilder.RegisterType(l).AsSelf().SingleInstance(); });
 			singletonServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 			componentsObject.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 

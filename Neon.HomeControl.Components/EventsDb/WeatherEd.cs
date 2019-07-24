@@ -10,6 +10,16 @@ namespace Neon.HomeControl.Components.EventsDb
 
 		public double Temperature { get; set; }
 
+		public double Pressure { get; set; }
+
+		public int UvIndex { get; set; }
+
+		public int WindBearing { get; set; }
+
+		public double WindGust { get; set; }
+
+		public double WindSpeed { get; set; }
+
 		public string Status { get; set; }
 	}
 }

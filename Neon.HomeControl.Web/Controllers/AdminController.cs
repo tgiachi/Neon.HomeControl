@@ -7,6 +7,9 @@ using Neon.HomeControl.Api.Core.Data.UserInteraction;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Neon.HomeControl.Api.Core.Data.Logger;
+using Neon.HomeControl.Api.Core.Logger;
+using Neon.HomeControl.Api.Core.Utils;
 
 namespace Neon.HomeControl.Web.Controllers
 {
@@ -65,6 +68,12 @@ namespace Neon.HomeControl.Web.Controllers
 		public ActionResult<List<UserInteractionData>> GetUserInteractionData()
 		{
 			return Ok(_userInteractionService.NeedUserInteractionData);
+		}
+
+		[HttpGet]
+		public ActionResult<List<LoggerEntry>> GetLogs()
+		{
+			return Ok(AppUtils.LoggerEntries);
 		}
 	}
 }

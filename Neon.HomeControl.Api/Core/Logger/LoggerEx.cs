@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Data.Logger;
+using Neon.HomeControl.Api.Core.Utils;
 
 namespace Neon.HomeControl.Api.Core.Logger
 {
 	public class LoggerEx<T> : ILogger<T>
 	{
 		private readonly ILogger _logger;
+		
+		private object loggerLock = new object();
 
 		public LoggerEx(ILoggerFactory factory)
 		{
@@ -28,6 +33,17 @@ namespace Neon.HomeControl.Api.Core.Logger
 			Func<TState, Exception, string> formatter)
 		{
 			_logger.Log(logLevel, eventId, state, exception, formatter);
+
+			lock (loggerLock)
+			{
+				AppUtils.LoggerEntries.Add(new LoggerEntry()
+				{
+					EventDateTime = DateTime.Now,
+					Message = formatter.Invoke(state, exception),
+					Severity = logLevel.ToString(),
+					Source = typeof(T).Name
+				});
+			}
 		}
 	}
 }

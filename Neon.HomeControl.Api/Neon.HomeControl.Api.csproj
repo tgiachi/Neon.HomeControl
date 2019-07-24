@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Authors>Tommaso Giachi &lt;squid@stormwind.it&gt;</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/tgiachi/Neon.HomeControl</PackageProjectUrl>
+    <PackageIconUrl>https://i.ibb.co/D9Pz2QH/iconfinder-9-408047.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/tgiachi/Neon.HomeControl</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>home-automation iot-platform iot-framework litedb litedb-database panasonic-air mqtt philips-hue-api philips-hue-bridge darksky-api owntracks nest spotify-web-api sonoff sonoff-tasmota</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

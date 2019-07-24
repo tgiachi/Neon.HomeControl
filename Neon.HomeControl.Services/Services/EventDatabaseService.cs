@@ -57,8 +57,7 @@ namespace Neon.HomeControl.Services.Services
 
 		public T Insert<T>(T value) where T : IIotEntity
 		{
-			if (value.Id == Guid.Empty)
-				value.Id = Guid.NewGuid();
+			value.Id = Guid.NewGuid();
 
 			var collectionName = typeof(T).GetCustomAttribute<EventDatabaseEntityAttribute>().CollectionName;
 			var collection = _liteDatabase.GetCollection<T>(collectionName);

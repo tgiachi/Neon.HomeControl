@@ -78,14 +78,20 @@ namespace Neon.HomeControl.Components.Components
 				});
 
 			_logger.LogInformation(
-				$"{forecast.Response.Currently.Icon} Temperature {forecast.Response.Currently.ApparentTemperature} - Humidity {forecast.Response.Currently.Humidity * 100}%");
+				$"{forecast.Response.Currently.Icon} Temperature {forecast.Response.Currently.Temperature} - Humidity {forecast.Response.Currently.Humidity * 100}%");
 
+			
 			var entity = new WeatherEd
 			{
 				EntityName = "Weather",
 				EventDateTime = DateTime.Now,
 				Humidity = forecast.Response.Currently.Humidity.Value,
 				Temperature = forecast.Response.Currently.Temperature.Value,
+				Pressure = forecast.Response.Currently.Pressure.Value,
+				WindBearing = forecast.Response.Currently.WindBearing.Value,
+				UvIndex = forecast.Response.Currently.UvIndex.Value,
+				WindGust = forecast.Response.Currently.WindGust.Value,
+				WindSpeed = forecast.Response.Currently.WindSpeed.Value,
 				Status = forecast.Response.Currently.Icon.ToString()
 			};
 
