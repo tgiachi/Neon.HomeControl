@@ -1,0 +1,4 @@
+site_name: Neon HomeControl
+pages:
+- Overview: index.md
+theme: readthedocs
