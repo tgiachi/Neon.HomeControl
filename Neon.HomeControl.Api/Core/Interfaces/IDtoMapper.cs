@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Neon.HomeControl.Api.Core.Interfaces.Dto;
+﻿using Neon.HomeControl.Api.Core.Interfaces.Dto;
 using Neon.HomeControl.Api.Core.Interfaces.Entities;
+using System.Collections.Generic;
 
 namespace Neon.HomeControl.Api.Core.Interfaces
 {

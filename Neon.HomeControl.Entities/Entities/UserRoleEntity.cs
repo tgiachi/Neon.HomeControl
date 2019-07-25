@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Interfaces.Entities;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Neon.HomeControl.Api.Core.Interfaces.Entities;
 
 namespace Neon.HomeControl.Entities.Entities
 {
@@ -15,7 +15,7 @@ namespace Neon.HomeControl.Entities.Entities
 
 		public long RoleId { get; set; }
 		public RoleEntity Role { get; set; }
-		
+
 
 		public DateTime CreatedDateTime { get; set; }
 		public DateTime UpdateDateTime { get; set; }

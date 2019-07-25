@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Neon.HomeControl.Api.Core.Data.LuaScript;
+﻿using Neon.HomeControl.Api.Core.Data.LuaScript;
+using System.Collections.Generic;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.HomeControl.Api.Core.Attributes.ScriptService;
+﻿using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 
 namespace Neon.Plugin.Test.Plugin
 {

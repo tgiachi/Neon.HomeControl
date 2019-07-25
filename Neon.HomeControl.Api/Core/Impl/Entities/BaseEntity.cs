@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Interfaces.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Neon.HomeControl.Api.Core.Interfaces.Entities;
 
 namespace Neon.HomeControl.Api.Core.Impl.Entities
 {
 	public class BaseEntity : IBaseEntity
 	{
-		
-		[Key] 
-		[Column("id")] 
+
+		[Key]
+		[Column("id")]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public long Id { get; set; }
 

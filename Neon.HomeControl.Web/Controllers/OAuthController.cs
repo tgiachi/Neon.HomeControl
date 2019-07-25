@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Mvc;
 using Neon.HomeControl.Api.Core.Attributes.OAuth;
 using Neon.HomeControl.Api.Core.Data.OAuth;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.OAuth;
 using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Reflection;
 
 namespace Neon.HomeControl.Web.Controllers
 {

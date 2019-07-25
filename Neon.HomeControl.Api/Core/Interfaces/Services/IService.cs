@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Interfaces.Managers;
+﻿using Neon.HomeControl.Api.Core.Interfaces.Managers;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {

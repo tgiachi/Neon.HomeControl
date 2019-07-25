@@ -25,9 +25,49 @@
             <param name="commandName"></param>
             <param name="args"></param>
         </member>
+        <member name="P:Neon.HomeControl.Components.Config.RadarrConfig.Host">
+            <summary>
+            Host of Radarr
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Components.Config.RadarrConfig.Port">
+            <summary>
+            Port of Radarr
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Components.Config.RadarrConfig.ApiKey">
+            <summary>
+            Api key of Radarr
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Components.Config.SonarrConfig">
+            <summary>
+            Config for Sonarr Component
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Components.Config.SonarrConfig.Host">
+            <summary>
+            Host of Sonarr
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Components.Config.SonarrConfig.Port">
+            <summary>
+            Port of Sonarr
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Components.Config.SonarrConfig.ApiKey">
+            <summary>
+            Api key of Sonarr
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Components.Interfaces.IChromecastComponent">
             <summary>
             Interface for create chrome cast connector
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Components.Interfaces.ISonarrComponent">
+            <summary>
+            Component for communicate to Sonarr movie indexer
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Components.Interfaces.ISpotifyWebComponent">

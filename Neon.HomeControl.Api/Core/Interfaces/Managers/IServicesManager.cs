@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Data.Services;
 using Neon.HomeControl.Api.Core.Enums;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Managers
 {

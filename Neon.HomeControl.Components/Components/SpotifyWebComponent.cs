@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Attributes.OAuth;
 using Neon.HomeControl.Api.Core.Data.OAuth;
@@ -15,8 +11,12 @@ using Neon.HomeControl.Api.Core.Utils;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
-using Microsoft.Extensions.Logging;
 using SpotifyAPI.Web;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {
@@ -85,38 +85,45 @@ namespace Neon.HomeControl.Components.Components
 					var tokenString = await res.Content.ReadAsStringAsync();
 					var tokenInfo = tokenString.FromJson<OAuthTokenResult>();
 					_logger.LogInformation(
-						$"Spotify authentication OK, token expire {DateTime.Now.AddSeconds(tokenInfo.ExpiresIn).ToShortDateString()}");
+						$"Spotify authentication OK, token expire {DateTime.Now.AddSeconds(tokenInfo.ExpiresIn).ToString()}");
 					_config.AccessToken = tokenInfo.AccessToken;
 					_config.TokenType = tokenInfo.TokenType;
 					_config.ExpireOn = DateTime.Now.AddSeconds(tokenInfo.ExpiresIn).ToLocalTime();
+					_config.RefreshToken = tokenInfo.RefreshToken;
 
 					_componentsService.SaveComponentConfig(_config);
 
-					_schedulerService.AddJob(async () =>
-					{
-						_logger.LogInformation("Refresh token");
-
-						res = await _httpClient.PostAsync(TokenAuthUrl,
-							HttpClientUtils.BuildFormParams(
-								new KeyValuePair<string, string>("grant_type", "refresh_token"),
-								new KeyValuePair<string, string>("refresh_token", tokenInfo.RefreshToken),
-								new KeyValuePair<string, string>("client_id", _config.ClientId),
-								new KeyValuePair<string, string>("client_secret", _config.ClientSecret)));
-						var st = await res.Content.ReadAsStringAsync();
-
-						var newToken = st.FromJson<OAuthTokenResult>();
-						_config.AccessToken = newToken.AccessToken;
-						_config.ExpireOn = DateTime.Now.AddSeconds(newToken.ExpiresIn);
-						_componentsService.SaveComponentConfig(_config);
-
-						_logger.LogInformation($"Token refresh expire on: {_config.ExpireOn}");
-
-						InitSpotifyClient();
-					}, "SpotifyRefreshToken", (int)TimeSpan.FromMinutes(10).TotalSeconds, false);
-
+				//	RefreshTokenJob();
 					await Start();
 				}
 			}
+		}
+
+		private void RefreshTokenJob()
+		{
+			_logger.LogInformation($"Adding refresh token job");
+			_schedulerService.AddJob(async () =>
+			{
+				_logger.LogInformation("Refresh token");
+
+				var res = await _httpClient.PostAsync(TokenAuthUrl,
+					HttpClientUtils.BuildFormParams(
+						new KeyValuePair<string, string>("grant_type", "refresh_token"),
+						new KeyValuePair<string, string>("refresh_token", _config.RefreshToken),
+						new KeyValuePair<string, string>("client_id", _config.ClientId),
+						new KeyValuePair<string, string>("client_secret", _config.ClientSecret)));
+				var st = await res.Content.ReadAsStringAsync();
+
+				var newToken = st.FromJson<OAuthTokenResult>();
+				_config.AccessToken = newToken.AccessToken;
+				_config.ExpireOn = DateTime.Now.AddSeconds(newToken.ExpiresIn);
+				_componentsService.SaveComponentConfig(_config);
+
+				_logger.LogInformation($"Token refresh expire on: {_config.ExpireOn}");
+
+				InitSpotifyClient();
+			}, "SpotifyRefreshToken", (int)TimeSpan.FromMinutes(5).TotalSeconds, false);
+
 		}
 
 		public async Task<bool> Start()
@@ -132,6 +139,7 @@ namespace Neon.HomeControl.Components.Components
 			else
 			{
 				InitSpotifyClient();
+				RefreshTokenJob();
 				_schedulerService.AddPolling(PollingRequest, "Spotify_Device",
 					SchedulerServicePollingEnum.SHORT_POLLING);
 			}

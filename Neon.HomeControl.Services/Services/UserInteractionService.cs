@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Attributes.Services;
+using Neon.HomeControl.Api.Core.Data.UserInteraction;
+using Neon.HomeControl.Api.Core.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Attributes.Services;
-using Neon.HomeControl.Api.Core.Data.UserInteraction;
-using Neon.HomeControl.Api.Core.Interfaces.Services;
 
 namespace Neon.HomeControl.Services.Services
 {

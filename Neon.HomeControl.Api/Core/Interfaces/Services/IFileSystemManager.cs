@@ -2,7 +2,7 @@
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {
-	public interface IFileSystemService : IService
+	public interface IFileSystemManager : IService
 	{
 		string RootDirectory { get; set; }
 

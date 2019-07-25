@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GoogleCast;
-using GoogleCast.Channels;
-using GoogleCast.Models.Media;
+﻿using GoogleCast;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {
 	/// <summary>
 	/// Component for connect to chromecast and play media
 	/// </summary>
-	[Component("chromecast","Chromecast connector", "1.0", "STREAMING", "Control chromecast", typeof(ChromecastConfig))]
+	[Component("chromecast", "Chromecast connector", "1.0", "STREAMING", "Control chromecast", typeof(ChromecastConfig))]
 	public class ChromecastComponent : IChromecastComponent
 	{
 
@@ -41,13 +36,13 @@ namespace Neon.HomeControl.Components.Components
 				{
 					_ioTService.InsertEvent(new ChromecastEd()
 					{
-						DeviceId =  c.Id,
+						DeviceId = c.Id,
 						Address = c.IPEndPoint.Address.ToString(),
 						EntityName = c.Id,
 						FriendlyName = c.FriendlyName
 					});
 				});
-				
+
 				//await sender.ConnectAsync(chrome);
 				//var mediaChannel = sender.GetChannel<IMediaChannel>();
 				//await sender.LaunchAsync(mediaChannel);

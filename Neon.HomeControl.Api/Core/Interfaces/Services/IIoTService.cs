@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MediatR;
-using Neon.HomeControl.Api.Core.Data.Commands;
-using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+﻿using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {

@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.WindowsServices;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.WindowsServices;
 
 namespace Neon.HomeControl.Service
 {

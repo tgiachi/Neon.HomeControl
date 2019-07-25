@@ -1,24 +1,22 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Attributes.Services;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
-namespace Neon.HomeControl.Services.Services
+namespace Neon.HomeControl.Api.Core.Managers
 {
-	[Service(typeof(IFileSystemService), LoadAtStartup = true, Order = 2)]
-	public class FileSystemService : IFileSystemService
+	public class FileSystemManager : IFileSystemManager
 	{
 		private static readonly string _pidFile = "Neon.home.pid";
 		private readonly NeonConfig _config;
 
 		private readonly ILogger _logger;
 
-		public FileSystemService(NeonConfig config, ILogger<FileSystemService> logger)
+		public FileSystemManager(NeonConfig config, ILogger logger)
 		{
 			_logger = logger;
 			_config = config;
@@ -79,7 +77,7 @@ namespace Neon.HomeControl.Services.Services
 
 		public T LoadFile<T>(string file)
 		{
-			return (T) LoadFile(file, typeof(T));
+			return (T)LoadFile(file, typeof(T));
 		}
 
 		public bool CreateDirectory(string directory)

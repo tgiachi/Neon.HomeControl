@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
@@ -8,11 +6,13 @@ using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
 using Neon.HomeControl.Components.Mqtt;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("sonoff_tasmoda","Sonoff-Tasmoda", "1.0", "IOT", "Connect and control Sonoff Tasmoda IoT", typeof(SonoffTasmodaConfig))]
+	[Component("sonoff_tasmoda", "Sonoff-Tasmoda", "1.0", "IOT", "Connect and control Sonoff Tasmoda IoT", typeof(SonoffTasmodaConfig))]
 	public class SonoffTasmodaComponent : ISonoffTasmodaComponent
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;

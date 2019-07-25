@@ -1,13 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Database;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Interfaces.Database;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Entities.Services
 {
@@ -32,7 +32,6 @@ namespace Neon.HomeControl.Entities.Services
 			//_neonDbContext = _servicesManager.Resolve<NeonDbContext>();
 			_logger.LogInformation("Applying migrations");
 			await _neonDbContext.Database.EnsureCreatedAsync();
-			await _neonDbContext.Database.MigrateAsync();
 			_logger.LogInformation("Migrations completed");
 
 			_logger.LogInformation("Starting seeds");

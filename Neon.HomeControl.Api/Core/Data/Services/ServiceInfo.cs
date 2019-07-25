@@ -1,6 +1,6 @@
-﻿using System;
-using Neon.HomeControl.Api.Core.Enums;
+﻿using Neon.HomeControl.Api.Core.Enums;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
+using System;
 
 namespace Neon.HomeControl.Api.Core.Data.Services
 {

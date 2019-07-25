@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 
@@ -10,7 +7,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 	/// <summary>
 	/// Bridge for control components
 	/// </summary>
-	//[LuaScriptObject]
+	[LuaScriptObject]
 	public class ComponentsServiceLuaObject
 	{
 

@@ -1,10 +1,10 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using AircoController.Model.Request;
+﻿using AircoController.Model.Request;
 using Neon.HomeControl.Components.AirCo.Model;
 using Neon.HomeControl.Components.AirCo.Model.Request;
 using Neon.HomeControl.Components.AirCo.Model.Response;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace Neon.HomeControl.Components.AirCo
 {

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using FluentScheduler;
+﻿using FluentScheduler;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.SchedulerJob;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Scheduler;
@@ -13,7 +8,12 @@ using Neon.HomeControl.Api.Core.Interfaces.JobScheduler;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -55,7 +55,7 @@ namespace Neon.HomeControl.Services.Services
 			};
 
 			AddPolling(GC.Collect, "GC", SchedulerServicePollingEnum.NORMAL_POLLING);
-	
+
 
 			return Task.FromResult(true);
 		}
@@ -100,7 +100,7 @@ namespace Neon.HomeControl.Services.Services
 		public void AddPolling(Action job, string name, SchedulerServicePollingEnum pollingType)
 		{
 			_logger.LogInformation($"Adding polling {name} [{pollingType}]");
-			AddJob(job, $"{name.ToUpper()}_POLLING", (int) pollingType, false);
+			AddJob(job, $"{name.ToUpper()}_POLLING", (int)pollingType, false);
 		}
 
 		public Task<bool> Stop()

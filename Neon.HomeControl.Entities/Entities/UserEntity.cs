@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Impl.Entities;
+using Neon.HomeControl.Api.Core.Utils;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Neon.HomeControl.Api.Core.Impl.Entities;
-using Neon.HomeControl.Api.Core.Utils;
 
 namespace Neon.HomeControl.Entities.Entities
 {
@@ -11,23 +10,23 @@ namespace Neon.HomeControl.Entities.Entities
 	public class UserEntity : BaseEntity
 	{
 
-		[Column("password")] 
-		[MaxLength(255)] 
+		[Column("password")]
+		[MaxLength(255)]
 		private string _password;
 
 		[Column("first_name")]
 		[MaxLength(100)]
 		public string FirstName { get; set; }
 
-		[Column("last_name")] 
-		[MaxLength(100)] 
+		[Column("last_name")]
+		[MaxLength(100)]
 		public string LastName { get; set; }
 
 		[Column("email")]
-		[MaxLength(150)] 
+		[MaxLength(150)]
 		public string Email { get; set; }
 
-		[Column("is_enabled")] 
+		[Column("is_enabled")]
 		public bool IsEnabled { get; set; }
 
 		[Column("user_name")]

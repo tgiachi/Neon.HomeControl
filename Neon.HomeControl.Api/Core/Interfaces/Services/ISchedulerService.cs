@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Neon.HomeControl.Api.Core.Data.Scheduler;
+﻿using Neon.HomeControl.Api.Core.Data.Scheduler;
 using Neon.HomeControl.Api.Core.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {

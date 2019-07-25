@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Neon.HomeControl.Api.Core.Attributes.Database;
+﻿using Neon.HomeControl.Api.Core.Attributes.Database;
 using Neon.HomeControl.Api.Core.Interfaces.Dao;
 using Neon.HomeControl.Api.Core.Interfaces.Database;
 using Neon.HomeControl.Entities.Entities;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Web.Seeds
 {

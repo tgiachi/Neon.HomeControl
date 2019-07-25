@@ -36,7 +36,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 		/// <param name="tasks">The tasks that will be execut in pool.</param>
 		public TaskPool(int threadsMaxCount, Func<Task>[] tasks) : this(threadsMaxCount)
 		{
-			foreach (var task in tasks) queue.Enqueue(new InternalTaskHolder {Task = task});
+			foreach (var task in tasks) queue.Enqueue(new InternalTaskHolder { Task = task });
 		}
 
 
@@ -54,7 +54,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 		{
 			lock (tasksMutex)
 			{
-				var holder = new InternalTaskHolder {Task = task, Waiter = new TaskCompletionSource<IDisposable>()};
+				var holder = new InternalTaskHolder { Task = task, Waiter = new TaskCompletionSource<IDisposable>() };
 
 				if (workingTasks.Count >= threadsMaxCount)
 					queue.Enqueue(holder);
@@ -73,7 +73,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 		{
 			lock (tasksMutex)
 			{
-				var holder = new InternalTaskHolderGeneric<T> {Task = task, Waiter = new TaskCompletionSource<T>()};
+				var holder = new InternalTaskHolderGeneric<T> { Task = task, Waiter = new TaskCompletionSource<T>() };
 
 				if (workingTasks.Count >= threadsMaxCount)
 					queue.Enqueue(holder);

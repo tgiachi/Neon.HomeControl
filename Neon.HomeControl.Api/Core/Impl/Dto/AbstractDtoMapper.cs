@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Neon.HomeControl.Api.Core.Interfaces;
 using Neon.HomeControl.Api.Core.Interfaces.Dto;
 using Neon.HomeControl.Api.Core.Interfaces.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neon.HomeControl.Api.Core.Impl.Dto
 {

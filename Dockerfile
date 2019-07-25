@@ -1,4 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+ARG IS_DOCKER=1
+ENV IS_DOCKER=${IS_DOCKER}
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -10,6 +12,7 @@ WORKDIR /src
 COPY global.json ./
 COPY Neon.HomeControl.sln ./
 COPY Neon.HomeControl.Api/*.csproj ./Neon.HomeControl.Api/
+COPY Neon.Plugin.Test/*.csproj ./Neon.Plugin.Test/
 COPY Neon.HomeControl.Components/*.csproj ./Neon.HomeControl.Components/
 COPY Neon.HomeControl.Entities/*.csproj ./Neon.HomeControl.Entities/
 COPY Neon.HomeControl.Dto/*.csproj ./Neon.HomeControl.Dto/
@@ -29,4 +32,5 @@ RUN dotnet publish -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+ENV IS_DOCKER=${IS_DOCKER}
 ENTRYPOINT ["dotnet", "Neon.HomeControl.Web.dll"]

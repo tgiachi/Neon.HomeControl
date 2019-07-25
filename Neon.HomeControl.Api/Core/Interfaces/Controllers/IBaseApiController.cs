@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using Neon.HomeControl.Api.Core.Interfaces.Dao;
 using Neon.HomeControl.Api.Core.Interfaces.Dto;
 using Neon.HomeControl.Api.Core.Interfaces.Entities;
-using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Controllers
 {

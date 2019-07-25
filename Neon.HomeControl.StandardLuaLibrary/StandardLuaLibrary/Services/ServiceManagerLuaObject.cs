@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Neon.HomeControl.Api.Core.Attributes.ScriptService;
+﻿using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Data.Services;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 {
@@ -33,7 +32,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 			return _servicesManager.Resolve(type);
 
 		}
-		
+
 		/// <summary>
 		/// Get all services info
 		/// </summary>

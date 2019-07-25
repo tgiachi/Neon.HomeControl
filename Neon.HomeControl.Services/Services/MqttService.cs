@@ -1,22 +1,21 @@
-﻿using System;
-using System.Net;
-using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Attributes.Services;
-using Neon.HomeControl.Api.Core.Data.Config;
-using Neon.HomeControl.Api.Core.Data.Mqtt;
-using Neon.HomeControl.Api.Core.Events;
-using Neon.HomeControl.Api.Core.Interfaces.Managers;
-using Neon.HomeControl.Api.Core.Interfaces.Messages;
-using Neon.HomeControl.Api.Core.Interfaces.Services;
-using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
+using Neon.HomeControl.Api.Core.Attributes.Services;
+using Neon.HomeControl.Api.Core.Data.Config;
+using Neon.HomeControl.Api.Core.Data.Mqtt;
+using Neon.HomeControl.Api.Core.Events;
+using Neon.HomeControl.Api.Core.Interfaces.Managers;
+using Neon.HomeControl.Api.Core.Interfaces.Services;
+using Neon.HomeControl.Api.Core.Utils;
+using System;
+using System.Net;
+using System.Reactive.Subjects;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -134,8 +133,8 @@ namespace Neon.HomeControl.Services.Services
 		private void OnMessageReceived(MqttApplicationMessage message)
 		{
 			_logger.LogDebug($"Received message from topic {message.Topic} {Encoding.UTF8.GetString(message.Payload)}");
-			((ReplaySubject<MqttMessage>) OnMqttMessage).OnNext(new MqttMessage
-				{Message = Encoding.UTF8.GetString(message.Payload), Topic = message.Topic});
+			((ReplaySubject<MqttMessage>)OnMqttMessage).OnNext(new MqttMessage
+			{ Message = Encoding.UTF8.GetString(message.Payload), Topic = message.Topic });
 
 			_notificationService = _servicesManager.Resolve<INotificationService>();
 			_notificationService.BroadcastMessage(new MqttMessageEvent

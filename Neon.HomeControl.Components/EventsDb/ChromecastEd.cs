@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.HomeControl.Api.Core.Attributes.EventDatabase;
+﻿using Neon.HomeControl.Api.Core.Attributes.EventDatabase;
 using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
 
 namespace Neon.HomeControl.Components.EventsDb

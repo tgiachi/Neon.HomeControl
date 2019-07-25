@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Neon.HomeControl.Api.Core.Impl.Entities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Neon.HomeControl.Api.Core.Impl.Entities;
 
 namespace Neon.HomeControl.Entities.Entities
 {

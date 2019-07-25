@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
-using Newtonsoft.Json;
 
 namespace Neon.HomeControl.Api.Core.Utils
 {
@@ -311,7 +311,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 		private static string request(string uri, string method = "POST", string payload = null)
 		{
 			if (method == "GET" &&
-			    !string.IsNullOrWhiteSpace(payload))
+				!string.IsNullOrWhiteSpace(payload))
 
 				uri += "?" + payload;
 
@@ -335,7 +335,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 
 
 			if (method == "POST" &&
-			    !string.IsNullOrWhiteSpace(payload))
+				!string.IsNullOrWhiteSpace(payload))
 			{
 				var buffer = Encoding.UTF8.GetBytes(payload);
 

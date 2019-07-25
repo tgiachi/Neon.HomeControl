@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Data.UserInteraction;
 using Neon.HomeControl.Api.Core.Enums;
@@ -10,9 +7,12 @@ using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
-using Microsoft.Extensions.Logging;
 using Q42.HueApi;
 using Q42.HueApi.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {

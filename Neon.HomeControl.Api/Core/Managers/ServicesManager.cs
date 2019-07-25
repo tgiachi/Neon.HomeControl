@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Reflection;
-using System.Threading.Tasks;
-using Autofac;
-using AutoMapper;
+﻿using Autofac;
+using MediatR;
+using MediatR.Pipeline;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Attributes.Database;
-using Neon.HomeControl.Api.Core.Attributes.Dto;
 using Neon.HomeControl.Api.Core.Attributes.SchedulerJob;
 using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Data.Services;
 using Neon.HomeControl.Api.Core.Enums;
+using Neon.HomeControl.Api.Core.Events.System;
 using Neon.HomeControl.Api.Core.Impl.Dao;
 using Neon.HomeControl.Api.Core.Impl.Dto;
 using Neon.HomeControl.Api.Core.Interfaces;
@@ -26,11 +20,15 @@ using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Modules;
 using Neon.HomeControl.Api.Core.Utils;
-using MediatR;
-using MediatR.Pipeline;
-using Microsoft.Extensions.Logging;
-using Neon.HomeControl.Api.Core.Events.System;
 using Polly;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
@@ -65,7 +63,10 @@ namespace Neon.HomeControl.Api.Core.Managers
 |  |  ||     ||     ||  |  |
 |__|__||_____| \___/ |__|__|
                             ");
+
+			_logger.LogInformation($"v {AppUtils.AppVersion}");
 		}
+
 
 
 		public ContainerBuilder InitContainer()
@@ -76,9 +77,12 @@ namespace Neon.HomeControl.Api.Core.Managers
 			ServicesInfo = new ObservableCollection<ServiceInfo>();
 			ContainerBuilder = new ContainerBuilder();
 
+
+
 			ContainerBuilder.RegisterModule(new LogRequestModule());
 			ContainerBuilder.RegisterInstance(_neonConfig);
 			ContainerBuilder.RegisterInstance<IServicesManager>(this);
+			InitManagers();
 
 			ContainerBuilder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 			AssemblyUtils.GetAppAssemblies().ForEach(a =>
@@ -182,6 +186,18 @@ namespace Neon.HomeControl.Api.Core.Managers
 				});
 		}
 
+		private async void InitManagers()
+		{
+			var fileSystemManager = new FileSystemManager(_neonConfig, _logger);
+			await fileSystemManager.Start();
+			ContainerBuilder.RegisterInstance<IFileSystemManager>(fileSystemManager);
+
+			var pluginsManager = new PluginsManager(_logger, fileSystemManager, this, _neonConfig);
+			await pluginsManager.Start();
+
+			ContainerBuilder.RegisterInstance<IPluginsManager>(pluginsManager);
+		}
+
 		public async Task<bool> Start()
 		{
 			var orderList = new Dictionary<int, List<Type>>();
@@ -203,7 +219,6 @@ namespace Neon.HomeControl.Api.Core.Managers
 				{
 					_logger.LogDebug($"ORDER {keyValuePair.Key} => {t.Name}");
 				});
-
 #endif
 
 			foreach (var keyValuePair in list)

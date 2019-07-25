@@ -978,6 +978,36 @@
             <param name="args"></param>
             <returns></returns>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Data.Config.ComponentConfig">
+            <summary>
+            Components config
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Config.ComponentConfig.ConfigDirectory">
+            <summary>
+            Where Neon Load/Save component's config
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Data.Config.ComponentConfig.#ctor">
+            <summary>
+            Default component config if Components
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Api.Core.Data.Config.DatabaseConfig">
+            <summary>
+            Internal Database config
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Config.DatabaseConfig.ConnectionString">
+            <summary>
+            SqLite file 
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Data.Config.DatabaseConfig.#ctor">
+            <summary>
+            Default Connection string is Neon.HomeControl.sqlite
+            </summary>
+        </member>
         <member name="P:Neon.HomeControl.Api.Core.Data.Config.MqttConfig.RunEmbedded">
             <summary>
             If true start local Mqtt Server
@@ -1182,6 +1212,16 @@
             <param name="commandName"></param>
             <param name="args"></param>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IDatabaseService">
+            <summary>
+            Database wrapper for DB Context
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Interfaces.Services.IDatabaseService.GetDbContextForContainer">
+            <summary>
+            Type of DB Context
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService">
             <summary>
                 Service for save Entities status
@@ -1254,7 +1294,7 @@
             <typeparam name="T"></typeparam>
             <param name="event"></param>
         </member>
-        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IPluginsService">
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IPluginsManager">
             <summary>
             Interface for create plugins manager service
             </summary>

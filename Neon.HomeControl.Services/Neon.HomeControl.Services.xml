@@ -18,12 +18,12 @@
                 Implementation of IoT Server
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemService,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService,Neon.HomeControl.Api.Core.Interfaces.Services.INotificationService,Neon.HomeControl.Api.Core.Interfaces.Services.IMqttService)">
+        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemManager,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService,Neon.HomeControl.Api.Core.Interfaces.Services.IMqttService)">
             <summary>
                 Ctor
             </summary>
             <param name="logger"></param>
-            <param name="fileSystemService"></param>
+            <param name="fileSystemManager"></param>
             <param name="config"></param>
         </member>
         <member name="M:Neon.HomeControl.Services.Services.IoTService.GetEntities">

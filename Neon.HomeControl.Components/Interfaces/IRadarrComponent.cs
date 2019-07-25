@@ -2,7 +2,7 @@
 
 namespace Neon.HomeControl.Components.Interfaces
 {
-	public interface ISsdpComponent : IComponent
+	public interface IRadarrComponent : IComponent
 	{
 	}
 }

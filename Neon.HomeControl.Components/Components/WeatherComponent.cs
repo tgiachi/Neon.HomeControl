@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using DarkSky.Services;
+﻿using DarkSky.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Attributes.Commands;
 using Neon.HomeControl.Api.Core.Attributes.Components;
+using Neon.HomeControl.Api.Core.Data.Commands;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
-using Microsoft.Extensions.Logging;
-using Neon.HomeControl.Api.Core.Attributes.Commands;
-using Neon.HomeControl.Api.Core.Data.Commands;
-using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {
@@ -80,7 +79,7 @@ namespace Neon.HomeControl.Components.Components
 			_logger.LogInformation(
 				$"{forecast.Response.Currently.Icon} Temperature {forecast.Response.Currently.Temperature} - Humidity {forecast.Response.Currently.Humidity * 100}%");
 
-			
+
 			var entity = new WeatherEd
 			{
 				EntityName = "Weather",

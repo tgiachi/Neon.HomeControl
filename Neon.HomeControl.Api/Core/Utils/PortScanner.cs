@@ -83,13 +83,13 @@ namespace Neon.HomeControl.Api.Core.Utils
 				_openPorts.Add(port);
 
 				// notify anyone paying attention
-				progress?.Report(new PortScanResult {PortNum = port, IsPortOpen = true});
+				progress?.Report(new PortScanResult { PortNum = port, IsPortOpen = true });
 			}
 			else
 			{
 				// server doesn't have that port open
 				_closedPorts.Add(port);
-				progress?.Report(new PortScanResult {PortNum = port, IsPortOpen = false});
+				progress?.Report(new PortScanResult { PortNum = port, IsPortOpen = false });
 			}
 		}
 

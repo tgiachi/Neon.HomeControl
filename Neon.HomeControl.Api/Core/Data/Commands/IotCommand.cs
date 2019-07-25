@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 
 namespace Neon.HomeControl.Api.Core.Data.Commands
@@ -31,7 +28,7 @@ namespace Neon.HomeControl.Api.Core.Data.Commands
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
 		/// <returns></returns>
-		public static IotCommand<T> BuildCommand<T>(T entity, string commandName, params object[] args) where T: IIotEntity
+		public static IotCommand<T> BuildCommand<T>(T entity, string commandName, params object[] args) where T : IIotEntity
 		{
 			return new IotCommand<T>()
 			{

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Data.Mqtt;
+using System;
 using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Data.Mqtt;
-using Neon.HomeControl.Api.Core.Interfaces.Messages;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {

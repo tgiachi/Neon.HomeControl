@@ -1,5 +1,5 @@
-﻿using System;
-using Neon.HomeControl.Api.Core.Interfaces.Dto;
+﻿using Neon.HomeControl.Api.Core.Interfaces.Dto;
+using System;
 
 namespace Neon.HomeControl.Api.Core.Impl.Dto
 {

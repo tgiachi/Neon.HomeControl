@@ -1,19 +1,18 @@
-﻿using System;
+﻿using LiteDB;
+using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Attributes.IoT;
+using Neon.HomeControl.Api.Core.Attributes.Services;
+using Neon.HomeControl.Api.Core.Data.Config;
+using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
+using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+using Neon.HomeControl.Api.Core.Interfaces.Services;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Attributes.IoT;
-using Neon.HomeControl.Api.Core.Attributes.Services;
-using Neon.HomeControl.Api.Core.Data.Config;
-using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
-using Neon.HomeControl.Api.Core.Interfaces.Services;
-using LiteDB;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using Neon.HomeControl.Api.Core.Data.Commands;
-using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
 
 
 namespace Neon.HomeControl.Services.Services
@@ -28,9 +27,8 @@ namespace Neon.HomeControl.Services.Services
 		private static readonly string _collectionName = "entities";
 		private LiteDatabase _liteDatabase;
 		private readonly NeonConfig _config;
-		private readonly IFileSystemService _fileSystemService;
+		private readonly IFileSystemManager _fileSystemManager;
 		private readonly IEventDatabaseService _eventDatabaseService;
-		private readonly INotificationService _notificationService;
 		private readonly IMqttService _mqttService;
 		private readonly Subject<IIotEntity> _iotEntitiesBus = new Subject<IIotEntity>();
 		private readonly ILogger _logger;
@@ -41,32 +39,30 @@ namespace Neon.HomeControl.Services.Services
 		///     Ctor
 		/// </summary>
 		/// <param name="logger"></param>
-		/// <param name="fileSystemService"></param>
+		/// <param name="fileSystemManager"></param>
 		/// <param name="config"></param>
-		public IoTService(ILogger<IIoTService> logger, IFileSystemService fileSystemService,
+		public IoTService(ILogger<IIoTService> logger, IFileSystemManager fileSystemManager,
 			NeonConfig config,
 			IEventDatabaseService eventDatabaseService,
-			INotificationService notificationService,
 			IMqttService mqttService
 		)
 		{
 			_logger = logger;
 			_mqttService = mqttService;
-			_notificationService = notificationService;
 			_eventDatabaseService = eventDatabaseService;
-			_fileSystemService = fileSystemService;
+			_fileSystemManager = fileSystemManager;
 			_config = config;
 		}
 
 		public Task<bool> Start()
 		{
 			_logger.LogInformation("Initializing IoT Database");
-			_fileSystemService.CreateDirectory(_config.IoT.DatabaseDirectory);
+			_fileSystemManager.CreateDirectory(_config.IoT.DatabaseDirectory);
 
 			lock (_liteDbObjectLock)
 			{
 				_liteDatabase =
-							new LiteDatabase(_fileSystemService.BuildFilePath(_config.IoT.DatabaseDirectory) + "\\" + _dbFilename);
+							new LiteDatabase(_fileSystemManager.BuildFilePath(_config.IoT.DatabaseDirectory) + Path.DirectorySeparatorChar + _dbFilename);
 				_liteDatabase.Shrink();
 			}
 

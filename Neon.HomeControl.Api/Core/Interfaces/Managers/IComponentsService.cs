@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Data.Components;
+﻿using Neon.HomeControl.Api.Core.Data.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Managers
 {

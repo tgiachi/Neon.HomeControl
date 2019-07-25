@@ -5,12 +5,16 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>Tommaso Giachi &lt;squid@stormwind.it&gt;</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.5.0</Version>
+    <AssemblyVersion>0.0.5.0</AssemblyVersion>
+    <FileVersion>0.0.5.0</FileVersion>
     <PackageProjectUrl>https://github.com/tgiachi/Neon.HomeControl</PackageProjectUrl>
     <PackageIconUrl>https://i.ibb.co/D9Pz2QH/iconfinder-9-408047.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/tgiachi/Neon.HomeControl</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>home-automation iot-platform iot-framework litedb litedb-database panasonic-air mqtt philips-hue-api philips-hue-bridge darksky-api owntracks nest spotify-web-api sonoff sonoff-tasmota</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>- Removed unused Nuget deps</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,14 +27,11 @@
     <PackageReference Include="Autofac" Version="4.9.3" />
     <PackageReference Include="Ben.Demystifier" Version="0.1.4" />
     <PackageReference Include="CoordinateSharp" Version="1.1.5.2" />
-    <PackageReference Include="Enums.NET" Version="2.3.2" />
     <PackageReference Include="Fody" Version="5.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="NLua" Version="1.4.18" />
-    <PackageReference Include="NReco.LambdaParser" Version="1.0.9" />
     <PackageReference Include="Polly" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.0.1" />
     <PackageReference Include="System.Collections" Version="4.3.0" />

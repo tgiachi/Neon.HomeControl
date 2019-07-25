@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Commands;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Commands;
 using Neon.HomeControl.Api.Core.Enums;
-using Neon.HomeControl.Api.Core.Interfaces.Components;
 using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -27,7 +25,7 @@ namespace Neon.HomeControl.Services.Services
 		private List<IotCommandInfo> _commands = new List<IotCommandInfo>();
 
 		public CommandDispatcherService(ILogger<ICommandDispatcherService> logger,
-			IComponentsService componentsService, 
+			IComponentsService componentsService,
 			INotificationService notificationService)
 		{
 			_logger = logger;

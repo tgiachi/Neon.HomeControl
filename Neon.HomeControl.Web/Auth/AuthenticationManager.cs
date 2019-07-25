@@ -1,13 +1,13 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.IdentityModel.Tokens;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Interfaces.Dao;
 using Neon.HomeControl.Api.Core.Utils;
 using Neon.HomeControl.Entities.Entities;
-using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 
 namespace Neon.HomeControl.Web.Auth
 {

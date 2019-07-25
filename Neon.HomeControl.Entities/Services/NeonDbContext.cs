@@ -1,6 +1,5 @@
-﻿using Neon.HomeControl.Entities.Entities;
-using Microsoft.EntityFrameworkCore;
-using Neon.HomeControl.Api.Core.Interfaces.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Neon.HomeControl.Entities.Entities;
 
 namespace Neon.HomeControl.Entities.Services
 {
@@ -10,16 +9,28 @@ namespace Neon.HomeControl.Entities.Services
 		{
 		}
 
+		/// <summary>
+		/// Users
+		/// </summary>
 		public DbSet<UserEntity> Users { get; set; }
+		/// <summary>
+		/// Roles
+		/// </summary>
 		public DbSet<RoleEntity> Roles { get; set; }
-
+		/// <summary>
+		///  Many user have may roles
+		/// </summary>
 		public DbSet<UserRoleEntity> UserRoles { get; set; }
 
+		/// <summary>
+		/// Setup relations
+		/// </summary>
+		/// <param name="modelBuilder"></param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			
+
 			modelBuilder.Entity<UserRoleEntity>().Ignore(sc => sc.Id)
-				.HasKey(sc => new {sc.UserId, sc.RoleId});
+				.HasKey(sc => new { sc.UserId, sc.RoleId });
 
 
 			modelBuilder.Entity<UserRoleEntity>()

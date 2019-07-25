@@ -1,7 +1,7 @@
-﻿using System;
-using Neon.HomeControl.Api.Core.Attributes.EventDatabase;
+﻿using Neon.HomeControl.Api.Core.Attributes.EventDatabase;
 using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
 using Newtonsoft.Json;
+using System;
 
 namespace Neon.HomeControl.Components.EventsDb
 {

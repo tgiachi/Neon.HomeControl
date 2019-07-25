@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Neon.HomeControl.Api.Core.Interfaces.Entities;
+using System.Collections.Generic;
 using System.Linq;
-using Neon.HomeControl.Api.Core.Interfaces.Entities;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Dao
 {

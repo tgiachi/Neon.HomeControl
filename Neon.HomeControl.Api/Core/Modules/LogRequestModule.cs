@@ -1,7 +1,7 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Neon.HomeControl.Api.Core.Modules
 {

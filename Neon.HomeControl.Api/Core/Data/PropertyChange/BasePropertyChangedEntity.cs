@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using Neon.HomeControl.Api.Core.Interfaces.PropertyChange;
+﻿using Neon.HomeControl.Api.Core.Interfaces.PropertyChange;
+using System.ComponentModel;
 
 namespace Neon.HomeControl.Api.Core.Data.PropertyChange
 {

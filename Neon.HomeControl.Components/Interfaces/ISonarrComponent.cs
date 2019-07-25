@@ -3,9 +3,9 @@
 namespace Neon.HomeControl.Components.Interfaces
 {
 	/// <summary>
-	/// Interface for create chrome cast connector
+	/// Component for communicate to Sonarr movie indexer
 	/// </summary>
-	public interface IChromecastComponent : IComponent
+	public interface ISonarrComponent : IComponent
 	{
 	}
 }

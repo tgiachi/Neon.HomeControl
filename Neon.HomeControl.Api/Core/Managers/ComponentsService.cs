@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Components;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Enums;
+using Neon.HomeControl.Api.Core.Events.System;
 using Neon.HomeControl.Api.Core.Interfaces.Components;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.Extensions.Logging;
-using Neon.HomeControl.Api.Core.Events.System;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
@@ -24,21 +26,26 @@ namespace Neon.HomeControl.Api.Core.Managers
 	public class ComponentsService : IComponentsService, INotificationHandler<ServiceLoadedEvent>
 	{
 		private readonly Dictionary<ComponentInfo, Type> _componentsTypes;
+		private readonly ITaskExecutorService _taskExecutorService;
 		private readonly NeonConfig _config;
-		private readonly IFileSystemService _fileSystemService;
+		private readonly IFileSystemManager _fileSystemManager;
 		private readonly ILogger _logger;
 		private readonly IServicesManager _servicesManager;
 
 		public List<ComponentInfo> AvailableComponents { get; set; }
 		public ObservableCollection<RunningComponentInfo> RunningComponents { get; set; }
 
-		public ComponentsService(ILogger<ComponentsService> logger, IServicesManager servicesManager, NeonConfig config,
-			IFileSystemService fileSystemService)
+		public ComponentsService(ILogger<ComponentsService> logger,
+			ITaskExecutorService taskExecutorService,
+			IServicesManager servicesManager,
+			NeonConfig config,
+			IFileSystemManager fileSystemManager)
 		{
 			_logger = logger;
 			_config = config;
 			_servicesManager = servicesManager;
-			_fileSystemService = fileSystemService;
+			_taskExecutorService = taskExecutorService;
+			_fileSystemManager = fileSystemManager;
 			AvailableComponents = new List<ComponentInfo>();
 			RunningComponents = new ObservableCollection<RunningComponentInfo>();
 			_componentsTypes = new Dictionary<ComponentInfo, Type>();
@@ -66,13 +73,13 @@ namespace Neon.HomeControl.Api.Core.Managers
 			if (RunningComponents.FirstOrDefault(c => c.Id == componentId) == null)
 				await StartComponent(component, _componentsTypes[component]);
 
-			return true;
 
+			return true;
 		}
 
 		public async Task<bool> Start()
 		{
-			_fileSystemService.CreateDirectory(_config.Components.ConfigDirectory);
+			_fileSystemManager.CreateDirectory(_config.Components.ConfigDirectory);
 			ScanComponents();
 			//await StartComponents();
 			return true;
@@ -117,59 +124,75 @@ namespace Neon.HomeControl.Api.Core.Managers
 		{
 			foreach (var keyValuePair in _componentsTypes)
 			{
+
 				await StartComponent(keyValuePair.Key, keyValuePair.Value);
 			}
 		}
 
-		private async Task StartComponent(ComponentInfo componentInfo, Type type)
+		private Task StartComponent(ComponentInfo componentInfo, Type type)
 		{
-
-			var runningComponent = new RunningComponentInfo
+			_taskExecutorService.Enqueue(async () =>
 			{
-				Id = componentInfo.Id,
-				Name = componentInfo.Name,
-				Version = componentInfo.Version,
-				Description = componentInfo.Description,
-				Status = ComponentStatusEnum.STOPPED
-			};
-			try
-			{
-				_logger.LogInformation($"Initialize component {componentInfo.Name} v{componentInfo.Version}");
-				var obj = _servicesManager.Resolve(type) as IComponent;
-				var attr = type.GetCustomAttribute<ComponentAttribute>();
+				var sw = new Stopwatch();
+				sw.Start();
 
-
-				RunningComponents.Add(runningComponent);
-				runningComponent.Component = obj;
-				var componentConfig = (IComponentConfig)LoadComponentConfig(attr.ComponentConfigType);
-
-				if (componentConfig != null)
-					await obj.InitConfiguration(componentConfig);
-				else
+				var runningComponent = new RunningComponentInfo
 				{
-					componentConfig = (IComponentConfig)obj.GetDefaultConfig();
-					SaveComponentConfig(componentConfig, attr.ComponentConfigType);
-					await obj.InitConfiguration(componentConfig);
-				}
-
-				if (componentConfig != null && componentConfig.Enabled)
+					Id = componentInfo.Id,
+					Name = componentInfo.Name,
+					Version = componentInfo.Version,
+					Description = componentInfo.Description,
+					Status = ComponentStatusEnum.STOPPED
+				};
+				try
 				{
-					await obj.Start();
-					runningComponent.Status = ComponentStatusEnum.STARTED;
+
+					_logger.LogInformation($"Initialize component {componentInfo.Name} v{componentInfo.Version}");
+					var obj = _servicesManager.Resolve(type) as IComponent;
+					var attr = type.GetCustomAttribute<ComponentAttribute>();
+
+
+					RunningComponents.Add(runningComponent);
+					runningComponent.Component = obj;
+					var componentConfig = (IComponentConfig)LoadComponentConfig(attr.ComponentConfigType);
+
+			
+					if (componentConfig != null)
+						await obj.InitConfiguration(componentConfig);
+					else
+					{
+						_logger.LogWarning($"Component {obj.GetType().Name} don't have configuration");
+						componentConfig = (IComponentConfig)obj.GetDefaultConfig();
+						SaveComponentConfig(componentConfig, attr.ComponentConfigType);
+						await obj.InitConfiguration(componentConfig);
+					}	
+
+					if (componentConfig != null && componentConfig.Enabled)
+					{
+						await obj.Start();
+						runningComponent.Status = ComponentStatusEnum.STARTED;
+					}
+
+					sw.Stop();
+
+					_logger.LogInformation($"Component {componentInfo.Name} loaded id {sw.Elapsed}");
 				}
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Error during start component {componentInfo.Name} => {ex.Message}");
-				runningComponent.Error = ex;
-				runningComponent.Status = ComponentStatusEnum.ERROR;
-			}
+				catch (Exception ex)
+				{
+					_logger.LogError($"Error during start component {componentInfo.Name} => {ex.Message}");
+					runningComponent.Error = ex;
+					runningComponent.Status = ComponentStatusEnum.ERROR;
+				}
+			});
+
+
+			return Task.CompletedTask;
 
 		}
 
 		private void SaveComponentConfig(object obj, Type configType)
 		{
-			_fileSystemService.SaveFile($"{_config.Components.ConfigDirectory}\\{configType.Name}.json",
+			_fileSystemManager.SaveFile($"{_config.Components.ConfigDirectory}{Path.DirectorySeparatorChar}{configType.Name}.json",
 				obj);
 		}
 
@@ -178,8 +201,8 @@ namespace Neon.HomeControl.Api.Core.Managers
 			try
 			{
 				var config =
-					_fileSystemService.LoadFile(
-						$"{_config.Components.ConfigDirectory}\\{configType.Name.ToLower()}.json", configType);
+					_fileSystemManager.LoadFile(
+						$"{_config.Components.ConfigDirectory}{Path.DirectorySeparatorChar}{configType.Name}.json", configType);
 
 				return config;
 			}

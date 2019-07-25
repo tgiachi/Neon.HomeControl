@@ -1,5 +1,5 @@
-﻿using Neon.HomeControl.Api.Core.Attributes.ScriptService;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 
 namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Logging
 {

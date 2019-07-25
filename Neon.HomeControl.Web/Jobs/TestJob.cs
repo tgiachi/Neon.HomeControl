@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Interfaces.JobScheduler;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Web.Jobs
 {

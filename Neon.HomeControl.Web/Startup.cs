@@ -1,15 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using Neon.HomeControl.Api.Core.Data.Config;
-using Neon.HomeControl.Api.Core.Interfaces.Managers;
-using Neon.HomeControl.Api.Core.Logger;
-using Neon.HomeControl.Api.Core.Managers;
-using Neon.HomeControl.Api.Core.Utils;
-using Neon.HomeControl.Entities.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +10,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Neon.HomeControl.Api.Core.Data.Config;
+using Neon.HomeControl.Api.Core.Interfaces.Managers;
+using Neon.HomeControl.Api.Core.Logger;
+using Neon.HomeControl.Api.Core.Managers;
+using Neon.HomeControl.Api.Core.Utils;
+using Neon.HomeControl.Entities.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
+using System.Text;
 
 namespace Neon.HomeControl.Web
 {
@@ -39,18 +39,32 @@ namespace Neon.HomeControl.Web
 				.AddEnvironmentVariables();
 
 			Configuration = builder.Build();
-			_neonConfig = Configuration.Get<NeonConfig>();
 
-			if (_neonConfig == null)
+			if (CheckIfDockerContainer())
 			{
-				_neonConfig = new NeonConfig();
-				File.WriteAllText(env.ContentRootPath + "neon.settings.json", _neonConfig.ToJson());
+				_neonConfig = File.ReadAllText("/config/neon.settings.json").FromJson<NeonConfig>();
 			}
+			else
+			{
+				_neonConfig = Configuration.Get<NeonConfig>();
+
+				if (_neonConfig == null)
+				{
+					_neonConfig = new NeonConfig();
+					File.WriteAllText(env.ContentRootPath + "neon.settings.json", _neonConfig.ToJson());
+				}
+			}
+
 			_servicesManager = new ServicesManager(_serviceManagerLogger, _neonConfig);
 		}
 
 
 		public IConfigurationRoot Configuration { get; }
+
+		private bool CheckIfDockerContainer()
+		{
+			return Environment.GetEnvironmentVariables()["DOTNET_RUNNING_IN_CONTAINER"] != null;
+		}
 
 
 		private async void OnShutdown()
@@ -68,8 +82,8 @@ namespace Neon.HomeControl.Web
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-		//	if (_neonConfig.EnableMetrics)
-		//		services.AddMetrics();
+			//	if (_neonConfig.EnableMetrics)
+			//		services.AddMetrics();
 
 
 			services.AddLogging();
@@ -98,20 +112,20 @@ namespace Neon.HomeControl.Web
 			if (_neonConfig.EnableSwagger)
 				services.AddSwaggerGen(c =>
 				{
-					c.SwaggerDoc("v1", new Info {Title = "Leon Home control", Version = "v1.0"});
+					c.SwaggerDoc("v1", new Info { Title = "Leon Home control", Version = "v1.0" });
 				});
 
 			services.AddDbContextPool<NeonDbContext>(options =>
 			{
-				var config = Configuration.Get<NeonConfig>();
+				//var config = Configuration.Get<NeonConfig>();
 
 				var dbFullPath =
-					$"Data Source={config.FileSystem.RootDirectory}{config.EventsDatabase.DatabaseDirectory}{Path.DirectorySeparatorChar}{config.Database.ConnectionString}";
+					$"Data Source={_neonConfig.FileSystem.RootDirectory}{_neonConfig.EventsDatabase.DatabaseDirectory}{Path.DirectorySeparatorChar}{_neonConfig.Database.ConnectionString}";
 				options.UseSqlite(dbFullPath);
 			});
 
 			services.AddTransient<DbContext, NeonDbContext>();
-
+			services.AddResponseCompression();
 			builder.Populate(services);
 			_container = _servicesManager.Build();
 
@@ -143,6 +157,8 @@ namespace Neon.HomeControl.Web
 
 			if (_neonConfig.EnableSwagger)
 				app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leon Home control"); });
+
+			app.UseResponseCompression();
 
 			app.UseMvc();
 			await _servicesManager.Start();

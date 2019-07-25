@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Neon.HomeControl.Api.Core.Attributes.Components;
+﻿using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
 using UPnP;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("ssdp","Ssdp connector", "1.0", "STREAMING", "Control ssdp", typeof(SsdpConfig))]
+	[Component("ssdp", "Ssdp connector", "1.0", "STREAMING", "Control ssdp", typeof(SsdpConfig))]
 	public class SsdpComponent : ISsdpComponent
 	{
 
@@ -33,7 +30,7 @@ namespace Neon.HomeControl.Components.Components
 
 		public Task InitConfiguration(object config)
 		{
-			_config = (SsdpConfig) config;
+			_config = (SsdpConfig)config;
 			return Task.CompletedTask;
 		}
 

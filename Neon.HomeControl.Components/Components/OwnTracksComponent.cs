@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using CoordinateSharp;
+﻿using CoordinateSharp;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
@@ -9,11 +8,12 @@ using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.Data;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {
-	[Component("owntracks","OwnTrack component", "1.0", "Presence", "Presence", typeof(OwnTracksConfig))]
+	[Component("owntracks", "OwnTrack component", "1.0", "Presence", "Presence", typeof(OwnTracksConfig))]
 	public class OwnTracksComponent : IOwnTracksComponent
 	{
 		private readonly IEventDatabaseService _eventDatabaseService;
@@ -71,7 +71,7 @@ namespace Neon.HomeControl.Components.Components
 
 		public Task InitConfiguration(object config)
 		{
-			_config = (OwnTracksConfig) config;
+			_config = (OwnTracksConfig)config;
 
 			return Task.CompletedTask;
 		}

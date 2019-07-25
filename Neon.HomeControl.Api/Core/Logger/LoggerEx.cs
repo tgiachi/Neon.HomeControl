@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Data.Logger;
 using Neon.HomeControl.Api.Core.Utils;
+using System;
 
 namespace Neon.HomeControl.Api.Core.Logger
 {
 	public class LoggerEx<T> : ILogger<T>
 	{
 		private readonly ILogger _logger;
-		
+
 		private object loggerLock = new object();
 
 		public LoggerEx(ILoggerFactory factory)

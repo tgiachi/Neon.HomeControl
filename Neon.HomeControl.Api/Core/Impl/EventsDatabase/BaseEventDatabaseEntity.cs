@@ -1,6 +1,6 @@
-﻿using System;
-using Neon.HomeControl.Api.Core.Attributes.IoT;
+﻿using Neon.HomeControl.Api.Core.Attributes.IoT;
 using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+using System;
 namespace Neon.HomeControl.Api.Core.Impl.EventsDatabase
 {
 	public class BaseEventDatabaseEntity : IIotEntity
@@ -10,14 +10,14 @@ namespace Neon.HomeControl.Api.Core.Impl.EventsDatabase
 			EventDateTime = DateTime.Now;
 		}
 
-		[IgnorePropertyCompare] 
+		[IgnorePropertyCompare]
 		public Guid Id { get; set; }
 
 		public string EntityName { get; set; }
 
 		public string EntityType { get; set; }
 
-		[IgnorePropertyCompare] 
+		[IgnorePropertyCompare]
 		public DateTime EventDateTime { get; set; }
 	}
 }

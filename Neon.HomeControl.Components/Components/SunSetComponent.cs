@@ -1,18 +1,18 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using CoordinateSharp;
+﻿using CoordinateSharp;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Components;
+using Neon.HomeControl.Api.Core.Data.Commands;
 using Neon.HomeControl.Api.Core.Data.Config;
 using Neon.HomeControl.Api.Core.Enums;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.EventsDb;
 using Neon.HomeControl.Components.Interfaces;
-using Microsoft.Extensions.Logging;
-using Neon.HomeControl.Api.Core.Data.Commands;
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Components.Components
 {

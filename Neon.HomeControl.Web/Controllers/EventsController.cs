@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Neon.HomeControl.Web.Controllers
 {

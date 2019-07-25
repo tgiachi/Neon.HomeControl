@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Interface for create plugins manager service
 	/// </summary>
-	public interface IPluginsService : IService
+	public interface IPluginsManager : IService
 	{
 	}
 }

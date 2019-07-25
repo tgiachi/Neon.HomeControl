@@ -28,6 +28,6 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Components
 		/// <returns></returns>
 		object GetDefaultConfig();
 
-	//	onReceviedCommand<T>()
+		//	onReceviedCommand<T>()
 	}
 }

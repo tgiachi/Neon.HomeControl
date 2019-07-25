@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using LiteDB;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.EventDatabase;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Config;
+using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
-using LiteDB;
-using Microsoft.Extensions.Logging;
-using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -22,28 +23,28 @@ namespace Neon.HomeControl.Services.Services
 
 		private readonly Dictionary<Type, string> _entities = new Dictionary<Type, string>();
 		private readonly Dictionary<string, Type> _entitiesTypes = new Dictionary<string, Type>();
-		private readonly IFileSystemService _fileSystemService;
+		private readonly IFileSystemManager _fileSystemManager;
 
 		private readonly ILogger _logger;
 		private LiteDatabase _liteDatabase;
 
 
-		public EventDatabaseService(ILogger<EventDatabaseService> logger, IFileSystemService fileSystemService,
+		public EventDatabaseService(ILogger<EventDatabaseService> logger, IFileSystemManager fileSystemManager,
 			NeonConfig config)
 		{
 			_logger = logger;
-			_fileSystemService = fileSystemService;
+			_fileSystemManager = fileSystemManager;
 			_config = config;
 		}
 
 		public Task<bool> Start()
 		{
 			_logger.LogInformation("Initializing Events Database");
-			_fileSystemService.CreateDirectory(_config.EventsDatabase.DatabaseDirectory);
+			_fileSystemManager.CreateDirectory(_config.EventsDatabase.DatabaseDirectory);
 
 			_liteDatabase =
-				new LiteDatabase(_fileSystemService.BuildFilePath(_config.EventsDatabase.DatabaseDirectory) + "\\" +
-				                 _dbFilename);
+				new LiteDatabase(_fileSystemManager.BuildFilePath(_config.EventsDatabase.DatabaseDirectory) + Path.DirectorySeparatorChar +
+								 _dbFilename);
 			_liteDatabase.Shrink();
 			ScanEntities();
 			return Task.FromResult(true);

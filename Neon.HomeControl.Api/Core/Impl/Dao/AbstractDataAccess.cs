@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Interfaces.Dao;
 using Neon.HomeControl.Api.Core.Interfaces.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neon.HomeControl.Api.Core.Impl.Dao
 {

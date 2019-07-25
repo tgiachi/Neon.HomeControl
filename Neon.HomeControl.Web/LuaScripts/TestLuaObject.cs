@@ -1,6 +1,6 @@
-﻿using System;
-using Neon.HomeControl.Api.Core.Attributes.ScriptService;
+﻿using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using NLua;
+using System;
 
 namespace Neon.HomeControl.Web.LuaScripts
 {

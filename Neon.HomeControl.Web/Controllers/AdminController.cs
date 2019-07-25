@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using Neon.HomeControl.Api.Core.Data.Components;
+using Neon.HomeControl.Api.Core.Data.Logger;
 using Neon.HomeControl.Api.Core.Data.LuaScript;
 using Neon.HomeControl.Api.Core.Data.Scheduler;
 using Neon.HomeControl.Api.Core.Data.Services;
 using Neon.HomeControl.Api.Core.Data.UserInteraction;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
-using Neon.HomeControl.Api.Core.Data.Logger;
-using Neon.HomeControl.Api.Core.Logger;
 using Neon.HomeControl.Api.Core.Utils;
+using System.Collections.Generic;
 
 namespace Neon.HomeControl.Web.Controllers
 {

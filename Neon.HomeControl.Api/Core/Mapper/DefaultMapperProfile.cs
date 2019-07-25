@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Neon.HomeControl.Api.Core.Attributes.Dto;
 using Neon.HomeControl.Api.Core.Utils;
+using System.Reflection;
 
 namespace Neon.HomeControl.Api.Core.Mapper
 {

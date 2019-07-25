@@ -1,5 +1,5 @@
-﻿using Neon.HomeControl.Web.Auth;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Neon.HomeControl.Web.Auth;
 
 namespace Neon.HomeControl.Web.Controllers
 {

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Neon.HomeControl.Api.Core.Data.Network;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reactive.Subjects;
 using System.Threading;
-using Neon.HomeControl.Api.Core.Data.Network;
 
 namespace Neon.HomeControl.Api.Core.Utils
 {
@@ -24,7 +24,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 			sw.Start();
 
 			var startAddress = networkAddress.Split('.')[0] + "." + networkAddress.Split('.')[1] + "." +
-			                   networkAddress.Split('.')[2] + ".";
+							   networkAddress.Split('.')[2] + ".";
 
 			for (var i = 1; i < 255; i++)
 			{
@@ -44,7 +44,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 
 		private void P_PingCompleted(object sender, PingCompletedEventArgs e)
 		{
-			var ip = (string) e.UserState;
+			var ip = (string)e.UserState;
 			if (e.Reply != null && e.Reply.Status == IPStatus.Success)
 			{
 				string name;
@@ -58,8 +58,8 @@ namespace Neon.HomeControl.Api.Core.Utils
 					name = "?";
 				}
 
-				((ReplaySubject<NetworkResult>) NetworkResultObservable).OnNext(new NetworkResult
-					{IpAddress = ip, DnsName = name, Online = true, RoundTripTime = e.Reply.RoundtripTime});
+				((ReplaySubject<NetworkResult>)NetworkResultObservable).OnNext(new NetworkResult
+				{ IpAddress = ip, DnsName = name, Online = true, RoundTripTime = e.Reply.RoundtripTime });
 
 
 				lock (LockObj)
@@ -69,8 +69,8 @@ namespace Neon.HomeControl.Api.Core.Utils
 			}
 			else if (e.Reply == null)
 			{
-				((ReplaySubject<NetworkResult>) NetworkResultObservable).OnNext(new NetworkResult
-					{IpAddress = ip, Online = false});
+				((ReplaySubject<NetworkResult>)NetworkResultObservable).OnNext(new NetworkResult
+				{ IpAddress = ip, Online = false });
 			}
 
 			_countdown.Signal();

@@ -4,5 +4,26 @@
         <name>Neon.HomeControl.Entities</name>
     </assembly>
     <members>
+        <member name="P:Neon.HomeControl.Entities.Services.NeonDbContext.Users">
+            <summary>
+            Users
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Entities.Services.NeonDbContext.Roles">
+            <summary>
+            Roles
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Entities.Services.NeonDbContext.UserRoles">
+            <summary>
+             Many user have may roles
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Entities.Services.NeonDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Setup relations
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
     </members>
 </doc>

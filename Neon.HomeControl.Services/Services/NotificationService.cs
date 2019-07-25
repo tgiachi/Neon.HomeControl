@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
-using MediatR;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -58,7 +58,7 @@ namespace Neon.HomeControl.Services.Services
 				_logger.LogDebug($"Sending notification type {message.GetType().Name}");
 				await _mediator.Publish(message);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_logger.LogError($"Error during publishing message {message.GetType().Name} => {ex}");
 			}

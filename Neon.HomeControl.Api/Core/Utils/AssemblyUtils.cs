@@ -103,6 +103,40 @@ namespace Neon.HomeControl.Api.Core.Utils
 			return _assembliesCache.ToArray();
 		}
 
+		private static void BuildAssemblyCache()
+		{
+			if (_assembliesCache.Count == 0)
+			{
+				var allAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(s => !s.IsDynamic).ToList();
+				var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+				var uri = new UriBuilder(codeBase);
+				var path2 = Uri.UnescapeDataString(uri.Path);
+				var path = Path.GetDirectoryName(path2);
+
+				var files = Directory.GetFiles(path, "*.dll");
+				foreach (var file in files)
+					try
+					{
+						var existsAssembly = (from s in allAssemblies where s.Location.Contains(file) select s)
+							.FirstOrDefault();
+
+						if (existsAssembly == null)
+						{
+							var assembly = Assembly.LoadFile(file);
+							allAssemblies.Add(assembly);
+						}
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine(ex.Message);
+					}
+
+				_assembliesCache.AddRange(allAssemblies);
+
+			}
+
+		}
+
 		/// <summary>
 		///     Controlla tutti gli assembly se hanno l'attributo
 		/// </summary>
@@ -116,37 +150,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 
 			// InitAppDomain();
 
-			if (_assembliesCache.Count == 0)
-			{
-				var allAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(s => !s.IsDynamic).ToList();
-				if (path == null)
-				{
-					var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-					var uri = new UriBuilder(codeBase);
-					var path2 = Uri.UnescapeDataString(uri.Path);
-					path = Path.GetDirectoryName(path2);
-
-					var files = Directory.GetFiles(path, "*.dll");
-					foreach (var file in files)
-						try
-						{
-							var existsAssembly = (from s in allAssemblies where s.Location.Contains(file) select s)
-								.FirstOrDefault();
-
-							if (existsAssembly == null)
-							{
-								var assembly = Assembly.LoadFile(file);
-								allAssemblies.Add(assembly);
-							}
-						}
-						catch (Exception ex)
-						{
-							Console.WriteLine(ex.Message);
-						}
-
-					_assembliesCache.AddRange(allAssemblies);
-				}
-			}
+			BuildAssemblyCache();
 
 			try
 			{
@@ -209,6 +213,14 @@ namespace Neon.HomeControl.Api.Core.Utils
 		/// <param name="assembly"></param>
 		public static void AddAssemblyToCache(Assembly assembly)
 		{
+			//if (_assembliesCache.Count == 0)
+			//{
+			//	var allAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(s => !s.IsDynamic).ToList();
+			//	_assembliesCache.AddRange(allAssemblies);
+			//}
+
+			BuildAssemblyCache();
+
 			if (!_assembliesCache.Contains(assembly))
 				_assembliesCache.Add(assembly);
 		}

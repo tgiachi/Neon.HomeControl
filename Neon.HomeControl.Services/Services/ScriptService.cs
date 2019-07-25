@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Config;
@@ -12,15 +6,21 @@ using Neon.HomeControl.Api.Core.Data.LuaScript;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
-using Microsoft.Extensions.Logging;
 using NLua;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Services.Services
 {
 	[Service(typeof(IScriptService), Name = "LUA Script service", LoadAtStartup = true, Order = 100)]
 	public class ScriptService : IScriptService
 	{
-		private readonly IFileSystemService _fileSystemService;
+		private readonly IFileSystemManager _fileSystemManager;
 		private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
 		private readonly List<LuaFunction> _functions = new List<LuaFunction>();
 		private readonly NeonConfig _neonConfig;
@@ -33,12 +33,12 @@ namespace Neon.HomeControl.Services.Services
 		private string _bootstrapFile = "";
 
 		public ScriptService(ILogger<ScriptService> logger, NeonConfig neonConfig, IServicesManager servicesManager,
-			IFileSystemService fileSystemService)
+			IFileSystemManager fileSystemManager)
 		{
 			GlobalFunctions = new List<LuaScriptFunctionData>();
 			_logger = logger;
 			_neonConfig = neonConfig;
-			_fileSystemService = fileSystemService;
+			_fileSystemManager = fileSystemManager;
 			_servicesManager = servicesManager;
 			_luaEngine = new Lua();
 			_luaEngine.State.Encoding = Encoding.UTF8;
@@ -52,10 +52,10 @@ namespace Neon.HomeControl.Services.Services
 
 		public Task<bool> Start()
 		{
-			_bootstrapFile = _fileSystemService.BuildFilePath(_neonConfig.Scripts.Directory + Path.DirectorySeparatorChar + "bootstrap.lua");
-			_fileSystemService.CreateDirectory(_neonConfig.Scripts.Directory);
+			_bootstrapFile = _fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory + Path.DirectorySeparatorChar + "bootstrap.lua");
+			_fileSystemManager.CreateDirectory(_neonConfig.Scripts.Directory);
 			CheckBootstrapFile();
-			StartMonitorDirectory();
+			//StartMonitorDirectory();
 
 			_logger.LogInformation("Initializing LUA script manager");
 			_luaEngine.LoadCLRPackage();
@@ -101,7 +101,7 @@ namespace Neon.HomeControl.Services.Services
 
 					{
 						var scriptFuncAttr = m.GetCustomAttribute<LuaScriptFunctionAttribute>();
-							
+
 
 						if (scriptFuncAttr == null) return;
 
@@ -121,7 +121,7 @@ namespace Neon.HomeControl.Services.Services
 					}
 					catch (Exception ex)
 					{
-						
+
 					}
 
 				});
@@ -132,7 +132,7 @@ namespace Neon.HomeControl.Services.Services
 		{
 			_logger.LogInformation($"Monitoring directory {_neonConfig.Scripts.Directory}");
 			_fileSystemWatcher.IncludeSubdirectories = true;
-			_fileSystemWatcher.Path = _fileSystemService.BuildFilePath(_neonConfig.Scripts.Directory);
+			_fileSystemWatcher.Path = _fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory);
 			_fileSystemWatcher.NotifyFilter = NotifyFilters.LastAccess
 											  | NotifyFilters.LastWrite
 											  | NotifyFilters.FileName
@@ -156,13 +156,13 @@ namespace Neon.HomeControl.Services.Services
 
 		private void LoadLuaFiles()
 		{
-			var files = Directory.GetFiles(_fileSystemService.BuildFilePath(_neonConfig.Scripts.Directory), "*.lua",
+			var files = Directory.GetFiles(_fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory), "*.lua",
 					SearchOption.AllDirectories)
 				.ToList();
 
 			files.ForEach(f =>
 			{
-				if (!f.ToLower().Contains("bootstrap.lua"))	
+				if (!f.ToLower().Contains("bootstrap.lua"))
 					LoadLuaFile(f, false);
 			});
 		}

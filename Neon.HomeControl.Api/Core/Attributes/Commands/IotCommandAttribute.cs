@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Neon.HomeControl.Api.Core.Attributes.Commands
 {
@@ -19,7 +17,7 @@ namespace Neon.HomeControl.Api.Core.Attributes.Commands
 		/// Entity Type
 		/// </summary>
 		public Type EntityType { get; set; }
-	
+
 		public IotCommandAttribute(string commandName, Type entityType)
 		{
 			CommandName = commandName;
