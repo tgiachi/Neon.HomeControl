@@ -122,7 +122,7 @@ namespace Neon.HomeControl.Components.Components
 				_logger.LogInformation($"Token refresh expire on: {_config.ExpireOn}");
 
 				InitSpotifyClient();
-			}, "SpotifyRefreshToken", (int)TimeSpan.FromMinutes(5).TotalSeconds, false);
+			}, "SpotifyRefreshToken", (int)TimeSpan.FromMinutes(30).TotalSeconds, false);
 
 		}
 
@@ -141,7 +141,7 @@ namespace Neon.HomeControl.Components.Components
 				InitSpotifyClient();
 				RefreshTokenJob();
 				_schedulerService.AddPolling(PollingRequest, "Spotify_Device",
-					SchedulerServicePollingEnum.SHORT_POLLING);
+					SchedulerServicePollingEnum.NORMAL_POLLING);
 			}
 
 			return true;

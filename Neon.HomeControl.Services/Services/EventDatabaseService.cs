@@ -45,6 +45,7 @@ namespace Neon.HomeControl.Services.Services
 			_liteDatabase =
 				new LiteDatabase(_fileSystemManager.BuildFilePath(_config.EventsDatabase.DatabaseDirectory) + Path.DirectorySeparatorChar +
 								 _dbFilename);
+
 			_liteDatabase.Shrink();
 			ScanEntities();
 			return Task.FromResult(true);
