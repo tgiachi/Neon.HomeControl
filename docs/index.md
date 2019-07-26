@@ -23,7 +23,7 @@ I'm looking for people to help me with the project, please contact me!
  - Classic Database (can change in future): *Sqlite*
 
 # !!! NOTE !!!
-Modify config `neon.settings-default.json` to `neon.settings.json` before lunch application
+Rename config `neon.settings-default.json` to `neon.settings.json` before start application
 
 
 
