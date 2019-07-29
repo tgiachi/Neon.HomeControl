@@ -1,4 +1,6 @@
-﻿using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
+﻿using System.Collections.Generic;
+using Neon.HomeControl.Api.Core.Data.Commands;
+using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 
 namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {
@@ -15,5 +17,11 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
 		void DispatchCommand<T>(T entity, string commandName, params object[] args) where T : IIotEntity;
+
+
+		/// <summary>
+		/// List of availables commands
+		/// </summary>
+		List<IotCommandInfo> CommandInfos { get; }
 	}
 }

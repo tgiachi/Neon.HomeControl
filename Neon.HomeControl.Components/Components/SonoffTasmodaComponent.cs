@@ -9,6 +9,8 @@ using Neon.HomeControl.Components.Mqtt;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using MediatR;
+using Neon.HomeControl.Api.Core.Attributes.Commands;
 
 namespace Neon.HomeControl.Components.Components
 {
@@ -70,6 +72,7 @@ namespace Neon.HomeControl.Components.Components
 			};
 		}
 
+
 		private void ParseMqttMessage(string topic, string message)
 		{
 			topic = topic.Replace("tele/", "");
@@ -92,5 +95,18 @@ namespace Neon.HomeControl.Components.Components
 				_ioTService.InsertEvent(ed);
 			}
 		}
+
+		[IotCommand("POWER", typeof(SonoffStatusEd), "Send message to Tasmoda-Sonoff")]
+		[IotCommandParam("Device", true)]
+		[IotCommandParam("Channel", true)]
+		[IotCommandParam("Power_status", true)]
+		public void SendPower(SonoffStatusEd entity, string commandName, params object[] args)
+		{
+			var device = args[0] as string;
+			var channel = args[1] as string;
+			var powerStatus = args[2] as string;
+			_mqttService.SendMessage($"/cmnd/{device}/power{channel}", powerStatus);
+		}
+
 	}
 }

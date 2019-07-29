@@ -78,7 +78,6 @@ namespace Neon.HomeControl.Components.Components
 				Sunset = coordinates.CelestialInfo.SunSet.Value.ToLocalTime()
 			};
 
-
 			_ioTService.InsertEvent(ed);
 		}
 

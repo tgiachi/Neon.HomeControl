@@ -763,10 +763,41 @@
             Command name
             </summary>
         </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandAttribute.Description">
+            <summary>
+            Command description
+            </summary>
+        </member>
         <member name="P:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandAttribute.EntityType">
             <summary>
             Entity Type
             </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandAttribute.#ctor(System.String,System.Type,System.String)">
+            <summary>
+            ctor
+            </summary>
+            <param name="commandName"></param>
+            <param name="entityType"></param>
+            <param name="description"></param>
+            <param name="args"></param>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandParamAttribute.Name">
+            <summary>
+            Name of param
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandParamAttribute.IsRequired">
+            <summary>
+            If is required
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Attributes.Commands.IotCommandParamAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="name"></param>
+            <param name="isRequired"></param>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Attributes.Components.ComponentAttribute">
             <summary>
@@ -1211,6 +1242,11 @@
             <param name="entity"></param>
             <param name="commandName"></param>
             <param name="args"></param>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Interfaces.Services.ICommandDispatcherService.CommandInfos">
+            <summary>
+            List of availables commands
+            </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IDatabaseService">
             <summary>

@@ -4,6 +4,11 @@
         <name>Neon.HomeControl.Services</name>
     </assembly>
     <members>
+        <member name="P:Neon.HomeControl.Services.Services.CommandDispatcherService.CommandInfos">
+            <summary>
+            Commands
+            </summary>
+        </member>
         <member name="M:Neon.HomeControl.Services.Services.CommandDispatcherService.DispatchCommand``1(``0,System.String,System.Object[])">
             <summary>
             Dispatch command to commands
