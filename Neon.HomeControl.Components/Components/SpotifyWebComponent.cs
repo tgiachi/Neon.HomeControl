@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Attributes.Commands;
 
 namespace Neon.HomeControl.Components.Components
 {
@@ -258,6 +259,22 @@ namespace Neon.HomeControl.Components.Components
 		{
 			return
 				$"{AuthorizeUrl}?response_type=code&redirect_uri={RedirectUrl}&client_id={_config.ClientId}&scope={string.Join("%20", scopes)}&state=k332yl";
+		}
+
+		[IotCommand("SET_VOLUME", typeof(SpotifyDeviceEd), "Set volume to device")]
+		[IotCommandParam("Volume_in_percentage", true)]
+		[IotCommandParam("DeviceId", false)]
+
+		public async void SendSetVolumeToDevice(SpotifyDeviceEd entity, string commandName, params object[] args)
+		{
+			var volume = args[0] as string;
+			var device = "";
+
+			if (args.Length > 1)
+				device = args[1] as string;
+
+			await _spotifyWebApi.SetVolumeAsync(int.Parse(volume), device);
+
 		}
 	}
 }
