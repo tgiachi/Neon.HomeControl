@@ -16,7 +16,6 @@ COPY Neon.Plugin.Test/*.csproj ./Neon.Plugin.Test/
 COPY Neon.HomeControl.Components/*.csproj ./Neon.HomeControl.Components/
 COPY Neon.HomeControl.Entities/*.csproj ./Neon.HomeControl.Entities/
 COPY Neon.HomeControl.Dto/*.csproj ./Neon.HomeControl.Dto/
-COPY Neon.HomeControl.Service/*.csproj ./Neon.HomeControl.Service/
 COPY Neon.HomeControl.Services/*.csproj ./Neon.HomeControl.Services/
 COPY Neon.HomeControl.StandardLuaLibrary/*.csproj ./Neon.HomeControl.StandardLuaLibrary/
 COPY Neon.HomeControl.Web/*.csproj ./Neon.HomeControl.Web/
