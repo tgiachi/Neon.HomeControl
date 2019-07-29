@@ -9,6 +9,7 @@ using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
 using System.Collections.Generic;
+using Neon.HomeControl.Api.Core.Data.Commands;
 
 namespace Neon.HomeControl.Web.Controllers
 {
@@ -21,16 +22,18 @@ namespace Neon.HomeControl.Web.Controllers
 		private readonly IScriptService _scriptService;
 		private readonly IServicesManager _servicesManager;
 		private readonly IUserInteractionService _userInteractionService;
+		private readonly ICommandDispatcherService _commandDispatcherService;
 
 		public AdminController(IServicesManager servicesManager, IScriptService scriptService,
 			IComponentsService componentsService, IUserInteractionService userInteractionService,
-			ISchedulerService schedulerService)
+			ISchedulerService schedulerService, ICommandDispatcherService commandDispatcherService)
 		{
 			_userInteractionService = userInteractionService;
 			_servicesManager = servicesManager;
 			_scriptService = scriptService;
 			_componentsService = componentsService;
 			_schedulerService = schedulerService;
+			_commandDispatcherService = commandDispatcherService;
 		}
 
 		[HttpGet]
@@ -73,6 +76,12 @@ namespace Neon.HomeControl.Web.Controllers
 		public ActionResult<List<LoggerEntry>> GetLogs()
 		{
 			return Ok(AppUtils.LoggerEntries);
+		}
+
+		[HttpGet]
+		public ActionResult<List<IotCommandInfo>> GetCommandsInfos()
+		{
+			return Ok(_commandDispatcherService.CommandInfos);
 		}
 	}
 }

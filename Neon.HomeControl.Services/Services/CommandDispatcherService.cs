@@ -24,6 +24,11 @@ namespace Neon.HomeControl.Services.Services
 
 		private List<IotCommandInfo> _commands = new List<IotCommandInfo>();
 
+		/// <summary>
+		/// Commands
+		/// </summary>
+		public List<IotCommandInfo> CommandInfos => _commands;
+		
 		public CommandDispatcherService(ILogger<ICommandDispatcherService> logger,
 			IComponentsService componentsService,
 			INotificationService notificationService)
@@ -65,6 +70,8 @@ namespace Neon.HomeControl.Services.Services
 
 		}
 
+	
+
 		private void ScanCommands()
 		{
 			_componentsService.RunningComponents.Where(c => c.Status == ComponentStatusEnum.STARTED).ToList().ForEach(
@@ -76,10 +83,26 @@ namespace Neon.HomeControl.Services.Services
 
 						if (commandAttributes == null) return;
 
+						var commandParamsInfo = new List<IotCommandParamInfo>();
+
+						var commandParams = m.GetCustomAttributes<IotCommandParamAttribute>();
+
+						commandParams.ToList().ForEach(cmd =>
+						{
+							commandParamsInfo.Add(new IotCommandParamInfo()
+							{
+								ParamName = cmd.Name,
+								IsRequired = cmd.IsRequired
+							});
+						});
+
+
 						_commands.Add(new IotCommandInfo()
 						{
 							CommandName = commandAttributes.CommandName.ToUpper(),
 							Method = m,
+							MethodName = m.Name,
+							Params = commandParamsInfo,
 							EntityType = commandAttributes.EntityType,
 							Component = c.Component
 						});

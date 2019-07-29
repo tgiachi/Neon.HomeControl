@@ -116,7 +116,8 @@ namespace Neon.HomeControl.Components.Components
 		/// <param name="entity"></param>
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
-		[IotCommand("RISE", typeof(WeatherEd))]
+		[IotCommand("RISE", typeof(WeatherEd), "Set sun up in the sky")]
+		[IotCommandParam("Azimut", false)]
 		public void HandleRiseCommand(WeatherEd entity, string commandName, params object[] args)
 		{
 			_logger.LogInformation("This is RISE command name");
