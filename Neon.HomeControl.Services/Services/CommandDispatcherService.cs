@@ -8,10 +8,12 @@ using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Data.Components;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -28,7 +30,7 @@ namespace Neon.HomeControl.Services.Services
 		/// Commands
 		/// </summary>
 		public List<IotCommandInfo> CommandInfos => _commands;
-		
+
 		public CommandDispatcherService(ILogger<ICommandDispatcherService> logger,
 			IComponentsService componentsService,
 			INotificationService notificationService)
@@ -38,8 +40,9 @@ namespace Neon.HomeControl.Services.Services
 			_componentsService = componentsService;
 			_componentsService.RunningComponents.CollectionChanged += (sender, s) =>
 			{
+				var oc = (ObservableCollection<RunningComponentInfo>)sender;
 				_commands.Clear();
-				ScanCommands();
+				ScanCommands(oc.ToList());
 			};
 		}
 
@@ -70,14 +73,14 @@ namespace Neon.HomeControl.Services.Services
 
 		}
 
-	
 
-		private void ScanCommands()
+
+		private void ScanCommands(List<RunningComponentInfo> components)
 		{
-			_componentsService.RunningComponents.Where(c => c.Status == ComponentStatusEnum.STARTED).ToList().ForEach(
+			components.ForEach(
 				c =>
 				{
-					c.Component.GetType().GetMethods().ToList().ForEach(m =>
+					c.Component?.GetType().GetMethods().ToList().ForEach(m =>
 					{
 						var commandAttributes = m.GetCustomAttribute<IotCommandAttribute>();
 
@@ -109,14 +112,13 @@ namespace Neon.HomeControl.Services.Services
 
 						_logger.LogInformation($"Adding command {commandAttributes.CommandName} for component {c.Name}");
 					});
-
 				});
 
 		}
 
 		public Task<bool> Start()
 		{
-			ScanCommands();
+			ScanCommands(_componentsService.RunningComponents.ToList());
 			return Task.FromResult(true);
 		}
 

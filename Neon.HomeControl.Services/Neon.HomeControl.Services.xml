@@ -4,6 +4,13 @@
         <name>Neon.HomeControl.Services</name>
     </assembly>
     <members>
+        <member name="M:Neon.HomeControl.Services.Connectors.LiteDbConnector.Init(System.String)">
+            <summary>
+            Initialize NoSQL db
+            </summary>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
         <member name="P:Neon.HomeControl.Services.Services.CommandDispatcherService.CommandInfos">
             <summary>
             Commands
@@ -23,13 +30,16 @@
                 Implementation of IoT Server
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemManager,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService,Neon.HomeControl.Api.Core.Interfaces.Services.IMqttService)">
+        <member name="M:Neon.HomeControl.Services.Services.IoTService.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.Api.Core.Interfaces.Services.IIoTService},Neon.HomeControl.Api.Core.Interfaces.Services.IFileSystemManager,Neon.HomeControl.Api.Core.Data.Config.NeonConfig,Neon.HomeControl.Api.Core.Interfaces.Services.IEventDatabaseService,Neon.HomeControl.Api.Core.Interfaces.Managers.IServicesManager,Neon.HomeControl.Api.Core.Interfaces.Services.IMqttService)">
             <summary>
-                Ctor
+            ctor
             </summary>
             <param name="logger"></param>
             <param name="fileSystemManager"></param>
             <param name="config"></param>
+            <param name="eventDatabaseService"></param>
+            <param name="servicesManager"></param>
+            <param name="mqttService"></param>
         </member>
         <member name="M:Neon.HomeControl.Services.Services.IoTService.GetEntities">
             <summary>

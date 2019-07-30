@@ -9,15 +9,7 @@
             Component for connect to chromecast and play media
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.Components.Components.WeatherComponent.Handle(Neon.HomeControl.Api.Core.Data.Commands.IotCommand{Neon.HomeControl.Components.EventsDb.WeatherEd},System.Threading.CancellationToken)">
-            <summary>
-            Handle command rise
-            </summary>
-            <param name="notification"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Neon.HomeControl.Components.Components.WeatherComponent.HandleRiseCommand(Neon.HomeControl.Components.EventsDb.WeatherEd,System.String,System.Object[])">
+        <member name="M:Neon.HomeControl.Components.Components.WeatherComponent.RiseCommand(Neon.HomeControl.Components.EventsDb.WeatherEd,System.String,System.Object[])">
             <summary>
             Command rise
             </summary>

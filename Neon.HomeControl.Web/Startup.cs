@@ -120,7 +120,7 @@ namespace Neon.HomeControl.Web
 				//var config = Configuration.Get<NeonConfig>();
 
 				var dbFullPath =
-					$"Data Source={_neonConfig.FileSystem.RootDirectory}{_neonConfig.EventsDatabase.DatabaseDirectory}{Path.DirectorySeparatorChar}{_neonConfig.Database.ConnectionString}";
+					$"Data Source={_neonConfig.FileSystem.RootDirectory}{_neonConfig.DatabaseDirectory}{Path.DirectorySeparatorChar}{_neonConfig.Database.ConnectionString}";
 				options.UseSqlite(dbFullPath);
 			});
 

@@ -1,13 +1,17 @@
-﻿namespace Neon.HomeControl.Api.Core.Data.Config
+﻿using System.IO;
+
+namespace Neon.HomeControl.Api.Core.Data.Config
 {
 	public class EventDatabaseConfig
 	{
-		public string DatabaseDirectory { get; set; }
+		public string ConnectorName { get; set; }
+
+		public string ConnectionString { get; set; }
 
 
 		public EventDatabaseConfig()
 		{
-			DatabaseDirectory = "Database";
+			ConnectionString = "Database" + Path.DirectorySeparatorChar + "Neon.HomeControl.Events.db";
 		}
 	}
 }

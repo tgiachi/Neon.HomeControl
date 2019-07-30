@@ -1,6 +1,7 @@
 ﻿# Neon.HomeControl
 Similar to HomeAssistant, but made with .net core and ❤️
 
+
 # Help request!
 I'm looking for people to help me with the project, please contact me!
 
@@ -19,7 +20,8 @@ I'm looking for people to help me with the project, please contact me!
 # Features
  - .NET Core 2.2 
  - Scripts Engine (for make rules): *LUA*
- - Events Database: *LiteDB*
+ ~~- Events Database: *LiteDB*~~
+ - Events Database: NoSQL Connectors (LiteDB and MongoDb)
  - Classic Database (can change in future): *Sqlite*
 
 # !!! NOTE !!!

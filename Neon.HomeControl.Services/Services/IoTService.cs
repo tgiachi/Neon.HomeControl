@@ -13,6 +13,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Interfaces.Database;
+using Neon.HomeControl.Api.Core.Interfaces.Managers;
+using Neon.HomeControl.Api.Core.Utils;
 
 
 namespace Neon.HomeControl.Services.Services
@@ -25,60 +28,71 @@ namespace Neon.HomeControl.Services.Services
 	{
 		private static readonly string _dbFilename = "Neon.HomeControl.IoT.db";
 		private static readonly string _collectionName = "entities";
-		private LiteDatabase _liteDatabase;
 		private readonly NeonConfig _config;
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly IEventDatabaseService _eventDatabaseService;
 		private readonly IMqttService _mqttService;
+		private readonly IServicesManager _servicesManager;
 		private readonly Subject<IIotEntity> _iotEntitiesBus = new Subject<IIotEntity>();
 		private readonly ILogger _logger;
-		private readonly object _liteDbObjectLock = new object();
+		private INoSqlConnector _noSqlConnector;
 
 
 		/// <summary>
-		///     Ctor
+		/// ctor
 		/// </summary>
 		/// <param name="logger"></param>
 		/// <param name="fileSystemManager"></param>
 		/// <param name="config"></param>
+		/// <param name="eventDatabaseService"></param>
+		/// <param name="servicesManager"></param>
+		/// <param name="mqttService"></param>
 		public IoTService(ILogger<IIoTService> logger, IFileSystemManager fileSystemManager,
 			NeonConfig config,
 			IEventDatabaseService eventDatabaseService,
-			IMqttService mqttService
+			IServicesManager servicesManager,
+				IMqttService mqttService
 		)
 		{
 			_logger = logger;
 			_mqttService = mqttService;
 			_eventDatabaseService = eventDatabaseService;
 			_fileSystemManager = fileSystemManager;
+			_servicesManager = servicesManager;
 			_config = config;
 		}
 
 		public Task<bool> Start()
 		{
 			_logger.LogInformation("Initializing IoT Database");
-			_fileSystemManager.CreateDirectory(_config.IoT.DatabaseDirectory);
 
-			lock (_liteDbObjectLock)
-			{
-				_liteDatabase =
-							new LiteDatabase(_fileSystemManager.BuildFilePath(_config.IoT.DatabaseDirectory) + Path.DirectorySeparatorChar + _dbFilename);
-				_liteDatabase.Shrink();
-			}
+			LoadConnector();
 
 			return Task.FromResult(true);
+		}
+
+		private void LoadConnector()
+		{
+			var connectorType = NoSqlUtils.GetNoSqlConnector(_config.IoT.ConnectorName);
+
+			if (connectorType == null)
+				throw new Exception($"NoSQL connector named {_config.IoT.ConnectorName} not found! ");
+
+			_noSqlConnector = (INoSqlConnector)_servicesManager.Resolve(connectorType);
+
+			_noSqlConnector.Init(_config.IoT.ConnectionString);
+
 		}
 
 
 		public T InsertEntity<T>(T value) where T : IIotEntity
 		{
-			lock (_liteDbObjectLock)
-			{
+			
 				value.EntityType = typeof(T).FullName;
 
-				_liteDatabase.GetCollection<T>(_collectionName).Insert(value);
+				_noSqlConnector.Insert(value, _collectionName);
 				return value;
-			}
+			
 		}
 
 		public string GetEntityTypeByName(string name)
@@ -90,11 +104,8 @@ namespace Neon.HomeControl.Services.Services
 
 		public T GetEntityByType<T>(string name, string type) where T : IIotEntity
 		{
-			lock (_liteDbObjectLock)
-			{
-				return _liteDatabase.GetCollection<T>(_collectionName).FindOne(document =>
+			return _noSqlConnector.Query<T>(_collectionName).FirstOrDefault(document =>
 					document.EntityName == name && document.EntityType == type);
-			}
 		}
 
 		/// <summary>
@@ -108,24 +119,25 @@ namespace Neon.HomeControl.Services.Services
 
 		public T Update<T>(T value) where T : IIotEntity
 		{
-			lock (_liteDbObjectLock)
-			{
-				value.EntityType = typeof(T).FullName;
-				var updated = _liteDatabase.GetCollection<T>(_collectionName).Update(value);
+
+			_noSqlConnector.Update(value, _collectionName);
 
 				return value;
-			}
+			
 		}
 
 		public IQueryable<T> Query<T>() where T : IIotEntity
 		{
-			return _liteDatabase.GetCollection<T>(_collectionName).FindAll().AsQueryable();
+			return _noSqlConnector.Query<T>(_collectionName);
 		}
 
 		public T InsertOrUpdate<T>(T value) where T : IIotEntity
 		{
 			if (value.Id == Guid.Empty)
 				value.Id = Guid.NewGuid();
+
+			if (string.IsNullOrEmpty(value.EntityType))
+				value.EntityType = value.GetType().FullName;
 
 			T obj = default;
 			var returnObj = default(T);
