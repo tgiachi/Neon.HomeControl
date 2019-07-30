@@ -16,21 +16,19 @@ using System.Threading.Tasks;
 namespace Neon.HomeControl.Components.Components
 {
 	[Component("weather", "Weather", "1.0", "WEATHER", "Broadcast weather", typeof(WeatherComponentConfig))]
-	public class WeatherComponent : IWeatherComponent, INotificationHandler<IotCommand<WeatherEd>>
+	public class WeatherComponent : IWeatherComponent
 	{
-		private readonly IEventDatabaseService _eventDatabaseService;
 		private readonly IIoTService _ioTService;
 		private readonly ILogger _logger;
 		private readonly ISchedulerService _schedulerService;
 		private WeatherComponentConfig _config;
 		private DarkSkyService _darkSkyService;
 
-		public WeatherComponent(ISchedulerService jobSchedulerService, ILogger<WeatherComponent> logger,
-			IEventDatabaseService eventDatabaseService, IIoTService ioTService)
+		public WeatherComponent(ISchedulerService jobSchedulerService, ILogger<WeatherComponent> logger, IIoTService ioTService)
 		{
 			_logger = logger;
 			_schedulerService = jobSchedulerService;
-			_eventDatabaseService = eventDatabaseService;
+
 			_ioTService = ioTService;
 		}
 
@@ -98,19 +96,6 @@ namespace Neon.HomeControl.Components.Components
 		}
 
 		/// <summary>
-		/// Handle command rise
-		/// </summary>
-		/// <param name="notification"></param>
-		/// <param name="cancellationToken"></param>
-		/// <returns></returns>
-		public Task Handle(IotCommand<WeatherEd> notification, CancellationToken cancellationToken)
-		{
-			_logger.LogInformation($"recevied from LUA => {notification.CommandName}");
-
-			return Task.CompletedTask;
-		}
-
-		/// <summary>
 		/// Command rise
 		/// </summary>
 		/// <param name="entity"></param>
@@ -118,7 +103,7 @@ namespace Neon.HomeControl.Components.Components
 		/// <param name="args"></param>
 		[IotCommand("RISE", typeof(WeatherEd), "Set sun up in the sky")]
 		[IotCommandParam("Azimut", false)]
-		public void HandleRiseCommand(WeatherEd entity, string commandName, params object[] args)
+		public void RiseCommand(WeatherEd entity, string commandName, params object[] args)
 		{
 			_logger.LogInformation("This is RISE command name");
 		}

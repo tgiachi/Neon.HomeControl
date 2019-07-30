@@ -27,7 +27,5 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Components
 		/// </summary>
 		/// <returns></returns>
 		object GetDefaultConfig();
-
-		//	onReceviedCommand<T>()
 	}
 }

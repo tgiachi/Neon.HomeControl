@@ -116,6 +116,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			var jobObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(SchedulerJobTaskAttribute));
 			var dbSeedsObject = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(DatabaseSeedAttribute));
 			var componentsObject = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ComponentAttribute));
+			var noSqlConnectors = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(NoSqlConnectorAttribute));
 
 			_availableServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ServiceAttribute));
 
@@ -159,6 +160,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 				ContainerBuilder.RegisterType(d).As(AssemblyUtils.GetInterfaceOfType(d)).InstancePerLifetimeScope();
 			});
 
+			noSqlConnectors.ForEach(t => { ContainerBuilder.RegisterType(t).InstancePerDependency(); });
 
 			transientServices.ForEach(t => RegisterService(LifeScopeTypeEnum.TRANSIENT, t));
 

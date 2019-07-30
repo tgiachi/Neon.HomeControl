@@ -8,10 +8,13 @@ using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Attributes.Database;
+using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
+using Neon.HomeControl.Api.Core.Interfaces.Database;
+using Neon.HomeControl.Api.Core.Interfaces.Managers;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -24,71 +27,76 @@ namespace Neon.HomeControl.Services.Services
 		private readonly Dictionary<Type, string> _entities = new Dictionary<Type, string>();
 		private readonly Dictionary<string, Type> _entitiesTypes = new Dictionary<string, Type>();
 		private readonly IFileSystemManager _fileSystemManager;
+		private readonly IServicesManager _servicesManager;
+		private INoSqlConnector _noSqlConnector;
 
 		private readonly ILogger _logger;
-		private LiteDatabase _liteDatabase;
+		//private LiteDatabase _liteDatabase;
 
 
 		public EventDatabaseService(ILogger<EventDatabaseService> logger, IFileSystemManager fileSystemManager,
-			NeonConfig config)
+			NeonConfig config, IServicesManager servicesManager)
 		{
 			_logger = logger;
+			_servicesManager = servicesManager;
 			_fileSystemManager = fileSystemManager;
 			_config = config;
 		}
 
 		public Task<bool> Start()
 		{
-			_logger.LogInformation("Initializing Events Database");
-			_fileSystemManager.CreateDirectory(_config.EventsDatabase.DatabaseDirectory);
+			_logger.LogInformation($"Initializing Events Database, connector {_config.EventsDatabase.ConnectorName}");
 
-			_liteDatabase =
-				new LiteDatabase(_fileSystemManager.BuildFilePath(_config.EventsDatabase.DatabaseDirectory) + Path.DirectorySeparatorChar +
-								 _dbFilename);
-
-			_liteDatabase.Shrink();
+			LoadConnector();
 			ScanEntities();
 			return Task.FromResult(true);
 		}
 
+		private void LoadConnector()
+		{
+			var connectorType = NoSqlUtils.GetNoSqlConnector(_config.EventsDatabase.ConnectorName);
+
+			if (connectorType == null)
+				throw new Exception($"NoSQL connector named {_config.EventsDatabase.ConnectorName} not found! ");
+
+			_noSqlConnector = (INoSqlConnector)_servicesManager.Resolve(connectorType);
+
+			_noSqlConnector.Init(_config.EventsDatabase.ConnectionString);
+
+		}
+
+
 		public Task<bool> Stop()
 		{
-			_liteDatabase.Dispose();
+
 			return Task.FromResult(true);
 		}
 
 		public T Insert<T>(T value) where T : IIotEntity
 		{
-			value.Id = Guid.NewGuid();
-
 			var collectionName = typeof(T).GetCustomAttribute<EventDatabaseEntityAttribute>().CollectionName;
-			var collection = _liteDatabase.GetCollection<T>(collectionName);
-			collection.Insert(value);
-
-			return value;
+			return _noSqlConnector.Insert(value, collectionName);
 		}
 
 		public T Update<T>(T value) where T : IIotEntity
 		{
+
 			var collectionName = typeof(T).GetCustomAttribute<EventDatabaseEntityAttribute>().CollectionName;
-
-			var collection = _liteDatabase.GetCollection<T>(collectionName);
-			collection.Update(value);
-
-			return value;
+			return _noSqlConnector.Update(value, collectionName);
 		}
 
 		public List<T> List<T>() where T : IIotEntity
 		{
 			var collectionName = typeof(T).GetCustomAttribute<EventDatabaseEntityAttribute>().CollectionName;
 
-			return _liteDatabase.GetCollection<T>(collectionName).FindAll().ToList();
+			return _noSqlConnector.List<T>(collectionName);
 		}
 
 		public List<object> List(Type type)
 		{
 			var collectionName = type.GetCustomAttribute<EventDatabaseEntityAttribute>().CollectionName;
-			return ConvertCollection(collectionName, _liteDatabase.GetCollection(collectionName).FindAll().ToList());
+			//return ConvertCollection(collectionName, _liteDatabase.GetCollection(collectionName).FindAll().ToList());
+			return new List<object>();
 		}
 
 		public Dictionary<string, List<object>> GetAllEvents()
@@ -109,7 +117,12 @@ namespace Neon.HomeControl.Services.Services
 
 		public List<object> GetEventsByName(string collection)
 		{
-			return ConvertCollection(collection, _liteDatabase.GetCollection(collection).FindAll().ToList());
+			var type = _entitiesTypes[collection];
+			var openCast = _noSqlConnector.GetType().GetMethod(nameof(_noSqlConnector.Query));
+			var closeCast = openCast.MakeGenericMethod(type);
+			var queryable = closeCast.Invoke(_noSqlConnector, new object[] { collection }) as IQueryable<object>;
+
+			return queryable.ToList();
 		}
 
 
@@ -129,9 +142,9 @@ namespace Neon.HomeControl.Services.Services
 				_entities.Add(t, attr.CollectionName);
 				_entitiesTypes.Add(attr.CollectionName, t);
 
-				if (!_liteDatabase.CollectionExists(attr.CollectionName))
+				if (!_noSqlConnector.CollectionExists(attr.CollectionName))
 					foreach (var entry in GetEntitiesIndexes(t))
-						_liteDatabase.GetCollection(attr.CollectionName).EnsureIndex(entry.Key, entry.Value.Unique);
+						_noSqlConnector.AddIndex(attr.CollectionName, entry.Key, entry.Value.Unique);
 			});
 		}
 

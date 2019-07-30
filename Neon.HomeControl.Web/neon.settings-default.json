@@ -29,10 +29,12 @@
 		"ConfigDirectory": "Components"
 	},
 	"EventsDatabase": {
-		"DatabaseDirectory": "Database"
+		"ConnectorName": "litedb",
+		"ConnectionString": "Database\\Neon.HomeControl.Events.db"
 	},
 	"IoT": {
-		"DatabaseDirectory": "Database"
+		"ConnectorName": "litedb",
+		"ConnectionString": "Database\\Neon.HomeControl.Iot.db"
 	},
 	"JwtToken": "Jqdik6YoOiZUIx35zO8p4ZnpBCjUtorN8kl58FywYgqbCeOjSOdASwWGDq21WNLw4tADnTqPPWvsJe66",
 	"EnableMetrics": false,

@@ -849,6 +849,22 @@
                 Seeds are classes for initializing default data in the database
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Attributes.Database.NoSqlConnectorAttribute">
+            <summary>
+            Attribute for NoSQL connector
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.Database.NoSqlConnectorAttribute.Name">
+            <summary>
+            Name of connector
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Attributes.Database.NoSqlConnectorAttribute.#ctor(System.String)">
+            <summary>
+            ctor	
+            </summary>
+            <param name="connectorName"></param>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Attributes.Dto.DtoMapAttribute">
             <summary>
                 Attribute for mapping entities and DTOs
@@ -1084,6 +1100,11 @@
             If true, load all components
             </summary>
         </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.Config.NeonConfig.DatabaseDirectory">
+            <summary>
+            Database directory
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Data.Config.ScriptConfig">
             <summary>
             Config for <see cref="T:Neon.HomeControl.Api.Core.Interfaces.Services.IScriptService"/> Script Service
@@ -1188,6 +1209,11 @@
             If configuration is empty send default config
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Database.INoSqlConnector">
+            <summary>
+            Interface for No SQL database
+            </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.IDtoMapper`2">
             <summary>

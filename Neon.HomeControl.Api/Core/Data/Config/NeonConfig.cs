@@ -45,6 +45,11 @@
 		public EventDatabaseConfig EventsDatabase { get; set; }
 		public IoTConfig IoT { get; set; }
 
+		/// <summary>
+		/// Database directory
+		/// </summary>
+		public string DatabaseDirectory { get; set; }
+
 
 		public NeonConfig()
 		{
@@ -58,6 +63,7 @@
 			EventsDatabase = new EventDatabaseConfig();
 			IoT = new IoTConfig();
 			JwtToken = "password";
+			DatabaseDirectory = "Database";
 			AutoLoadComponents = true;
 			Home = new HomeConfig();
 		}

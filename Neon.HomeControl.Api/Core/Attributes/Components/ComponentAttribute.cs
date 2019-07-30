@@ -51,7 +51,7 @@ namespace Neon.HomeControl.Api.Core.Attributes.Components
 		///     Description of component
 		/// </summary>
 		public string Description { get; set; }
-
+		
 		/// <summary>
 		///     Type of config
 		/// </summary>

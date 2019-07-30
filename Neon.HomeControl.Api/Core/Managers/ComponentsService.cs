@@ -152,8 +152,9 @@ namespace Neon.HomeControl.Api.Core.Managers
 					var attr = type.GetCustomAttribute<ComponentAttribute>();
 
 
-					RunningComponents.Add(runningComponent);
+				
 					runningComponent.Component = obj;
+					RunningComponents.Add(runningComponent);
 					var componentConfig = (IComponentConfig)LoadComponentConfig(attr.ComponentConfigType);
 
 			
