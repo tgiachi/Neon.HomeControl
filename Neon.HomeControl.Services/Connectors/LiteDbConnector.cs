@@ -92,9 +92,10 @@ namespace Neon.HomeControl.Services.Connectors
 		}
 
 		public IQueryable<T> Query<T>(string collectionName) where T : IIotEntity
-		{
-			return _liteDatabase.GetCollection<T>().FindAll().AsQueryable();
-		}
+        {
+            return _liteDatabase.GetCollection<T>(collectionName).FindAll().AsQueryable();
+
+        }
 
 		public void Dispose()
 		{

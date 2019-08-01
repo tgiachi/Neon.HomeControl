@@ -27,7 +27,7 @@ namespace Neon.HomeControl.Components.Components
 	{
 		private const string TokenAuthUrl = "https://accounts.spotify.com/api/token";
 		private const string RedirectUrl = "https://localhost:5001/api/oauth/Authorize/spotify";
-		private const string AuthorizeUrl = "https://accounts.spotify.com/it/authorize";
+		private const string AuthorizeUrl = "https://accounts.spotify.com/authorize";
 
 		private readonly IComponentsService _componentsService;
 		private readonly HttpClient _httpClient;
@@ -72,7 +72,6 @@ namespace Neon.HomeControl.Components.Components
 			{
 				var res = await _httpClient.PostAsync(TokenAuthUrl,
 					HttpClientUtils.BuildFormParams(
-						new KeyValuePair<string, string>("grant_type", "authorization_code"),
 						new KeyValuePair<string, string>("grant_type", "authorization_code"),
 						new KeyValuePair<string, string>("code", result.Code),
 						new KeyValuePair<string, string>("client_id", _config.ClientId),
@@ -261,11 +260,13 @@ namespace Neon.HomeControl.Components.Components
 				$"{AuthorizeUrl}?response_type=code&redirect_uri={RedirectUrl}&client_id={_config.ClientId}&scope={string.Join("%20", scopes)}&state=k332yl";
 		}
 
-		[IotCommand("SET_VOLUME", typeof(SpotifyDeviceEd), "Set volume to device")]
+        #region Commands
+
+        [IotCommand("SET_VOLUME", typeof(SpotifyDeviceEd), "Set volume on current or specified device.")]
 		[IotCommandParam("Volume_in_percentage", true)]
 		[IotCommandParam("DeviceId", false)]
 
-		public async void SendSetVolumeToDevice(SpotifyDeviceEd entity, string commandName, params object[] args)
+		public async void SendSetVolumeCommand(SpotifyDeviceEd entity, string commandName, params object[] args)
 		{
 			var volume = args[0] as string;
 			var device = "";
@@ -274,7 +275,27 @@ namespace Neon.HomeControl.Components.Components
 				device = args[1] as string;
 
 			await _spotifyWebApi.SetVolumeAsync(int.Parse(volume), device);
+        }
 
-		}
-	}
+        [IotCommand("PLAY", typeof(SpotifyDeviceEd), "Play/resume a song/album/artist/playlist on current or specified device.")]
+        [IotCommandParam("ContextUri", false)]
+        [IotCommandParam("TrackUri", false)]
+        [IotCommandParam("DeviceId", false)]
+        public async void SendPlayCommand(SpotifyDeviceEd entity, string commandName, params object[] args)
+        {
+            //string contextUri, trackUri, deviceId;
+            //contextUri = trackUri = deviceId = "";
+
+            //if (args.Length > 0)
+            //    var contextUri = args[0] as string;
+            //var device = "";
+
+            //if (args.Length > 1)
+            //    device = args[1] as string;
+
+            //await _spotifyWebApi.ResumePlaybackAsync(uris: new List<string> { trackUri }, deviceId: device, offset: 0);
+        }
+
+        #endregion
+    }
 }
