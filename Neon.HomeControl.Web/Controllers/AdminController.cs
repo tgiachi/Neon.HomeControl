@@ -61,7 +61,7 @@ namespace Neon.HomeControl.Web.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult<List<ComponentInfo>> GetAvaiableComponents()
+		public ActionResult<List<ComponentInfo>> GetAvailableComponents()
 		{
 			return Ok(_componentsService.AvailableComponents);
 		}
