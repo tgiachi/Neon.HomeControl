@@ -5,8 +5,10 @@ namespace Neon.HomeControl.Components.EventsDb
 {
 	[EventDatabaseEntity("spotify_devices")]
 	public class SpotifyDeviceEd : BaseEventDatabaseEntity
-	{
-		public string DeviceName { get; set; }
+    {
+        public string DeviceId { get; set; }
+
+        public string DeviceName { get; set; }
 
 		public string DeviceType { get; set; }
 
