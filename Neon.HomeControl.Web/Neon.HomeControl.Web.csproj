@@ -37,6 +37,7 @@
     <ProjectReference Include="..\Neon.HomeControl.Dto\Neon.HomeControl.Dto.csproj" />
     <ProjectReference Include="..\Neon.HomeControl.Entities\Neon.HomeControl.Entities.csproj" />
     <ProjectReference Include="..\Neon.HomeControl.Services\Neon.HomeControl.Services.csproj" />
+    <ProjectReference Include="..\Neon.HomeControl.StandardScriptLibrary\Neon.HomeControl.StandardScriptLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

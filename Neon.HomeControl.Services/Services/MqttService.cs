@@ -76,7 +76,7 @@ namespace Neon.HomeControl.Services.Services
 				var mqttOptionBuilder = new MqttServerOptionsBuilder()
 					.WithConnectionBacklog(100)
 					.WithDefaultEndpointBoundIPAddress(IPAddress.Parse("0.0.0.0"))
-					.WithDefaultEndpointPort(35001);
+					.WithDefaultEndpointPort(1883);
 				_mqttServer = new MqttFactory().CreateMqttServer();
 				_logger.LogInformation($"Starting embedded MQTT Server");
 				await _mqttServer.StartAsync(mqttOptionBuilder.Build());

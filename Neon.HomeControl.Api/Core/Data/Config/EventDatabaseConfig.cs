@@ -11,6 +11,7 @@ namespace Neon.HomeControl.Api.Core.Data.Config
 
 		public EventDatabaseConfig()
 		{
+			ConnectorName = "litedb";
 			ConnectionString = "Database" + Path.DirectorySeparatorChar + "Neon.HomeControl.Events.db";
 		}
 	}

@@ -14,6 +14,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Attributes.ScriptEngine;
+using Neon.HomeControl.Api.Core.Interfaces.ScriptEngine;
 
 namespace Neon.HomeControl.Services.Services
 {
@@ -23,12 +25,15 @@ namespace Neon.HomeControl.Services.Services
 	{
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
-		private readonly List<LuaFunction> _functions = new List<LuaFunction>();
+		
+		private readonly Dictionary<string, Type> _scriptsEngines = new Dictionary<string, Type>();
+
 		private readonly NeonConfig _neonConfig;
 		private readonly ILogger _logger;
-		private readonly Lua _luaEngine;
-
+		
 		private readonly IServicesManager _servicesManager;
+		private IScriptEngine _scriptEngine;
+		private ScriptEngineAttribute _scriptEngineAttribute;
 
 		public List<ScriptFunctionData> GlobalFunctions { get; set; }
 
@@ -43,37 +48,51 @@ namespace Neon.HomeControl.Services.Services
 			_neonConfig = neonConfig;
 			_fileSystemManager = fileSystemManager;
 			_servicesManager = servicesManager;
-			_luaEngine = new Lua();
-			_luaEngine.State.Encoding = Encoding.UTF8;
-	
 
-			_luaEngine.HookException += (sender, args) =>
+			AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptEngineAttribute)).ForEach(se =>
 			{
-				_logger.LogError($"Error during execute LUA =>\n {args.Exception.FlattenException()}");
-			};
+				var attr = se.GetCustomAttribute<ScriptEngineAttribute>();
+				_scriptsEngines.Add(attr.Name, se);
+
+			});
+			
 		}
 
-		public Task<bool> Start()
+		public async Task<bool> Start()
 		{
-			_bootstrapFile = _fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory + Path.DirectorySeparatorChar + "bootstrap.lua");
-			_fileSystemManager.CreateDirectory(_neonConfig.Scripts.Directory);
-			CheckBootstrapFile();
-			//StartMonitorDirectory();
+			if (_scriptsEngines.ContainsKey(_neonConfig.Scripts.EngineName))
+			{
+				_scriptEngine = (IScriptEngine)_servicesManager.Resolve(_scriptsEngines[_neonConfig.Scripts.EngineName]);
+				_scriptEngineAttribute = _scriptEngine.GetType().GetCustomAttribute<ScriptEngineAttribute>();
 
-			_logger.LogInformation("Initializing LUA script manager");
-			_luaEngine.LoadCLRPackage();
-			ScanForScriptClasses();
+				_logger.LogInformation($"Initializing script engine {_scriptEngineAttribute.Name} {_scriptEngineAttribute.Version}");
 
-			_logger.LogInformation($"Loading bootstrap file");
-			LoadLuaFile(_bootstrapFile, true);
+				_bootstrapFile = _fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory + Path.DirectorySeparatorChar + $"bootstrap{_scriptEngineAttribute.FileExtension}");
+				_fileSystemManager.CreateDirectory(_neonConfig.Scripts.Directory);
+				CheckBootstrapFile();
+				//StartMonitorDirectory();
 
-			_logger.LogInformation($"Scanning files in directory {_neonConfig.Scripts.Directory}");
-			LoadLuaFiles();
+				_logger.LogInformation("Initializing Script manager");
+				ScanForScriptClasses();
 
-			_functions.ForEach(f => { _logger.LogInformation($"{f.Call()}"); });
+				_logger.LogInformation($"Loading bootstrap file");
+				_scriptEngine.LoadFile(_bootstrapFile, true);
 
-			_logger.LogInformation("LUA Script manager initialized");
-			return Task.FromResult(true);
+				_logger.LogInformation($"Scanning files in directory {_neonConfig.Scripts.Directory}");
+				LoadScriptsFiles();
+
+				await _scriptEngine.Build();
+
+				_logger.LogInformation("Script manager initialized");
+			}
+			else
+			{
+				throw new Exception("No script engine found");
+			}
+
+			
+
+			return true;
 		}
 
 		private void CheckBootstrapFile()
@@ -87,7 +106,6 @@ namespace Neon.HomeControl.Services.Services
 
 		public Task<bool> Stop()
 		{
-			_luaEngine.Dispose();
 			_fileSystemWatcher.Dispose();
 			return Task.FromResult(true);
 		}
@@ -96,7 +114,7 @@ namespace Neon.HomeControl.Services.Services
 		{
 			AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptObjectAttribute)).ForEach(t =>
 			{
-				_logger.LogInformation($"Registering {t.Name} in LUA Objects");
+				_logger.LogInformation($"Registering {t.Name} in Scripts Objects");
 				var obj = _servicesManager.Resolve(t);
 				obj.GetType().GetMethods().ToList().ForEach(m =>
 				{
@@ -111,7 +129,7 @@ namespace Neon.HomeControl.Services.Services
 						_logger.LogInformation(
 							$"{obj.GetType().Name} - {scriptFuncAttr.FunctionName} [{scriptFuncAttr.Help}]");
 
-						_luaEngine.RegisterFunction(scriptFuncAttr.FunctionName, obj,
+						_scriptEngine.RegisterFunction(scriptFuncAttr.FunctionName, obj,
 							obj.GetType().GetMethod(m.Name));
 						
 
@@ -153,39 +171,25 @@ namespace Neon.HomeControl.Services.Services
 		{
 			if (File.GetAttributes(filename) == FileAttributes.Directory) return;
 
-			if (Path.GetExtension(filename) != ".lua") return;
+			if (Path.GetExtension(filename) != "." + _scriptEngineAttribute.FileExtension) return;
 
 			_logger.LogInformation($"New File created: {filename}");
-			LoadLuaFile(filename, true);
+			_scriptEngine.LoadFile(filename, true);
 		}
 
-		private void LoadLuaFiles()
+		private void LoadScriptsFiles()
 		{
-			var files = Directory.GetFiles(_fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory), "*.lua",
+			var files = Directory.GetFiles(_fileSystemManager.BuildFilePath(_neonConfig.Scripts.Directory), "*" + _scriptEngineAttribute.FileExtension,
 					SearchOption.AllDirectories)
 				.ToList();
 
 			files.ForEach(f =>
 			{
-				if (!f.ToLower().Contains("bootstrap.lua"))
-					LoadLuaFile(f, false);
+				if (!f.ToLower().Contains("bootstrap" + _scriptEngineAttribute.FileExtension))
+					_scriptEngine.LoadFile(f, false);
 			});
 		}
 
-		public void LoadLuaFile(string filename, bool execute)
-		{
-			try
-			{
-				_logger.LogInformation($"Loading file {filename}...");
-				var func = _luaEngine.LoadFile(filename);
-				_functions.Add(func);
-				if (execute)
-					func.Call();
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"Error during load file {filename} => {ex.FlattenException()}");
-			}
-		}
+	
 	}
 }
