@@ -3,9 +3,9 @@
 namespace Neon.HomeControl.Api.Core.Attributes.ScriptService
 {
 	[AttributeUsage(AttributeTargets.Method, Inherited = false)]
-	public class LuaScriptFunctionAttribute : Attribute
+	public class ScriptFunctionAttribute : Attribute
 	{
-		public LuaScriptFunctionAttribute(string category, string functionName, string help)
+		public ScriptFunctionAttribute(string category, string functionName, string help)
 		{
 			FunctionCategory = category;
 			FunctionName = functionName;

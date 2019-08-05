@@ -1,21 +1,21 @@
-﻿using Neon.HomeControl.Api.Core.Attributes.ScriptService;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Impl.EventsDatabase;
 using Neon.HomeControl.Api.Core.Interfaces.IoTEntities;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
 using NLua;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
+namespace Neon.HomeControl.StandardScriptLibrary.Services
 {
 
 	/// <summary>
 	/// Events manager for LUA
 	/// </summary>
-	[LuaScriptObject]
-	public class EventBridgeLuaObject
+	[ScriptObject]
+	public class EventBridgeScriptObject
 	{
 
 		private readonly IIoTService _ioTService;
@@ -23,7 +23,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		private readonly ICommandDispatcherService _commandDispatcherService;
 		private readonly IRuleEngineService _ruleEngineService;
 
-		public EventBridgeLuaObject(IIoTService ioTService, ISchedulerService schedulerService, ICommandDispatcherService commandDispatcherService, IRuleEngineService ruleEngineService)
+		public EventBridgeScriptObject(IIoTService ioTService, ISchedulerService schedulerService, ICommandDispatcherService commandDispatcherService, IRuleEngineService ruleEngineService)
 		{
 			_ioTService = ioTService;
 			_schedulerService = schedulerService;
@@ -39,7 +39,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// <param name="hours"></param>
 		/// <param name="minutes"></param>
 		/// <param name="function"></param>
-		[LuaScriptFunction("TIMER", "add_alarm", "Add new alarm")]
+		[ScriptFunction("TIMER", "add_alarm", "Add new alarm")]
 		public void AddAlarm(string name, int hours, int minutes, LuaFunction function)
 		{
 			_schedulerService.AddJob(() => { function.Call(); }, name, hours, minutes);
@@ -49,7 +49,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// Get all entities
 		/// </summary>
 		/// <returns></returns>
-		[LuaScriptFunction("ENTITIES", "get_entities", "Get all entities")]
+		[ScriptFunction("ENTITIES", "get_entities", "Get all entities")]
 		public List<BaseEventDatabaseEntity> GetEntities()
 		{
 			return _ioTService.Query<BaseEventDatabaseEntity>().ToList();
@@ -60,7 +60,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		[LuaScriptFunction("ENTITIES", "get_entity_by_name", "Get entity passing name")]
+		[ScriptFunction("ENTITIES", "get_entity_by_name", "Get entity passing name")]
 		public BaseEventDatabaseEntity GetEntityByName(string name)
 		{
 			return _ioTService.Query<BaseEventDatabaseEntity>().FirstOrDefault(e => e.EntityName == name);
@@ -73,7 +73,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// <typeparam name="T"></typeparam>
 		/// <param name="entity"></param>
 		/// <returns></returns>
-		[LuaScriptFunction("ENTITIES", "cast_entity", "Transform entity to Generic entity")]
+		[ScriptFunction("ENTITIES", "cast_entity", "Transform entity to Generic entity")]
 		public T GetEntityType<T>(object entity) where T : class
 		{
 			var castedEntity = ((IIotEntity)entity);
@@ -95,7 +95,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// </summary>
 		/// <param name="entityName"></param>
 		/// <param name="function"></param>
-		[LuaScriptFunction("EVENTS", "on_event_name", "Subscribe on event")]
+		[ScriptFunction("EVENTS", "on_event_name", "Subscribe on event")]
 		public void OnEventName(string entityName, LuaFunction function)
 		{
 			_ioTService.GetEventStream<IIotEntity>().Subscribe(entity =>
@@ -121,7 +121,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// <param name="entity"></param>
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
-		[LuaScriptFunction("EVENTS", "send_command", "Send command ")]
+		[ScriptFunction("EVENTS", "send_command", "Send command ")]
 		public void SendCommand(IIotEntity entity, string commandName, params object[] args)
 		{
 			var type = entity.EntityType;
@@ -137,7 +137,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// </summary>
 		/// <param name="eventType"></param>
 		/// <param name="function"></param>
-		[LuaScriptFunction("RULES", "on_event_type", "Subscribe on event")]
+		[ScriptFunction("RULES", "on_event_type", "Subscribe on event")]
 		public void OnEventType(string eventType, LuaFunction function)
 		{
 			_ioTService.GetEventStream<IIotEntity>().Subscribe(entity =>
@@ -149,14 +149,14 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 			});
 		}
 
-		[LuaScriptFunction("ENTITIES", "get_entity_type", "Subscribe on event")]
+		[ScriptFunction("ENTITIES", "get_entity_type", "Subscribe on event")]
 		public string GetEntityTypeByName(string entityName)
 		{
 			return _ioTService.GetEntityTypeByName(entityName);
 		}
 
 
-		[LuaScriptFunction("RULES", "add_rule", "Add rule to event")]
+		[ScriptFunction("RULES", "add_rule", "Add rule to event")]
 		public void AddRule(string ruleName, string entityName, string condition, LuaFunction function)
 		{
 			_ruleEngineService.AddRule(ruleName, AssemblyUtils.GetType(GetEntityTypeByName(entityName)), condition, function);

@@ -11,19 +11,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
-using System.Management.Automation.Host;
-using System.Management.Automation.Runspaces;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.PowerShell;
-using Microsoft.PowerShell.Commands;
 
 namespace Neon.HomeControl.Services.Services
 {
 
-	[Service(typeof(IScriptService), Name = "LUA Script service", LoadAtStartup = true, Order = 100)]
+	[Service(typeof(IScriptService), Name = "Universal Script service", LoadAtStartup = true, Order = 100)]
 	public class ScriptService : IScriptService
 	{
 		private readonly IFileSystemManager _fileSystemManager;
@@ -32,22 +27,18 @@ namespace Neon.HomeControl.Services.Services
 		private readonly NeonConfig _neonConfig;
 		private readonly ILogger _logger;
 		private readonly Lua _luaEngine;
-		private List<ModuleSpecification> _modules = new List<ModuleSpecification>();
-		private Dictionary<string, object> _variables = new Dictionary<string, object>();
-		private PSHost _host;
 
 		private readonly IServicesManager _servicesManager;
 
-		public List<LuaScriptFunctionData> GlobalFunctions { get; set; }
+		public List<ScriptFunctionData> GlobalFunctions { get; set; }
 
 		
-
 		private string _bootstrapFile = "";
 
 		public ScriptService(ILogger<ScriptService> logger, NeonConfig neonConfig, IServicesManager servicesManager,
 			IFileSystemManager fileSystemManager)
 		{
-			GlobalFunctions = new List<LuaScriptFunctionData>();
+			GlobalFunctions = new List<ScriptFunctionData>();
 			_logger = logger;
 			_neonConfig = neonConfig;
 			_fileSystemManager = fileSystemManager;
@@ -61,31 +52,6 @@ namespace Neon.HomeControl.Services.Services
 				_logger.LogError($"Error during execute LUA =>\n {args.Exception.FlattenException()}");
 			};
 		}
-
-
-		public Runspace GetRunspace()
-		{
-			var state = InitialSessionState.CreateDefault2();
-			if (_modules != null)
-			{
-				state.ImportPSModule(_modules);
-			}
-			state.ExecutionPolicy = ExecutionPolicy.RemoteSigned;
-			state.Providers.Remove("Registry", null);
-			state.Providers.Remove("FileSystem", null);
-			if (_variables != null)
-			{
-				foreach (var variable in _variables)
-				{
-					state.Variables.Add(new SessionStateVariableEntry(variable.Key, variable.Value, variable.Key, ScopedItemOptions.Constant));
-				}
-			}
-			var runspace = RunspaceFactory.CreateRunspace(_host, state);
-			runspace.Open();
-
-			return runspace;
-		}
-
 
 		public Task<bool> Start()
 		{
@@ -128,7 +94,7 @@ namespace Neon.HomeControl.Services.Services
 
 		private void ScanForScriptClasses()
 		{
-			AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(LuaScriptObjectAttribute)).ForEach(t =>
+			AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptObjectAttribute)).ForEach(t =>
 			{
 				_logger.LogInformation($"Registering {t.Name} in LUA Objects");
 				var obj = _servicesManager.Resolve(t);
@@ -137,7 +103,7 @@ namespace Neon.HomeControl.Services.Services
 					try
 
 					{
-						var scriptFuncAttr = m.GetCustomAttribute<LuaScriptFunctionAttribute>();
+						var scriptFuncAttr = m.GetCustomAttribute<ScriptFunctionAttribute>();
 
 
 						if (scriptFuncAttr == null) return;
@@ -150,7 +116,7 @@ namespace Neon.HomeControl.Services.Services
 						
 
 						
-						GlobalFunctions.Add(new LuaScriptFunctionData
+						GlobalFunctions.Add(new ScriptFunctionData
 						{
 							Category = scriptFuncAttr.FunctionCategory,
 							Help = scriptFuncAttr.Help,

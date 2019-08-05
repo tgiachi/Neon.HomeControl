@@ -5,6 +5,6 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 {
 	public interface IScriptService : IService
 	{
-		List<LuaScriptFunctionData> GlobalFunctions { get; set; }
+		List<ScriptFunctionData> GlobalFunctions { get; set; }
 	}
 }

@@ -29,6 +29,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Attributes.ScriptEngine;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
@@ -71,6 +72,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		public ContainerBuilder InitContainer()
 		{
+			AssemblyUtils.GetAppAssemblies();
 			PrintHeader();
 			EnhancedStackTrace.Current();
 			InitPolly();
@@ -112,11 +114,12 @@ namespace Neon.HomeControl.Api.Core.Managers
 			var transientServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(TransientAttribute));
 			var scopedServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScopedAttribute));
 			var dataAccess = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(DataAccessAttribute));
-			var luaObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(LuaScriptObjectAttribute));
+			var luaObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptObjectAttribute));
 			var jobObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(SchedulerJobTaskAttribute));
 			var dbSeedsObject = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(DatabaseSeedAttribute));
 			var componentsObject = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ComponentAttribute));
 			var noSqlConnectors = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(NoSqlConnectorAttribute));
+			var scriptEngines = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptEngineAttribute));
 
 			_availableServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ServiceAttribute));
 
@@ -131,6 +134,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			luaObjects.ForEach(l => { ContainerBuilder.RegisterType(l).AsSelf().SingleInstance(); });
 			singletonServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 			componentsObject.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
+			scriptEngines.ForEach(s => RegisterService(LifeScopeTypeEnum.SINGLETON, s));
 
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.Where(t => t == typeof(IDatabaseSeed))

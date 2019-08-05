@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Neon.HomeControl.StandardLuaLibrary</name>
+        <name>Neon.HomeControl.StandardScriptLibrary</name>
     </assembly>
     <members>
-        <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ComponentsServiceLuaObject">
+        <member name="T:Neon.HomeControl.StandardScriptLibrary.Services.ComponentsServiceScriptObject">
             <summary>
             Bridge for control components
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ComponentsServiceLuaObject.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ComponentsServiceLuaObject},Neon.HomeControl.Api.Core.Interfaces.Managers.IComponentsService)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.ComponentsServiceScriptObject.#ctor(Microsoft.Extensions.Logging.ILogger{Neon.HomeControl.StandardScriptLibrary.Services.ComponentsServiceScriptObject},Neon.HomeControl.Api.Core.Interfaces.Managers.IComponentsService)">
             <summary>
             ctor
             </summary>
             <param name="logger"></param>
             <param name="componentsService"></param>
         </member>
-        <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject">
+        <member name="T:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject">
             <summary>
             Events manager for LUA
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.AddAlarm(System.String,System.Int32,System.Int32,NLua.LuaFunction)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.AddAlarm(System.String,System.Int32,System.Int32,NLua.LuaFunction)">
             <summary>
             Add new alarm
             </summary>
@@ -30,20 +30,20 @@
             <param name="minutes"></param>
             <param name="function"></param>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.GetEntities">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.GetEntities">
             <summary>
             Get all entities
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.GetEntityByName(System.String)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.GetEntityByName(System.String)">
             <summary>
             Get Entity by Name
             </summary>
             <param name="name"></param>
             <returns></returns>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.GetEntityType``1(System.Object)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.GetEntityType``1(System.Object)">
             <summary>
             Transform entity to Generic Entity
             </summary>
@@ -51,14 +51,14 @@
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.OnEventName(System.String,NLua.LuaFunction)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.OnEventName(System.String,NLua.LuaFunction)">
             <summary>
             Subscribe to event with name
             </summary>
             <param name="entityName"></param>
             <param name="function"></param>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.SendCommand(Neon.HomeControl.Api.Core.Interfaces.IoTEntities.IIotEntity,System.String,System.Object[])">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.SendCommand(Neon.HomeControl.Api.Core.Interfaces.IoTEntities.IIotEntity,System.String,System.Object[])">
             <summary>
             Send command to event system
             </summary>
@@ -66,26 +66,26 @@
             <param name="commandName"></param>
             <param name="args"></param>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.EventBridgeLuaObject.OnEventType(System.String,NLua.LuaFunction)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.EventBridgeScriptObject.OnEventType(System.String,NLua.LuaFunction)">
             <summary>
             Subscribe to event with Type (without full class name)
             </summary>
             <param name="eventType"></param>
             <param name="function"></param>
         </member>
-        <member name="T:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ServiceManagerLuaObject">
+        <member name="T:Neon.HomeControl.StandardScriptLibrary.Services.ServiceManagerScriptObject">
             <summary>
             Class for control Services Manager
             </summary>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ServiceManagerLuaObject.ResolveObject(System.Type)">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.ServiceManagerScriptObject.ResolveObject(System.Type)">
             <summary>
             Resolve a service
             </summary>
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services.ServiceManagerLuaObject.GetServiceInfo">
+        <member name="M:Neon.HomeControl.StandardScriptLibrary.Services.ServiceManagerScriptObject.GetServiceInfo">
             <summary>
             Get all services info
             </summary>

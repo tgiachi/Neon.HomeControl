@@ -1,22 +1,22 @@
-﻿using Neon.HomeControl.Api.Core.Attributes.ScriptService;
-using Neon.HomeControl.Api.Core.Data.Services;
-using Neon.HomeControl.Api.Core.Interfaces.Managers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Neon.HomeControl.Api.Core.Attributes.ScriptService;
+using Neon.HomeControl.Api.Core.Data.Services;
+using Neon.HomeControl.Api.Core.Interfaces.Managers;
 
-namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
+namespace Neon.HomeControl.StandardScriptLibrary.Services
 {
 
 	/// <summary>
 	/// Class for control Services Manager
 	/// </summary>
-	[LuaScriptObject]
-	public class ServiceManagerLuaObject
+	[ScriptObject]
+	public class ServiceManagerScriptObject
 	{
 		private readonly IServicesManager _servicesManager;
 
-		public ServiceManagerLuaObject(IServicesManager servicesManager)
+		public ServiceManagerScriptObject(IServicesManager servicesManager)
 		{
 			_servicesManager = servicesManager;
 		}
@@ -26,7 +26,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		[LuaScriptFunction("SERVICES", "service_resolve", "Resolve service")]
+		[ScriptFunction("SERVICES", "service_resolve", "Resolve service")]
 		public object ResolveObject(Type type)
 		{
 			return _servicesManager.Resolve(type);
@@ -37,7 +37,7 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// Get all services info
 		/// </summary>
 		/// <returns></returns>
-		[LuaScriptFunction("SERVICES", "get_services_info", "Get all services info")]
+		[ScriptFunction("SERVICES", "get_services_info", "Get all services info")]
 		public List<ServiceInfo> GetServiceInfo()
 		{
 			return _servicesManager.ServicesInfo.ToList();

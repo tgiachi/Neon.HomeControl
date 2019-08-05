@@ -5,16 +5,16 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>Tommaso Giachi &lt;squid@stormwind.it&gt;</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.5.2</Version>
-    <AssemblyVersion>0.0.5.2</AssemblyVersion>
-    <FileVersion>0.0.5.2</FileVersion>
+    <Version>0.0.5.3</Version>
+    <AssemblyVersion>0.0.5.3</AssemblyVersion>
+    <FileVersion>0.0.5.3</FileVersion>
     <PackageProjectUrl>https://github.com/tgiachi/Neon.HomeControl</PackageProjectUrl>
     <PackageIconUrl>https://i.ibb.co/D9Pz2QH/iconfinder-9-408047.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/tgiachi/Neon.HomeControl</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>home-automation iot-platform iot-framework litedb litedb-database panasonic-air mqtt philips-hue-api philips-hue-bridge darksky-api owntracks nest spotify-web-api sonoff sonoff-tasmota</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>Events Database and IoTService use INoSQLConnector for connect to database - Removed LiteDb dep</PackageReleaseNotes>
+    <PackageReleaseNotes>Rafactoring Script Engine</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,7 +42,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="System.Reactive" Version="4.1.5" />
+    <PackageReference Include="System.Reactive" Version="4.1.6" />
     <PackageReference Include="CoordinateSharp" Version="1.1.5.2" />
   </ItemGroup>
 
