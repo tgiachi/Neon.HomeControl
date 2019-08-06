@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Class for describe C# to Lua function
 	/// </summary>
-	public class LuaScriptFunctionData
+	public class ScriptFunctionData
 	{
 		/// <summary>
 		/// Name of function

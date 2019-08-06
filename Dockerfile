@@ -17,7 +17,7 @@ COPY Neon.HomeControl.Components/*.csproj ./Neon.HomeControl.Components/
 COPY Neon.HomeControl.Entities/*.csproj ./Neon.HomeControl.Entities/
 COPY Neon.HomeControl.Dto/*.csproj ./Neon.HomeControl.Dto/
 COPY Neon.HomeControl.Services/*.csproj ./Neon.HomeControl.Services/
-COPY Neon.HomeControl.StandardLuaLibrary/*.csproj ./Neon.HomeControl.StandardLuaLibrary/
+COPY Neon.HomeControl.StandardScriptLibrary/*.csproj ./Neon.HomeControl.StandardScriptLibrary/
 COPY Neon.HomeControl.Web/*.csproj ./Neon.HomeControl.Web/
 
 RUN dotnet restore
@@ -32,4 +32,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
 ENV IS_DOCKER=${IS_DOCKER}
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "curl --fail http://localhost/api/Health/Ping || exit 1" ]
 ENTRYPOINT ["dotnet", "Neon.HomeControl.Web.dll"]

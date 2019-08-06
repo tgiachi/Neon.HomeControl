@@ -996,6 +996,31 @@
                 Number of secondse
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute">
+            <summary>
+            Script Engine Attribute
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.Name">
+            <summary>
+            Name of Script Engine
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.Version">
+            <summary>
+            Version
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.FileExtension">
+            <summary>
+            Extension of file to read
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Ctor
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1">
             <summary>
             Command to send to devices
@@ -1115,27 +1140,27 @@
             Directory where script is located
             </summary>
         </member>
-        <member name="T:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData">
+        <member name="T:Neon.HomeControl.Api.Core.Data.LuaScript.ScriptFunctionData">
             <summary>
             Class for describe C# to Lua function
             </summary>
         </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Name">
+        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.ScriptFunctionData.Name">
             <summary>
             Name of function
             </summary>
         </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Args">
+        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.ScriptFunctionData.Args">
             <summary>
             Parameters
             </summary>
         </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Category">
+        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.ScriptFunctionData.Category">
             <summary>
             Category of function (Ex: Logger)
             </summary>
         </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Help">
+        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.ScriptFunctionData.Help">
             <summary>
             Help text for describe function
             </summary>
@@ -1253,6 +1278,11 @@
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.PropertyChange.IBasePropertyChangedEntity">
             <summary>
                 Interface for create Property Change Entity
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.ScriptEngine.IScriptEngine">
+            <summary>
+            Interface for creates Universal Script Engine
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.ICommandDispatcherService">

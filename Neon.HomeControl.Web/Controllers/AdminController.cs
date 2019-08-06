@@ -49,7 +49,7 @@ namespace Neon.HomeControl.Web.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult<List<LuaScriptFunctionData>> GetLuaGlobalFunctions()
+		public ActionResult<List<ScriptFunctionData>> GetLuaGlobalFunctions()
 		{
 			return Ok(_scriptService.GlobalFunctions);
 		}

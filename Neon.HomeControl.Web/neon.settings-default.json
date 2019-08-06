@@ -17,6 +17,7 @@
 		"Directory": "Plugins"
 	},
 	"Scripts": {
+		"EngineName": "lua",
 		"Directory": "Scripts"
 	},
 	"Tasks": {

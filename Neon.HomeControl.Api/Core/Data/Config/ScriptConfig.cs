@@ -8,6 +8,9 @@ namespace Neon.HomeControl.Api.Core.Data.Config
 	/// </summary>
 	public class ScriptConfig
 	{
+
+		public string EngineName { get; set; }
+
 		/// <summary>
 		/// Directory where script is located
 		/// </summary>
@@ -15,6 +18,7 @@ namespace Neon.HomeControl.Api.Core.Data.Config
 
 		public ScriptConfig()
 		{
+			EngineName = "lua";
 			Directory = "Scripts";
 		}
 	}
