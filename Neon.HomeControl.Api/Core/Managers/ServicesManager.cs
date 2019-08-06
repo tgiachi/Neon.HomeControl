@@ -20,7 +20,6 @@ using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Modules;
 using Neon.HomeControl.Api.Core.Utils;
-using Polly;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -185,11 +184,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		private void InitPolly()
 		{
-			Policy
-				.Handle<HttpRequestException>().RetryAsync(3, onRetry: (exception, retryCount) =>
-				{
-					_logger.LogWarning($"Got HttpRequestException retrying {retryCount}, {exception.Message}");
-				});
+			// TODO
 		}
 
 		private async void InitManagers()

@@ -7,7 +7,7 @@ namespace Neon.HomeControl.Api.Core.Utils
 	{
 		public static string AppName = "Neon.HomeControl";
 
-		public static string AppVersion = "0.0.5.5";
+		public static string AppVersion = typeof(AppUtils).Assembly.GetName().Version.ToString();
 
 		public static string AppFullVersion => $"{AppName} v{AppVersion}";
 

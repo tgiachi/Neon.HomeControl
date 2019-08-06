@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     <PackageReference Include="Q42.HueApi" Version="3.10.1" />
+    <PackageReference Include="CoordinateSharp" Version="1.1.5.2" />
     <PackageReference Include="RadarrSharp" Version="1.0.30" />
     <PackageReference Include="SonarrSharp" Version="1.2.1" />
     <PackageReference Include="SSDP.Portable" Version="1.0.31" />

@@ -2,10 +2,10 @@
 
 namespace Neon.Plugin.Test.Plugin
 {
-	[LuaScriptObject]
+	[ScriptObject]
 	public class TestLuaCommand
 	{
-		[LuaScriptFunction("EXAMPLE", "sum", "sum two numbers")]
+		[ScriptFunction("EXAMPLE", "sum", "sum two numbers")]
 		public string Sum(int firstNumber, int secondNumber)
 		{
 			return (firstNumber + secondNumber).ToString();

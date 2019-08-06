@@ -122,13 +122,15 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
 		[ScriptFunction("EVENTS", "send_command", "Send command ")]
-		public void SendCommand(IIotEntity entity, string commandName, params object[] args)
+		public object SendCommand(IIotEntity entity, string commandName, params object[] args)
 		{
 			var type = entity.EntityType;
 			var openCast2 = _commandDispatcherService.GetType().GetMethod(nameof(_commandDispatcherService.DispatchCommand));
 			var closeCase2 = openCast2.MakeGenericMethod(new[] { AssemblyUtils.GetType(type) });
 
 			var cmd = closeCase2.Invoke(_commandDispatcherService, new object[] { entity, commandName, args });
+
+			return cmd;
 
 		}
 
@@ -142,7 +144,7 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 		{
 			_ioTService.GetEventStream<IIotEntity>().Subscribe(entity =>
 			{
-				if (string.Equals(Type.GetType("entity.EntityType").Name, eventType, StringComparison.CurrentCultureIgnoreCase))
+				if (string.Equals(Type.GetType(entity.EntityType).Name, eventType, StringComparison.CurrentCultureIgnoreCase))
 				{
 					function.Call(entity);
 				}
