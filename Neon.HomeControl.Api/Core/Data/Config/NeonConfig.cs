@@ -63,6 +63,7 @@
 			EventsDatabase = new EventDatabaseConfig();
 			IoT = new IoTConfig();
 			JwtToken = "password";
+			EnableSwagger = true;
 			DatabaseDirectory = "Database";
 			AutoLoadComponents = true;
 			Home = new HomeConfig();
