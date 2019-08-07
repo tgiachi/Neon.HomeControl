@@ -3,7 +3,7 @@ using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 
 namespace Neon.HomeControl.StandardScriptLibrary.Logging
 {
-	[ScriptObject]
+	[ScriptObject("logger")]
 	public class LoggerScriptObject
 	{
 		private readonly ILogger _logger;

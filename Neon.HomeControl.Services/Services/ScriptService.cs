@@ -2,7 +2,6 @@
 using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Attributes.Services;
 using Neon.HomeControl.Api.Core.Data.Config;
-using Neon.HomeControl.Api.Core.Data.LuaScript;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
@@ -15,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Neon.HomeControl.Api.Core.Attributes.ScriptEngine;
+using Neon.HomeControl.Api.Core.Data.ScriptData;
 using Neon.HomeControl.Api.Core.Interfaces.ScriptEngine;
 
 namespace Neon.HomeControl.Services.Services

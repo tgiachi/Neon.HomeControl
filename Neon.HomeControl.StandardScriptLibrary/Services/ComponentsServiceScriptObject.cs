@@ -7,7 +7,7 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 	/// <summary>
 	/// Bridge for control components
 	/// </summary>
-	[ScriptObject]
+	[ScriptObject("components")]
 	public class ComponentsServiceScriptObject
 	{
 

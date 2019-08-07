@@ -37,6 +37,8 @@ namespace Neon.HomeControl.Services.Services
 		private readonly ILogger _logger;
 		private INoSqlConnector _noSqlConnector;
 
+		
+
 
 		/// <summary>
 		/// ctor

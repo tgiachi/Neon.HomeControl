@@ -14,7 +14,7 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 	/// <summary>
 	/// Events manager for LUA
 	/// </summary>
-	[ScriptObject]
+	[ScriptObject("events")]
 	public class EventBridgeScriptObject
 	{
 
@@ -44,6 +44,8 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 		{
 			_schedulerService.AddJob(() => { function.Call(); }, name, hours, minutes);
 		}
+
+
 
 		/// <summary>
 		/// Get all entities
@@ -142,6 +144,7 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 		[ScriptFunction("RULES", "on_event_type", "Subscribe on event")]
 		public void OnEventType(string eventType, LuaFunction function)
 		{
+
 			_ioTService.GetEventStream<IIotEntity>().Subscribe(entity =>
 			{
 				if (string.Equals(Type.GetType(entity.EntityType).Name, eventType, StringComparison.CurrentCultureIgnoreCase))

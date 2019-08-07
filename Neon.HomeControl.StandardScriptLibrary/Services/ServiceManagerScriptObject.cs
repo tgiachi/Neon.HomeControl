@@ -11,7 +11,7 @@ namespace Neon.HomeControl.StandardScriptLibrary.Services
 	/// <summary>
 	/// Class for control Services Manager
 	/// </summary>
-	[ScriptObject]
+	[ScriptObject("services")]
 	public class ServiceManagerScriptObject
 	{
 		private readonly IServicesManager _servicesManager;

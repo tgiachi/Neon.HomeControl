@@ -4,7 +4,7 @@ using System;
 
 namespace Neon.HomeControl.Web.LuaScripts
 {
-	[ScriptObject]
+	[ScriptObject("testclass")]
 	public class TestLuaObject
 	{
 		[ScriptFunction("TEST", "test", "Display test")]
