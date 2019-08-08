@@ -9,6 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using NuGet.Configuration;
+using NuGet.Frameworks;
+using NuGet.Protocol;
+using NuGet.Protocol.Core.Types;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
@@ -20,16 +24,28 @@ namespace Neon.HomeControl.Api.Core.Managers
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly IServicesManager _servicesManager;
 		private readonly NeonConfig _neonConfig;
-
 		private readonly ILogger _logger;
+		private ISettings _nugetSettings;
+		private ISourceRepositoryProvider _nugetSourceRepositoryProvider;
+		private NuGetFramework _nuGetFramework;
+
+
 
 		public PluginsManager(ILogger logger, IFileSystemManager fileSystemManager, IServicesManager servicesManager,
 			NeonConfig neonConfig)
 		{
+			
 			_neonConfig = neonConfig;
 			_logger = logger;
 			_servicesManager = servicesManager;
 			_fileSystemManager = fileSystemManager;
+		}
+
+		private void InitNuGet()
+		{
+			_nugetSettings = Settings.LoadDefaultSettings(root: null);
+			_nugetSourceRepositoryProvider = new SourceRepositoryProvider(_nugetSettings, Repository.Provider.GetCoreV3());
+			_nuGetFramework = NuGetFramework.ParseFolder("netstandard2.0");
 		}
 
 		public Task<bool> Start()
@@ -59,18 +75,29 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		private void LoadPlugin(FileInfo file)
 		{
-			_logger.LogInformation($"Loading plugin name {file.Name}");
 
-			try
+			var pluginConfFilename = Path.Combine(file.DirectoryName, "plugin.conf");
+			if (File.Exists(pluginConfFilename))
 			{
-				var assembly = Assembly.LoadFile(file.FullName);
-				AssemblyUtils.AddAssemblyToCache(assembly);
-				_pluginsAssemblies.Add(assembly);
+				var pluginConf = JsonUtils.FromJson<PluginConfig>(File.ReadAllText(pluginConfFilename));
+				_logger.LogInformation($"Loading plugin name {file.Name}");
+
+				try
+				{
+					var assembly = Assembly.LoadFile(file.FullName);
+					AssemblyUtils.AddAssemblyToCache(assembly);
+					_pluginsAssemblies.Add(assembly);
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError($"Error during loading plugin {file.Name} => {ex}");
+				}
 			}
-			catch (Exception ex)
+			else
 			{
-				_logger.LogError($"Error during loading plugin {file.Name} => {ex}");
+				_logger.LogWarning($"Can't load plugin {file.Name}. File plugin.conf is missing!");
 			}
+
 		}
 
 		public Task<bool> Stop()
