@@ -95,11 +95,14 @@ namespace Neon.HomeControl.Api.Core.Utils
 		/// <returns></returns>
 		public static List<Assembly> GetAppAssemblies()
 		{
+			BuildAssemblyCache();
 			return _assembliesCache;
 		}
 
 		public static Assembly[] GetAppAssembliesArray()
 		{
+			BuildAssemblyCache();
+
 			return _assembliesCache.ToArray();
 		}
 
@@ -152,15 +155,18 @@ namespace Neon.HomeControl.Api.Core.Utils
 
 			BuildAssemblyCache();
 
-			try
+			foreach (var assembly in _assembliesCache)
 			{
-				foreach (var assembly in _assembliesCache)
+				try
+				{
 					result.AddRange(GetTypesWithCustomAttribute(assembly, attribute));
+				}
+				catch (Exception ex)
+				{
+					//Console.WriteLine(ex);
+				}
 			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex);
-			}
+
 
 
 			return result;

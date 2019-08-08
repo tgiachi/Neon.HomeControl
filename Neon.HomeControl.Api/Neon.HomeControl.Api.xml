@@ -996,6 +996,36 @@
                 Number of secondse
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute">
+            <summary>
+            Script Engine Attribute
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.Name">
+            <summary>
+            Name of Script Engine
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.Version">
+            <summary>
+            Version
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.FileExtension">
+            <summary>
+            Extension of file to read
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Attributes.ScriptEngine.ScriptEngineAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Attributes.ScriptService.ScriptObjectAttribute.ObjName">
+            <summary>
+            Object name in script engine (ex: logger.log_info())
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Data.Commands.IotCommand`1">
             <summary>
             Command to send to devices
@@ -1115,31 +1145,6 @@
             Directory where script is located
             </summary>
         </member>
-        <member name="T:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData">
-            <summary>
-            Class for describe C# to Lua function
-            </summary>
-        </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Name">
-            <summary>
-            Name of function
-            </summary>
-        </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Args">
-            <summary>
-            Parameters
-            </summary>
-        </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Category">
-            <summary>
-            Category of function (Ex: Logger)
-            </summary>
-        </member>
-        <member name="P:Neon.HomeControl.Api.Core.Data.LuaScript.LuaScriptFunctionData.Help">
-            <summary>
-            Help text for describe function
-            </summary>
-        </member>
         <member name="T:Neon.HomeControl.Api.Core.Data.PropertyChange.BasePropertyChangedEntity">
             <summary>
                 Implementation of Property Change Entity
@@ -1148,6 +1153,31 @@
         <member name="E:Neon.HomeControl.Api.Core.Data.PropertyChange.BasePropertyChangedEntity.PropertyChanged">
             <summary>
                 Event for track property Changed
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Api.Core.Data.ScriptData.ScriptFunctionData">
+            <summary>
+            Class for describe C# to script engine function
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.ScriptData.ScriptFunctionData.Name">
+            <summary>
+            Name of function
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.ScriptData.ScriptFunctionData.Args">
+            <summary>
+            Parameters
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.ScriptData.ScriptFunctionData.Category">
+            <summary>
+            Category of function (Ex: Logger)
+            </summary>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Data.ScriptData.ScriptFunctionData.Help">
+            <summary>
+            Help text for describe function
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Enums.ComponentStatusEnum">
@@ -1255,6 +1285,11 @@
                 Interface for create Property Change Entity
             </summary>
         </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.ScriptEngine.IScriptEngine">
+            <summary>
+            Interface for creates Universal Script Engine
+            </summary>
+        </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.ICommandDispatcherService">
             <summary>
             Dispatcher Service
@@ -1359,6 +1394,30 @@
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IPluginsManager">
             <summary>
             Interface for create plugins manager service
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IRoutineService">
+            <summary>
+            Service for create/save routines
+            </summary>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IRoutineService.AddRoutine(System.String,System.Action)">
+            <summary>
+            Add routine
+            </summary>
+            <param name="name"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neon.HomeControl.Api.Core.Interfaces.Services.IRoutineService.ExecuteRoutine(System.String)">
+            <summary>
+            Execute a routine
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="P:Neon.HomeControl.Api.Core.Interfaces.Services.IRoutineService.RoutineNames">
+            <summary>
+            Get routine names
             </summary>
         </member>
         <member name="T:Neon.HomeControl.Api.Core.Interfaces.Services.IRuleEngineService">

@@ -41,8 +41,10 @@ namespace Neon.HomeControl.Services.Services
 			_componentsService.RunningComponents.CollectionChanged += (sender, s) =>
 			{
 				var oc = (ObservableCollection<RunningComponentInfo>)sender;
-				_commands.Clear();
-				ScanCommands(oc.ToList());
+				//_commands.Clear();
+				var readonlyList = s.NewItems[0] as RunningComponentInfo;
+
+				ScanCommands(new List<RunningComponentInfo>() { readonlyList });
 			};
 		}
 
@@ -54,7 +56,7 @@ namespace Neon.HomeControl.Services.Services
 		/// <param name="entity"></param>
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
-		public void DispatchCommand<T>(T entity, string commandName, params object[] args) where T : IIotEntity
+		public object DispatchCommand<T>(T entity, string commandName, params object[] args) where T : IIotEntity
 		{
 
 			_notificationService.BroadcastMessage(IotCommand<T>.BuildCommand(entity, commandName, args));
@@ -64,13 +66,16 @@ namespace Neon.HomeControl.Services.Services
 
 			try
 			{
-				commandMethod?.Method.Invoke(commandMethod.Component, new object[] { entity, commandName, args });
+				var result = commandMethod?.Method.Invoke(commandMethod.Component, new object[] { entity, commandName, args });
+
+				return result;
 			}
 			catch (Exception e)
 			{
 				_logger.LogError($"Error during dispatch command {commandName} for Entity: {entity.GetType().Name} => {e}");
-			}
 
+				return null;
+			}
 		}
 
 

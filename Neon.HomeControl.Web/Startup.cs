@@ -19,7 +19,11 @@ using Neon.HomeControl.Entities.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using Neon.HomeControl.Api.Core.Attributes.WebSocket;
+using Neon.HomeControl.Web.Websockets;
+using WebSocketManager;
 
 namespace Neon.HomeControl.Web
 {
@@ -82,11 +86,12 @@ namespace Neon.HomeControl.Web
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			services.AddWebSocketManager();
 			//	if (_neonConfig.EnableMetrics)
 			//		services.AddMetrics();
 
 
-			services.AddLogging();
+			
 			services.AddHttpClient();
 
 
@@ -109,11 +114,7 @@ namespace Neon.HomeControl.Web
 					};
 				});
 
-			if (_neonConfig.EnableSwagger)
-				services.AddSwaggerGen(c =>
-				{
-					c.SwaggerDoc("v1", new Info { Title = "Leon Home control", Version = "v1.0" });
-				});
+			
 
 			services.AddDbContextPool<NeonDbContext>(options =>
 			{
@@ -126,16 +127,29 @@ namespace Neon.HomeControl.Web
 
 			services.AddTransient<DbContext, NeonDbContext>();
 			services.AddResponseCompression();
+			if (_neonConfig.EnableSwagger)
+				services.AddSwaggerGen(c =>
+				{
+					c.SwaggerDoc("v1", new Info { Title = "Leon Home control", Version = "v1.0" });
+				});
 			builder.Populate(services);
 			_container = _servicesManager.Build();
 
-			return new AutofacServiceProvider(_container);
+			var cont = new AutofacServiceProvider(_container);
+
+
+			
+
+			return cont;
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
-			IApplicationLifetime applicationLifetime)
+			IApplicationLifetime applicationLifetime, IServiceProvider serviceProvider)
 		{
+
+			var logger = serviceProvider.GetService<ILogger<Startup>>();
+
 			applicationLifetime.ApplicationStopping.Register(async () =>
 				await _servicesManager.Stop());
 
@@ -148,13 +162,25 @@ namespace Neon.HomeControl.Web
 			app.UseHttpsRedirection();
 
 			app.UseSwagger();
-
+		
 			app.UseCors(x => x
 				.AllowAnyOrigin()
 				.AllowAnyMethod()
 				.AllowAnyHeader());
 			app.UseAuthentication();
 
+		
+			app.UseWebSockets();
+			
+			AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(WebSocketHubAttribute)).ForEach(t =>
+			{
+				var wsAttr = t.GetCustomAttribute<WebSocketHubAttribute>();
+				logger.LogInformation($"Registering websocket path {wsAttr.Path} to {t.Name}");
+
+				app.MapWebSocketManager(wsAttr.Path, _container.Resolve(t) as WebSocketHandler);
+			});
+
+			
 			if (_neonConfig.EnableSwagger)
 				app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leon Home control"); });
 
@@ -163,5 +189,6 @@ namespace Neon.HomeControl.Web
 			app.UseMvc();
 			await _servicesManager.Start();
 		}
+		
 	}
 }

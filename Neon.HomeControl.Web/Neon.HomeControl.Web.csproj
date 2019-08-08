@@ -23,12 +23,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="ReadLine" Version="2.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.0.0" />
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="WebSocketManager" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +39,7 @@
     <ProjectReference Include="..\Neon.HomeControl.Dto\Neon.HomeControl.Dto.csproj" />
     <ProjectReference Include="..\Neon.HomeControl.Entities\Neon.HomeControl.Entities.csproj" />
     <ProjectReference Include="..\Neon.HomeControl.Services\Neon.HomeControl.Services.csproj" />
-    <ProjectReference Include="..\Neon.HomeControl.StandardLuaLibrary\Neon.HomeControl.StandardLuaLibrary.csproj" />
+    <ProjectReference Include="..\Neon.HomeControl.StandardScriptLibrary\Neon.HomeControl.StandardScriptLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

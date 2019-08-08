@@ -1,9 +1,9 @@
-﻿namespace Neon.HomeControl.Api.Core.Data.LuaScript
+﻿namespace Neon.HomeControl.Api.Core.Data.ScriptData
 {
 	/// <summary>
-	/// Class for describe C# to Lua function
+	/// Class for describe C# to script engine function
 	/// </summary>
-	public class LuaScriptFunctionData
+	public class ScriptFunctionData
 	{
 		/// <summary>
 		/// Name of function

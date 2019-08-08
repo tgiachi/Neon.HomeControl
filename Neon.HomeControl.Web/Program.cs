@@ -7,6 +7,7 @@ using Serilog.Filters;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Neon.HomeControl.Web
 {
@@ -28,7 +29,19 @@ namespace Neon.HomeControl.Web
 				.CreateLogger();
 			try
 			{
+
+			
 				CreateWebHostBuilder(args).Build().Run();
+				
+				//string input = ReadLine.Read("(prompt)> ");
+
+				//while (input != "exit")
+				//{
+				//	input = ReadLine.Read("(prompt)> ");
+
+				//}
+
+
 			}
 			finally
 			{

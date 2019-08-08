@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Neon.HomeControl.Api.Core.Data.Components;
 using Neon.HomeControl.Api.Core.Data.Logger;
-using Neon.HomeControl.Api.Core.Data.LuaScript;
 using Neon.HomeControl.Api.Core.Data.Scheduler;
 using Neon.HomeControl.Api.Core.Data.Services;
 using Neon.HomeControl.Api.Core.Data.UserInteraction;
@@ -10,6 +9,7 @@ using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Utils;
 using System.Collections.Generic;
 using Neon.HomeControl.Api.Core.Data.Commands;
+using Neon.HomeControl.Api.Core.Data.ScriptData;
 
 namespace Neon.HomeControl.Web.Controllers
 {
@@ -49,7 +49,7 @@ namespace Neon.HomeControl.Web.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult<List<LuaScriptFunctionData>> GetLuaGlobalFunctions()
+		public ActionResult<List<ScriptFunctionData>> GetLuaGlobalFunctions()
 		{
 			return Ok(_scriptService.GlobalFunctions);
 		}
@@ -82,6 +82,13 @@ namespace Neon.HomeControl.Web.Controllers
 		public ActionResult<List<IotCommandInfo>> GetCommandsInfos()
 		{
 			return Ok(_commandDispatcherService.CommandInfos);
+		}
+
+
+		[HttpPost]
+		public ActionResult<ScriptLiveExecutionResult> ExecuteScript(string script)
+		{
+			return Ok(_scriptService.ExecuteCode(script));
 		}
 	}
 }

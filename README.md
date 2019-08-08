@@ -1,6 +1,10 @@
-﻿# Neon.HomeControl
+# Neon.HomeControl
 Similar to HomeAssistant, but made with .net core and ❤️
 
+# Contributors
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftgiachi%2FNeon.HomeControl.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftgiachi%2FNeon.HomeControl?ref=badge_shield)
+
+Thanks to: Bart Kardol (@bkardol) !
 
 # Help request!
 I'm looking for people to help me with the project, please contact me!
@@ -74,3 +78,8 @@ add_alarm("test_alarm", 07,32, function()
 end
 )
 ```
+
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftgiachi%2FNeon.HomeControl.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftgiachi%2FNeon.HomeControl?ref=badge_large)

@@ -2,13 +2,13 @@
 using Neon.HomeControl.Api.Core.Attributes.ScriptService;
 using Neon.HomeControl.Api.Core.Interfaces.Managers;
 
-namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
+namespace Neon.HomeControl.StandardScriptLibrary.Services
 {
 	/// <summary>
 	/// Bridge for control components
 	/// </summary>
-	[LuaScriptObject]
-	public class ComponentsServiceLuaObject
+	[ScriptObject("components")]
+	public class ComponentsServiceScriptObject
 	{
 
 		private readonly ILogger _logger;
@@ -19,14 +19,14 @@ namespace Neon.HomeControl.StandardLuaLibrary.StandardLuaLibrary.Services
 		/// </summary>
 		/// <param name="logger"></param>
 		/// <param name="componentsService"></param>
-		public ComponentsServiceLuaObject(ILogger<ComponentsServiceLuaObject> logger,
+		public ComponentsServiceScriptObject(ILogger<ComponentsServiceScriptObject> logger,
 			IComponentsService componentsService)
 		{
 			_logger = logger;
 			_componentsService = componentsService;
 		}
 
-		[LuaScriptFunction("COMPONENTS", "load_component", "Load component")]
+		[ScriptFunction("COMPONENTS", "load_component", "Load component")]
 		public bool LoadComponent(string componentName)
 		{
 			_logger.LogInformation($"Loading service name {componentName}");

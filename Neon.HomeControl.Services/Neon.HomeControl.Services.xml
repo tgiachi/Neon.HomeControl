@@ -11,6 +11,16 @@
             <param name="connectionString"></param>
             <returns></returns>
         </member>
+        <member name="T:Neon.HomeControl.Services.ScriptEngines.JsScriptEngine">
+            <summary>
+            Implementation of Javascript Engine
+            </summary>
+        </member>
+        <member name="T:Neon.HomeControl.Services.ScriptEngines.LuaScriptEngine">
+            <summary>
+            Implementation of LUA script Engine
+            </summary>
+        </member>
         <member name="P:Neon.HomeControl.Services.Services.CommandDispatcherService.CommandInfos">
             <summary>
             Commands

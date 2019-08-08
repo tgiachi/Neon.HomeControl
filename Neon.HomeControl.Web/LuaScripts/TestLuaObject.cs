@@ -4,17 +4,17 @@ using System;
 
 namespace Neon.HomeControl.Web.LuaScripts
 {
-	[LuaScriptObject]
+	[ScriptObject("testclass")]
 	public class TestLuaObject
 	{
-		[LuaScriptFunction("TEST", "test", "Display test")]
+		[ScriptFunction("TEST", "test", "Display test")]
 		public void Test(string param)
 		{
 			Console.WriteLine("OK");
 			//	throw new Exception("This is test");
 		}
 
-		[LuaScriptFunction("TEST", "bind_function", "Display test")]
+		[ScriptFunction("TEST", "bind_function", "Display test")]
 		public void ExecuteFunction(LuaFunction function)
 		{
 			Console.WriteLine($"Executing {function.GetType().Name}");

@@ -1,5 +1,6 @@
 ﻿using Neon.HomeControl.Api.Core.Data.Logger;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Neon.HomeControl.Api.Core.Utils
 {
@@ -7,11 +8,11 @@ namespace Neon.HomeControl.Api.Core.Utils
 	{
 		public static string AppName = "Neon.HomeControl";
 
-		public static string AppVersion = "1.0.0.0";
+		public static string AppVersion = typeof(AppUtils).Assembly.GetName().Version.ToString();
 
 		public static string AppFullVersion => $"{AppName} v{AppVersion}";
 
-		public static List<LoggerEntry> LoggerEntries { get; set; } = new List<LoggerEntry>();
+		public static ObservableCollection<LoggerEntry> LoggerEntries { get; set; } = new ObservableCollection<LoggerEntry>();
 
 	}
 }

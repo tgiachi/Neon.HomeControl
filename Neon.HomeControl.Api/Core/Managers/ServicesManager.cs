@@ -20,7 +20,6 @@ using Neon.HomeControl.Api.Core.Interfaces.Managers;
 using Neon.HomeControl.Api.Core.Interfaces.Services;
 using Neon.HomeControl.Api.Core.Modules;
 using Neon.HomeControl.Api.Core.Utils;
-using Polly;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +28,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.HomeControl.Api.Core.Attributes.ScriptEngine;
 
 namespace Neon.HomeControl.Api.Core.Managers
 {
@@ -71,6 +71,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		public ContainerBuilder InitContainer()
 		{
+			var assemblies = AssemblyUtils.GetAppAssemblies();
 			PrintHeader();
 			EnhancedStackTrace.Current();
 			InitPolly();
@@ -112,11 +113,12 @@ namespace Neon.HomeControl.Api.Core.Managers
 			var transientServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(TransientAttribute));
 			var scopedServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScopedAttribute));
 			var dataAccess = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(DataAccessAttribute));
-			var luaObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(LuaScriptObjectAttribute));
+			var luaObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptObjectAttribute));
 			var jobObjects = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(SchedulerJobTaskAttribute));
 			var dbSeedsObject = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(DatabaseSeedAttribute));
 			var componentsObject = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ComponentAttribute));
 			var noSqlConnectors = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(NoSqlConnectorAttribute));
+			var scriptEngines = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ScriptEngineAttribute));
 
 			_availableServices = AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(ServiceAttribute));
 
@@ -131,6 +133,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			luaObjects.ForEach(l => { ContainerBuilder.RegisterType(l).AsSelf().SingleInstance(); });
 			singletonServices.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
 			componentsObject.ForEach(t => RegisterService(LifeScopeTypeEnum.SINGLETON, t));
+			scriptEngines.ForEach(s => RegisterService(LifeScopeTypeEnum.SINGLETON, s));
 
 			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.Where(t => t == typeof(IDatabaseSeed))
@@ -170,7 +173,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			jobObjects.ForEach(t => RegisterService(LifeScopeTypeEnum.SCOPED, t));
 
-			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssembliesArray())
+			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.Where(t => t.Name.ToLower().EndsWith("service"))
 				.AsImplementedInterfaces().SingleInstance();
 
@@ -181,11 +184,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		private void InitPolly()
 		{
-			Policy
-				.Handle<HttpRequestException>().RetryAsync(3, onRetry: (exception, retryCount) =>
-				{
-					_logger.LogWarning($"Got HttpRequestException retrying {retryCount}, {exception.Message}");
-				});
+			// TODO
 		}
 
 		private async void InitManagers()

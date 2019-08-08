@@ -80,5 +80,7 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 		/// <typeparam name="T"></typeparam>
 		/// <param name="event"></param>
 		void Publish<T>(T @event) where T : IIotEntity;
+
+		
 	}
 }

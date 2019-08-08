@@ -12,13 +12,13 @@
 
   <ItemGroup>
     <PackageReference Include="FluentScheduler" Version="5.3.0" />
+    <PackageReference Include="Jint" Version="2.11.58" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="Makaretu.Dns.Multicast" Version="0.24.0" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
     <PackageReference Include="MQTTnet" Version="3.0.5" />
     <PackageReference Include="NLua" Version="1.4.20" />
-    <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.2.2" />
     <PackageReference Include="NReco.LambdaParser" Version="1.0.9" />
   </ItemGroup>
 

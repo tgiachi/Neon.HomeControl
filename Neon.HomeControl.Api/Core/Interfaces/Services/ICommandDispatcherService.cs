@@ -16,7 +16,7 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 		/// <param name="entity"></param>
 		/// <param name="commandName"></param>
 		/// <param name="args"></param>
-		void DispatchCommand<T>(T entity, string commandName, params object[] args) where T : IIotEntity;
+		object DispatchCommand<T>(T entity, string commandName, params object[] args) where T : IIotEntity;
 
 
 		/// <summary>
