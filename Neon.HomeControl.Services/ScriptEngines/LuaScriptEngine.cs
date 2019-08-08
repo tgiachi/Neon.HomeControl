@@ -81,7 +81,6 @@ namespace Neon.HomeControl.Services.ScriptEngines
 			-- Update the search path
 			local module_folder = '{_modulesPath}'
 			package.path = module_folder .. '?.lua;' .. package.path");
-
 		}
 
 
@@ -105,6 +104,11 @@ namespace Neon.HomeControl.Services.ScriptEngines
 		public void RegisterFunction(string functionName, object obj, MethodInfo method)
 		{
 			_luaEngine.RegisterFunction(functionName, obj, method);
+		}
+
+		public object ExecuteCode(string code)
+		{
+			return _luaEngine.DoString(code);
 		}
 
 		public Task<bool> Build()

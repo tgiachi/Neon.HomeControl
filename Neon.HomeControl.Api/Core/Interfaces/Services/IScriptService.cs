@@ -6,5 +6,7 @@ namespace Neon.HomeControl.Api.Core.Interfaces.Services
 	public interface IScriptService : IService
 	{
 		List<ScriptFunctionData> GlobalFunctions { get; set; }
+
+		ScriptLiveExecutionResult ExecuteCode(string code);
 	}
 }

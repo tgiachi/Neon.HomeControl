@@ -15,6 +15,8 @@ namespace Neon.HomeControl.Api.Core.Interfaces.ScriptEngine
 
 		void RegisterFunction(string functionName, object obj, MethodInfo method);
 
+		object ExecuteCode(string code);
+
 		Task<bool> Build();
 
 	}

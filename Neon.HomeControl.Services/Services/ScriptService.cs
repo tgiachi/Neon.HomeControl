@@ -36,8 +36,28 @@ namespace Neon.HomeControl.Services.Services
 		private ScriptEngineAttribute _scriptEngineAttribute;
 
 		public List<ScriptFunctionData> GlobalFunctions { get; set; }
+		public ScriptLiveExecutionResult ExecuteCode(string code)
+		{
+			try
+			{
+				var result = _scriptEngine.ExecuteCode(code);
 
-		
+				return new ScriptLiveExecutionResult()
+				{
+					Success = true,
+					Output = result.ToJson(),
+					Source = code
+				};
+
+			}
+			catch (Exception ex)
+			{
+
+				return new ScriptLiveExecutionResult() {Exception = ex, Source = code, Success = false};
+			}
+		}
+
+
 		private string _bootstrapFile = "";
 
 		public ScriptService(ILogger<ScriptService> logger, NeonConfig neonConfig, IServicesManager servicesManager,

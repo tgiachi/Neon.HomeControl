@@ -71,7 +71,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 		public ContainerBuilder InitContainer()
 		{
-			AssemblyUtils.GetAppAssemblies();
+			var assemblies = AssemblyUtils.GetAppAssemblies();
 			PrintHeader();
 			EnhancedStackTrace.Current();
 			InitPolly();
@@ -173,7 +173,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			jobObjects.ForEach(t => RegisterService(LifeScopeTypeEnum.SCOPED, t));
 
-			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssembliesArray())
+			ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
 				.Where(t => t.Name.ToLower().EndsWith("service"))
 				.AsImplementedInterfaces().SingleInstance();
 

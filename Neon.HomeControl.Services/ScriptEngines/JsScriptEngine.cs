@@ -62,6 +62,11 @@ namespace Neon.HomeControl.Services.ScriptEngines
 			_scriptsClassLoaded.Add(scriptObjAttribute.ObjName);
 		}
 
+		public object ExecuteCode(string code)
+		{
+			throw new NotImplementedException();
+		}
+
 
 		static T Cast<T>(object entity) where T : class
 		{

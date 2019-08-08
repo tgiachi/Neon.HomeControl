@@ -19,7 +19,9 @@ using Neon.HomeControl.Entities.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using Neon.HomeControl.Api.Core.Attributes.WebSocket;
 using Neon.HomeControl.Web.Websockets;
 using WebSocketManager;
 
@@ -145,6 +147,9 @@ namespace Neon.HomeControl.Web
 		public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
 			IApplicationLifetime applicationLifetime, IServiceProvider serviceProvider)
 		{
+
+			var logger = serviceProvider.GetService<ILogger<Startup>>();
+
 			applicationLifetime.ApplicationStopping.Register(async () =>
 				await _servicesManager.Stop());
 
@@ -166,9 +171,16 @@ namespace Neon.HomeControl.Web
 
 		
 			app.UseWebSockets();
-			app.MapWebSocketManager("/ws/events", _container.Resolve<EventsHub>());
-			app.MapWebSocketManager("/ws/logs", _container.Resolve<LoggerHub>());
+			
+			AssemblyUtils.ScanAllAssembliesFromAttribute(typeof(WebSocketHubAttribute)).ForEach(t =>
+			{
+				var wsAttr = t.GetCustomAttribute<WebSocketHubAttribute>();
+				logger.LogInformation($"Registering websocket path {wsAttr.Path} to {t.Name}");
 
+				app.MapWebSocketManager(wsAttr.Path, _container.Resolve(t) as WebSocketHandler);
+			});
+
+			
 			if (_neonConfig.EnableSwagger)
 				app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Leon Home control"); });
 
@@ -177,5 +189,6 @@ namespace Neon.HomeControl.Web
 			app.UseMvc();
 			await _servicesManager.Start();
 		}
+		
 	}
 }

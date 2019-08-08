@@ -83,5 +83,12 @@ namespace Neon.HomeControl.Web.Controllers
 		{
 			return Ok(_commandDispatcherService.CommandInfos);
 		}
+
+
+		[HttpPost]
+		public ActionResult<ScriptLiveExecutionResult> ExecuteScript(string script)
+		{
+			return Ok(_scriptService.ExecuteCode(script));
+		}
 	}
 }

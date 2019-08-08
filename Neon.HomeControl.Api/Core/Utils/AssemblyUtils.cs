@@ -95,11 +95,14 @@ namespace Neon.HomeControl.Api.Core.Utils
 		/// <returns></returns>
 		public static List<Assembly> GetAppAssemblies()
 		{
+			BuildAssemblyCache();
 			return _assembliesCache;
 		}
 
 		public static Assembly[] GetAppAssembliesArray()
 		{
+			BuildAssemblyCache();
+
 			return _assembliesCache.ToArray();
 		}
 
