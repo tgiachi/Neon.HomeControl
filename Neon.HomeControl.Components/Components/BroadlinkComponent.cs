@@ -7,6 +7,7 @@ using Neon.HomeControl.Api.Core.Attributes.Components;
 using Neon.HomeControl.Components.Config;
 using Neon.HomeControl.Components.Interfaces;
 using SharpBroadlink;
+using SharpBroadlink.Devices;
 
 namespace Neon.HomeControl.Components.Components
 {
@@ -15,10 +16,19 @@ namespace Neon.HomeControl.Components.Components
 	{
 		private readonly ILogger _logger;
 		private BroadlinkConfig _config;
+
+		private readonly List<Device> _devices = new List<Device>();
+
 		public async Task<bool> Start()
 		{
-			var devices = await Broadlink.Discover(10);
+			_config.Devices.ForEach(ConnectDevice);
 			return true;
+		}
+
+		private void ConnectDevice(BroadlinkDeviceConfig device)
+		{
+			//Broadlink.Create(DeviceType.Rm, device, new)
+
 		}
 
 		public Task<bool> Stop()

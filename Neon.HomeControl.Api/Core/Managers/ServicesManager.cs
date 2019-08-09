@@ -85,6 +85,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			ContainerBuilder.RegisterInstance<IServicesManager>(this);
 			InitManagers();
 
+
 			ContainerBuilder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 			AssemblyUtils.GetAppAssemblies().ForEach(a =>
 			{
@@ -195,7 +196,6 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			var pluginsManager = new PluginsManager(_logger, fileSystemManager, this, _neonConfig);
 			await pluginsManager.Start();
-
 			ContainerBuilder.RegisterInstance<IPluginsManager>(pluginsManager);
 		}
 
