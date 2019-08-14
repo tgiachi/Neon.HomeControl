@@ -28,6 +28,7 @@ namespace Neon.HomeControl.Services.Services
 
 		private IMqttServer _mqttServer;
 		private IMqttClient _mqttClient;
+		private IMqttClient _mirrorMqttClient;
 		private INotificationService _notificationService;
 
 		private int _reconnectTry;
@@ -46,9 +47,9 @@ namespace Neon.HomeControl.Services.Services
 		{
 			if (_mqttClient.IsConnected)
 			{
-				var result = await _mqttClient.SubscribeAsync(topic, MqttQualityOfServiceLevel.ExactlyOnce);
+				var result = await _mqttClient.SubscribeAsync(topic, MqttQualityOfServiceLevel.AtLeastOnce);
 
-				_logger.LogDebug($"Topic {topic} subcribed {result.Items[0].ResultCode}");
+				_logger.LogDebug($"Topic {topic} subscribed {result.Items[0].ResultCode}");
 
 				return true;
 			}
@@ -63,6 +64,10 @@ namespace Neon.HomeControl.Services.Services
 			if (_mqttClient.IsConnected)
 			{
 				await _mqttClient.PublishAsync(topic, message.ToJson());
+				if (_neonConfig.Mqtt.MirrorConfig.SendToMirror)
+				{
+					await _mirrorMqttClient.PublishAsync(topic, message.ToJson());
+				}
 				return true;
 			}
 
@@ -77,6 +82,7 @@ namespace Neon.HomeControl.Services.Services
 					.WithConnectionBacklog(100)
 					.WithDefaultEndpointBoundIPAddress(IPAddress.Parse("0.0.0.0"))
 					.WithDefaultEndpointPort(1883);
+
 				_mqttServer = new MqttFactory().CreateMqttServer();
 				_logger.LogInformation($"Starting embedded MQTT Server");
 				await _mqttServer.StartAsync(mqttOptionBuilder.Build());
@@ -120,7 +126,40 @@ namespace Neon.HomeControl.Services.Services
 			await _mqttClient.ConnectAsync(options);
 
 			_logger.LogInformation("Connected");
+
+			ConnectMirror();
+
 			return true;
+		}
+
+		private async void ConnectMirror()
+		{
+			if (_neonConfig.Mqtt.MirrorConfig.IsEnabled)
+			{
+				var mqttMirrorClientOptions = new MqttClientOptionsBuilder()
+					.WithClientId(Guid.NewGuid().ToString())
+					.WithTcpServer(_neonConfig.Mqtt.MirrorConfig.ClientConfig.HostName,
+						_neonConfig.Mqtt.MirrorConfig.ClientConfig.Port).WithCleanSession();
+
+				if (_neonConfig.Mqtt.MirrorConfig.ClientConfig.IsAuth)
+					mqttMirrorClientOptions = mqttMirrorClientOptions.WithCredentials(
+						_neonConfig.Mqtt.MirrorConfig.ClientConfig.Username,
+						_neonConfig.Mqtt.MirrorConfig.ClientConfig.Password);
+
+
+				_mirrorMqttClient = new MqttFactory().CreateMqttClient();
+
+				_mirrorMqttClient.UseApplicationMessageReceivedHandler(async args =>
+				{
+					if (_neonConfig.Mqtt.MirrorConfig.ReceiveFromMirror)
+					{
+						await _mqttClient.PublishAsync(args.ApplicationMessage);
+					}
+
+				});
+				await _mirrorMqttClient.ConnectAsync(mqttMirrorClientOptions.Build());
+				_logger.LogInformation($"Mirror MQTT connected");
+			}
 		}
 
 		public async Task<bool> Stop()
@@ -130,8 +169,13 @@ namespace Neon.HomeControl.Services.Services
 			return true;
 		}
 
-		private void OnMessageReceived(MqttApplicationMessage message)
+		private async void OnMessageReceived(MqttApplicationMessage message)
 		{
+			if (_neonConfig.Mqtt.MirrorConfig.SendToMirror)
+			{
+				if (_mirrorMqttClient != null)
+					await _mirrorMqttClient?.PublishAsync(message.Topic, message.Payload);
+			}
 			_logger.LogDebug($"Received message from topic {message.Topic} {Encoding.UTF8.GetString(message.Payload)}");
 			((ReplaySubject<MqttMessage>)OnMqttMessage).OnNext(new MqttMessage
 			{ Message = Encoding.UTF8.GetString(message.Payload), Topic = message.Topic });

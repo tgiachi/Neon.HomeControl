@@ -7,5 +7,19 @@ namespace Neon.HomeControl.Components.Config
 {
 	public class BroadlinkConfig : BaseComponentConfig
 	{
+		public List<BroadlinkDeviceConfig> Devices { get; set; }
+
+		public BroadlinkConfig()
+		{
+			Devices = new List<BroadlinkDeviceConfig>();
+		}
+	}
+
+
+	public class BroadlinkDeviceConfig
+	{
+		public string MacAddress { get; set; }
+
+		public string IpAddress { get; set; }
 	}
 }

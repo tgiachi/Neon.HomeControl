@@ -129,9 +129,9 @@ namespace Neon.HomeControl.Api.Core.Managers
 			}
 		}
 
-		private Task StartComponent(ComponentInfo componentInfo, Type type)
+		private async Task StartComponent(ComponentInfo componentInfo, Type type)
 		{
-			_taskExecutorService.Enqueue(async () =>
+			await _taskExecutorService.Enqueue(async () =>
 			{
 				var sw = new Stopwatch();
 				sw.Start();
@@ -148,16 +148,16 @@ namespace Neon.HomeControl.Api.Core.Managers
 				{
 
 					_logger.LogInformation($"Initialize component {componentInfo.Name} v{componentInfo.Version}");
-					var obj = _servicesManager.Resolve(type) as IComponent;
+					var obj = _servicesManager.Resolve(AssemblyUtils.GetInterfaceOfType(type)) as IComponent;
 					var attr = type.GetCustomAttribute<ComponentAttribute>();
 
 
-				
+
 					runningComponent.Component = obj;
 					RunningComponents.Add(runningComponent);
 					var componentConfig = (IComponentConfig)LoadComponentConfig(attr.ComponentConfigType);
 
-			
+
 					if (componentConfig != null)
 						await obj.InitConfiguration(componentConfig);
 					else
@@ -166,7 +166,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 						componentConfig = (IComponentConfig)obj.GetDefaultConfig();
 						SaveComponentConfig(componentConfig, attr.ComponentConfigType);
 						await obj.InitConfiguration(componentConfig);
-					}	
+					}
 
 					if (componentConfig != null && componentConfig.Enabled)
 					{
@@ -185,9 +185,6 @@ namespace Neon.HomeControl.Api.Core.Managers
 					runningComponent.Status = ComponentStatusEnum.ERROR;
 				}
 			});
-
-
-			return Task.CompletedTask;
 
 		}
 

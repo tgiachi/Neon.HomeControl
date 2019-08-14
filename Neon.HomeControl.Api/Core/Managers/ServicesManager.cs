@@ -85,6 +85,7 @@ namespace Neon.HomeControl.Api.Core.Managers
 			ContainerBuilder.RegisterInstance<IServicesManager>(this);
 			InitManagers();
 
+
 			ContainerBuilder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 			AssemblyUtils.GetAppAssemblies().ForEach(a =>
 			{
@@ -178,6 +179,10 @@ namespace Neon.HomeControl.Api.Core.Managers
 				.AsImplementedInterfaces().SingleInstance();
 
 
+			//ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
+			//	.Where(t => t.Name.ToLower().EndsWith("component"))
+			//	.AsImplementedInterfaces().SingleInstance();
+
 
 			return ContainerBuilder;
 		}
@@ -195,7 +200,6 @@ namespace Neon.HomeControl.Api.Core.Managers
 
 			var pluginsManager = new PluginsManager(_logger, fileSystemManager, this, _neonConfig);
 			await pluginsManager.Start();
-
 			ContainerBuilder.RegisterInstance<IPluginsManager>(pluginsManager);
 		}
 
@@ -313,11 +317,17 @@ namespace Neon.HomeControl.Api.Core.Managers
 			if (Container == null)
 				throw new Exception("Container is null, are you built container?");
 
-			_logger.LogDebug($"Requesting service {type.Name}");
-			//	using (var scope = Container.BeginLifetimeScope())
-			//	{
-			return Container.Resolve(type);
-			//	}
+			if (Container.IsRegistered(type))
+			{
+
+				_logger.LogDebug($"Requesting service {type.Name}");
+				//	using (var scope = Container.BeginLifetimeScope())
+				//	{
+				return Container.Resolve(type);
+				//	}
+			}
+			else
+				throw new Exception($"Type {type} not registered!");
 		}
 
 
