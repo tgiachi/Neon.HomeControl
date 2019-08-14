@@ -179,6 +179,10 @@ namespace Neon.HomeControl.Api.Core.Managers
 				.AsImplementedInterfaces().SingleInstance();
 
 
+			//ContainerBuilder.RegisterAssemblyTypes(AssemblyUtils.GetAppAssemblies().ToArray())
+			//	.Where(t => t.Name.ToLower().EndsWith("component"))
+			//	.AsImplementedInterfaces().SingleInstance();
+
 
 			return ContainerBuilder;
 		}
@@ -313,11 +317,17 @@ namespace Neon.HomeControl.Api.Core.Managers
 			if (Container == null)
 				throw new Exception("Container is null, are you built container?");
 
-			_logger.LogDebug($"Requesting service {type.Name}");
-			//	using (var scope = Container.BeginLifetimeScope())
-			//	{
-			return Container.Resolve(type);
-			//	}
+			if (Container.IsRegistered(type))
+			{
+
+				_logger.LogDebug($"Requesting service {type.Name}");
+				//	using (var scope = Container.BeginLifetimeScope())
+				//	{
+				return Container.Resolve(type);
+				//	}
+			}
+			else
+				throw new Exception($"Type {type} not registered!");
 		}
 
 

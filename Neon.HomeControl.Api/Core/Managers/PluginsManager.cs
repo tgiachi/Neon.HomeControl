@@ -99,8 +99,8 @@ namespace Neon.HomeControl.Api.Core.Managers
 			//<PackageReference Include="Castle.Core" Version="4.4.0" />
 			//<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
 			//<PackageReference Include="MySql.Data" Version="8.0.17" />
-			await DownloadDependecies(new List<PluginDependencyConfig>()
-				{new PluginDependencyConfig() {PackageName = "MySql.Data", PackageVersion = "8.0.17"}});
+		//	await DownloadDependecies(new List<PluginDependencyConfig>()
+		//		{new PluginDependencyConfig() {PackageName = "MySql.Data", PackageVersion = "8.0.17"}});
 
 			_logger.LogInformation($"Updating Assemblies");
 
